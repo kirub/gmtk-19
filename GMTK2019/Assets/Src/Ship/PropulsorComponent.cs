@@ -8,12 +8,16 @@ using UnityEngine.Events;
 public class PropulsorComponent : MonoBehaviour
 {
 	[SerializeField] private bool CanAlwaysPropulse = false;
+	[SerializeField] private bool CanAddRechargeWithR = false;
 
 	[SerializeField] private float MinPropulsionSpeed = 5f;
 	[SerializeField] private float MaxPropulsionSpeed = 20f;
 	[SerializeField] private float MaxPressedPropulsionTime = 2f;
 	[SerializeField] private float _GoodPropulsionRatio = 0.3f;
 	[SerializeField] private float _BadPropulsionRatio = 0.2f;
+
+	[SerializeField] private int MaxRecharge = 3;
+	[SerializeField] private int BaseRecharge = 3;
 
 	[SerializeField] private float SlowTime = 0.5f;
 	[SerializeField] private float SlowTimeSpeed = 2f;
@@ -39,16 +43,18 @@ public class PropulsorComponent : MonoBehaviour
 
 	[SerializeField] private List<GameObject> NearComets = new List<GameObject>();
 
+	private int CurrentNumRecharge = 0;
+
 	private float CurrentPressedPropulsionTime = -1f;
 	private MovingComponent MovingComp = null;
 	private RotatorComponent RotatorComp = null;
 	private ShakeComponent CameraShakeComp = null;
 
-	public bool CanPropulse { get { return CanAlwaysPropulse || NearComets.Count > 0; } }
+	public bool CanPropulse { get { return CanAlwaysPropulse || CurrentNumRecharge > 0 || NearComets.Count > 0; } }
 	public bool IsPropulsing { get { return CurrentPressedPropulsionTime >= 0f; } }
 	public float CurrentPropulsionRatio { get { return CurrentPressedPropulsionTime / MaxPressedPropulsionTime; } }
 
-	void StopPropulse()
+	void ResetPropulse()
 	{
 		CameraShakeComp.StopContinuousShakeCamera();
 		CurrentPressedPropulsionTime = -1f;
@@ -57,8 +63,90 @@ public class PropulsorComponent : MonoBehaviour
 
 	void CancelPropulse()
 	{
-		StopPropulse();
+		ResetPropulse();
 		OnPropulseCancelEvent.Invoke();
+	}
+
+	void StartPropulse()
+	{
+		if (CanPropulse)
+		{
+			CurrentPressedPropulsionTime = 0f;
+			OnPropulseStartEvent.Invoke();
+
+			if (UseCameraShake && CameraShakeComp)
+			{
+				CameraShakeComp.ContinuousShakeCamera(PropulsingCameraShakeAmount);
+			}
+		}
+	}
+	
+	void UpdatePropulse()
+	{
+		if (IsPropulsing)
+		{
+			CurrentPressedPropulsionTime += Time.unscaledDeltaTime;
+			float newTimeScale = Time.timeScale - SlowTimeSpeed * Time.unscaledDeltaTime;
+			if (newTimeScale > SlowTime)
+			{
+				Time.timeScale = newTimeScale;
+			}
+			else
+			{
+				Time.timeScale = SlowTime;
+			}
+
+			if (CurrentPressedPropulsionTime > MaxPressedPropulsionTime)
+			{
+				OnCanPropulseEndEvent.Invoke();
+				CancelPropulse();
+				if (ShipUnit.Instance)
+				{
+					ShipUnit.Instance.Explode();
+				}
+				else
+				{
+					Debug.LogWarning("No Ship Instance found, will not be able to die");
+				}
+			}
+		}
+	}
+
+	void EndPropulse()
+	{
+		if (IsPropulsing)
+		{
+			OnPropulseEndEvent.Invoke();
+
+			if (NearComets.Count > 0)
+			{
+				GameObject NearestComet = NearComets[0];
+				NearComets.RemoveAt(0);
+
+				Destroy(NearestComet);
+			}
+			else
+			{
+				CurrentNumRecharge = Mathf.Max(0, CurrentNumRecharge - 1);
+				Debug.Log("Remaining recharge " + CurrentNumRecharge);
+			}
+
+			float CameraShakeAmount = MinCameraShakeAmount + (MaxCameraShakeAmount - MinCameraShakeAmount) * CurrentPropulsionRatio;
+			MovingComp.CurrentSpeed = MinPropulsionSpeed + (MaxPropulsionSpeed - MinPropulsionSpeed) * CurrentPropulsionRatio;
+
+			if (RotatorComp.MeshRotated)
+			{
+				transform.rotation = RotatorComp.MeshRotated.rotation;
+				RotatorComp.MeshRotated.localRotation = Quaternion.identity;
+			}
+
+			if (UseCameraShake && CameraShakeComp)
+			{
+				CameraShakeComp.ShakeCamera(CameraShakeTime, CameraShakeAmount);
+			}
+		}
+
+		ResetPropulse();
 	}
 
 	private void Awake()
@@ -70,90 +158,36 @@ public class PropulsorComponent : MonoBehaviour
 	private void Start()
 	{
 		CameraShakeComp = FindObjectOfType<ShakeComponent>();
+		CurrentNumRecharge = BaseRecharge;
+		Debug.Log("Starting recharge " + CurrentNumRecharge);
 	}
 
 	private void Update()
 	{
+		if (CanAddRechargeWithR && Input.GetKeyUp(KeyCode.R))
+		{
+			CurrentNumRecharge = Mathf.Min(MaxRecharge, CurrentNumRecharge + 1);
+			Debug.Log("New recharge " + CurrentNumRecharge);
+		}
+
 		if ( IsPropulsing && !CanPropulse )
 		{
 			CancelPropulse();
 		}
 
-		if (Input.GetKeyDown(KeyCode.Space))
+		if ( Input.GetKeyDown( KeyCode.Space ) )
 		{
-			if (CanPropulse)
-			{
-				CurrentPressedPropulsionTime = 0f;
-				OnPropulseStartEvent.Invoke();
-
-				if (UseCameraShake && CameraShakeComp)
-				{
-					CameraShakeComp.ContinuousShakeCamera(PropulsingCameraShakeAmount);
-				}
-			}
+			StartPropulse();
 		}
 
 		if ( Input.GetKey( KeyCode.Space ) )
 		{
-			if (IsPropulsing)
-			{
-				CurrentPressedPropulsionTime += Time.unscaledDeltaTime;
-				float newTimeScale = Time.timeScale - SlowTimeSpeed * Time.unscaledDeltaTime;
-				if (newTimeScale > SlowTime)
-				{
-					Time.timeScale = newTimeScale;
-				}
-				else
-				{
-					Time.timeScale = SlowTime;
-				}
-
-				if (CurrentPressedPropulsionTime > MaxPressedPropulsionTime)
-				{
-					OnCanPropulseEndEvent.Invoke();
-					CancelPropulse();
-					if (ShipUnit.Instance)
-					{
-						ShipUnit.Instance.Explode();
-					}
-					else
-					{
-						Debug.LogWarning("No Ship Instance found, will not be able to die");
-					}
-				}
-			}
+			UpdatePropulse();
 		}
 		
 		if ( Input.GetKeyUp( KeyCode.Space ) )
 		{
-			if (IsPropulsing)
-			{
-				OnPropulseEndEvent.Invoke();
-
-				if (NearComets.Count > 0)
-				{
-					GameObject NearestComet = NearComets[0];
-					NearComets.RemoveAt(0);
-
-					Destroy(NearestComet);
-				}
-
-				float CameraShakeAmount = MinCameraShakeAmount + (MaxCameraShakeAmount - MinCameraShakeAmount) * CurrentPropulsionRatio;
-				MovingComp.CurrentSpeed = MinPropulsionSpeed + (MaxPropulsionSpeed - MinPropulsionSpeed) * CurrentPropulsionRatio;
-
-				if (RotatorComp.MeshRotated)
-				{
-					transform.rotation = RotatorComp.MeshRotated.rotation;
-					RotatorComp.MeshRotated.localRotation = Quaternion.identity;
-				}
-
-				if (UseCameraShake && CameraShakeComp)
-				{
-					CameraShakeComp.ShakeCamera(CameraShakeTime, CameraShakeAmount);
-				}
-			}
-
-			StopPropulse();
+			EndPropulse();
 		}
 	}
 

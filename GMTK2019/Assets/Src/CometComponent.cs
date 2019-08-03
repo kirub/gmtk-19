@@ -6,13 +6,6 @@ public class CometComponent : MonoBehaviour
 {
 	[SerializeField] private ParticleSystem RangeParticle = null;
 
-	private Color CurrentSpriteColor = new Color();
-	private float CurrentSpriteTransparency = 0f;
-	private float CurrentDisplaySpriteTime = 0f;
-
-	private float StartSpriteTransparency = 0f;
-	private float FinalSpriteTransparency = 0f;
-
 	void OnCanPropulseStart()
 	{
 		RangeParticle.gameObject.SetActive(true);
