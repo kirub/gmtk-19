@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class MovingComponent : MonoBehaviour
 {
+	[SerializeField] private float BaseMovingSpeed = 1f;
 	[SerializeField] private float MinMovingSpeed = 1f;
 	[SerializeField] private float MaxMovingSpeed = 1f;
 	[SerializeField] private float Deceleration = 1f;
 
 	public float CurrentSpeed { get; set; } = 0f;
+
+	private void Awake()
+	{
+		CurrentSpeed = BaseMovingSpeed;
+	}
 
 	private void Update()
 	{
