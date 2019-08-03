@@ -52,6 +52,7 @@ public class PropulsorComponent : MonoBehaviour
 
 	public bool CanPropulse { get { return CanAlwaysPropulse || CurrentNumRecharge > 0 || NearComets.Count > 0; } }
 	public bool IsPropulsing { get { return CurrentPressedPropulsionTime >= 0f; } }
+	public bool IsValidPropulsion { get { return IsPropulsing && CurrentPropulsionRatio > NeutralPropulsionRatio; } }
 	public float CurrentPropulsionRatio { get { return CurrentPressedPropulsionTime / MaxPressedPropulsionTime; } }
 
 	void ResetPropulse()
@@ -114,7 +115,7 @@ public class PropulsorComponent : MonoBehaviour
 
 	void EndPropulse()
 	{
-		if (IsPropulsing)
+		if (IsValidPropulsion)
 		{
 			OnPropulseEndEvent.Invoke();
 
@@ -146,7 +147,14 @@ public class PropulsorComponent : MonoBehaviour
 			}
 		}
 
-		ResetPropulse();
+		if (IsPropulsing)
+		{
+			CancelPropulse();
+		}
+		else
+		{
+			ResetPropulse();
+		}
 	}
 
 	private void Awake()
