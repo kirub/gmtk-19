@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Planet_03_mat 2
+  m_Name: Planet_05_mat
   m_Shader: {fileID: 4800000, guid: bdf6b707e38375041bb0c91fc5e83393, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -20,11 +20,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Emissive:
-        m_Texture: {fileID: 2800000, guid: da3dadf7c3521584d9dfae7d00a049a1, type: 3}
+        m_Texture: {fileID: 2800000, guid: cb5b03e3b1bd50842bfbc8aa8a377481, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: da3dadf7c3521584d9dfae7d00a049a1, type: 3}
+        m_Texture: {fileID: 2800000, guid: cb5b03e3b1bd50842bfbc8aa8a377481, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Metallic:
