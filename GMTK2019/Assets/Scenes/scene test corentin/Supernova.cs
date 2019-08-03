@@ -10,8 +10,8 @@ public class Supernova : MonoBehaviour
     public Transform PlayerTransform;
     public Rigidbody PlayerBody;
     
-    public float TimerBeforeStart = 5f;
-    public float ExpantionSpeed = 0.5f;
+    public float TimerBeforeStart = 2f;
+    public float ExpantionSpeed = 5f;
     public float NovaPullBaseStrengh = 0.5f;
     public float NovaPullStrenghIncreaseOverTime = 0.001f;
 
@@ -42,17 +42,24 @@ public class Supernova : MonoBehaviour
     //ajouter condition ou layer pour ne capter que le ship
     public void OnTriggerEnter(Collider other)
     {
-        OnEnterOuterSupernova.Invoke();
-        NovaPullIsOn = true;
-        NovaPullActualStrengh = NovaPullBaseStrengh;
-        //Debug.Log("Enter outer");
+        if(other.tag=="Player")
+        {
+            OnEnterOuterSupernova.Invoke();
+            NovaPullIsOn = true;
+            NovaPullActualStrengh = NovaPullBaseStrengh;
+            //Debug.Log("Enter outer");
+        }
     }
     public void OnTriggerExit(Collider other)
     {
-        OnExitOuterSupernova.Invoke();
-        NovaPullIsOn = false;
-        NovaPullActualStrengh = 0;
-        //Debug.Log("Exit outer");
+        if (other.tag == "Player")
+        {
+            OnExitOuterSupernova.Invoke();
+            NovaPullIsOn = false;
+            NovaPullActualStrengh = 0;
+            //Debug.Log("Exit outer");
+        }
+
     }
     // Update is called once per frame
     void Update()
@@ -60,16 +67,18 @@ public class Supernova : MonoBehaviour
         if(ExpantionIsOn)
         {
             Novacore.localScale = Novacore.localScale + (VScale* Time.deltaTime);
-            
         }
         if (NovaPullIsOn)
         {
             NovaPullActualStrengh += NovaPullStrenghIncreaseOverTime*Time.deltaTime;
-            PlayerBody.AddForce((Novacore.position - PlayerTransform.position)* NovaPullActualStrengh);
+            if(PlayerTransform)
+                PlayerBody.AddForce((Novacore.position - PlayerTransform.position)* NovaPullActualStrengh);
            // Debug.Log(NovaPullActualStrengh);
         }
-        DistancePlayerNovacore = Vector3.Distance(Novacore.position, PlayerTransform.position);
-        M.LatestScore = DistancePlayerNovacore*100;
+        if (PlayerTransform)
+            DistancePlayerNovacore = Vector3.Distance(Novacore.position, PlayerTransform.position);
+        if (M)
+            M.LatestScore = DistancePlayerNovacore*100;
     }
 
     
