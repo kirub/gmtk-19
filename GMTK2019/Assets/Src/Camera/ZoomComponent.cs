@@ -11,7 +11,7 @@ public class ZoomComponent : MonoBehaviour
 	[SerializeField] private float ZoomAcceleration = 1f;
 
 	private float BaseY = 0f;
-	[SerializeField] private float ZoomSpeed = 0f;
+	private float ZoomSpeed = 0f;
 	private float ZoomModifier = 0f;
 
 	void OnZoomStart()

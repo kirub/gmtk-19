@@ -52742,14 +52742,14 @@ MonoBehaviour:
   CanAlwaysPropulse: 1
   MinPropulsionSpeed: 5
   MaxPropulsionSpeed: 30
-  MaxPressedPropulsionTime: 10
+  MaxPressedPropulsionTime: 5
   _GoodPropulsionRatio: 0.3
   _BadPropulsionRatio: 0.2
   SlowTime: 0.2
   SlowTimeSpeed: 1
   UseCameraShake: 1
   CameraShakeTime: 1
-  PropulsingCameraShakeAmount: 1
+  PropulsingCameraShakeAmount: 4
   MinCameraShakeAmount: 10
   MaxCameraShakeAmount: 25
   NearComets: []
