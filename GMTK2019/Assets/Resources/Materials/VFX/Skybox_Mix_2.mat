@@ -20,11 +20,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Noise_1:
-        m_Texture: {fileID: 2800000, guid: 03c5fdb2dc8acbc47a142c59911c6539, type: 3}
+        m_Texture: {fileID: 2800000, guid: a020a50c5e01c074face923f01fd7569, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Noise_2:
-        m_Texture: {fileID: 2800000, guid: 03c5fdb2dc8acbc47a142c59911c6539, type: 3}
+        m_Texture: {fileID: 2800000, guid: a020a50c5e01c074face923f01fd7569, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OpacityMask:
@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture3:
-        m_Texture: {fileID: 2800000, guid: 03c5fdb2dc8acbc47a142c59911c6539, type: 3}
+        m_Texture: {fileID: 2800000, guid: a020a50c5e01c074face923f01fd7569, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _UV_Distortion_Mask:
