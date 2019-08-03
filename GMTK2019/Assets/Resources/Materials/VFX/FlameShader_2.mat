@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - _AdditiveValue: 0.61
+    - _AdditiveValue: 1.5
     - _CounterFresneBias: 0.24
     - _CounterFresnelPower: 6.35
     - _CounterFresnelScale: 1.41

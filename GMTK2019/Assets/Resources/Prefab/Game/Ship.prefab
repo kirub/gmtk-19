@@ -79,16 +79,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f47d3b5c83fe0344ad6539849f4d9b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   CanAlwaysPropulse: 1
+=======
+  CanAlwaysPropulse: 0
+>>>>>>> 441a79f7753892195a7af341b24b1c5ac38f7afa
   MinPropulsionSpeed: 5
   MaxPropulsionSpeed: 30
   MaxPressedPropulsionTime: 2
+  _GoodPropulsionRatio: 0.3
+  _BadPropulsionRatio: 0.2
   SlowTime: 0.2
   SlowTimeSpeed: 1
   UseCameraShake: 1
   CameraShakeTime: 1
+  PropulsingCameraShakeAmount: 1
   MinCameraShakeAmount: 10
   MaxCameraShakeAmount: 25
+  NearComets: []
 --- !u!114 &3415852780956670764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,6 +109,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3a7658c1392ab4cb9cb5974771fecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UseCameraShakeOnExplode: 1
+  ExplodeShakeTime: 1
+  ExplodeShakeAmount: 5
 --- !u!54 &1180141065556479920
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -220,6 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307d96af49e170e4fa6e6b8a45774542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   UseCameraShake: 1
   CameraShakeTime: 3
   CameraShakeAmount: 10
@@ -237,6 +249,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _AttractedBy: {fileID: 0}
   IsAStaticStar: 0
+=======
+>>>>>>> 441a79f7753892195a7af341b24b1c5ac38f7afa
 --- !u!1001 &2769834526873320255
 PrefabInstance:
   m_ObjectHideFlags: 0

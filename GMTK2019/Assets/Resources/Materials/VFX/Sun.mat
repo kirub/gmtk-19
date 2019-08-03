@@ -44,7 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Noise_1_Value: 3.5
+    - _Noise_1_Value: 4.21
     - _Noise_2_Value: 9
     - _VertexOffset: 0.1
     - __dirty: 0
