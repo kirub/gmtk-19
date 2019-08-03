@@ -48,6 +48,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsSmoothShake: 1
   SmoothAmount: 5
+  RemainingShakeTime: 0
+  RemainingShakeAmount: 0
+  ShakePercentage: 0
+  TotalShakeTime: 0
+  TotalShakeAmount: 0
 --- !u!114 &132206820036382636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,7 +67,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DistanceToShip: 10
   SmoothFollow: 1
-  SmoothAmount: 3
+  SmoothAmount: 10
 --- !u!114 &428178066
 MonoBehaviour:
   m_ObjectHideFlags: 0
