@@ -14,6 +14,6 @@ public class MovingComponent : MonoBehaviour
 	{
 		CurrentSpeed -= Deceleration * Time.deltaTime;
 		CurrentSpeed = Mathf.Clamp( CurrentSpeed, MinMovingSpeed, MaxMovingSpeed );
-		transform.Translate(transform.forward * CurrentSpeed * Time.deltaTime);
+		transform.position = transform.position + transform.forward * CurrentSpeed * Time.deltaTime;
 	}
 }

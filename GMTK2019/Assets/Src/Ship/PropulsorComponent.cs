@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(MovingComponent))]
+[RequireComponent(typeof(RotatorComponent))]
 public class PropulsorComponent : MonoBehaviour
 {
 	[SerializeField] private float MinPropulsionSpeed = 5f;
@@ -19,11 +20,13 @@ public class PropulsorComponent : MonoBehaviour
 
 	private float CurrentPressedPropulsionTime = 0f;
 	private MovingComponent MovingComp = null;
+	private RotatorComponent RotatorComp = null;
 	private ShakeComponent CameraShakeComp = null;
 
 	private void Awake()
 	{
 		MovingComp = GetComponent<MovingComponent>();
+		RotatorComp = GetComponent<RotatorComponent>();
 	}
 
 	private void Start()
@@ -60,6 +63,12 @@ public class PropulsorComponent : MonoBehaviour
 			}
 			CurrentPressedPropulsionTime = 0f;
 			Time.timeScale = 1f;
+
+			if (RotatorComp.MeshRotated)
+			{
+				transform.rotation = RotatorComp.MeshRotated.rotation;
+				RotatorComp.MeshRotated.localRotation = Quaternion.identity;
+			}
 
 			if (UseCameraShake && CameraShakeComp)
 			{

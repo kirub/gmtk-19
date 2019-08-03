@@ -245,7 +245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MinMovingSpeed: 1
-  MaxMovingSpeed: 10
+  MaxMovingSpeed: 30
   Deceleration: 1
 --- !u!114 &1974838034
 MonoBehaviour:
@@ -260,7 +260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MinPropulsionSpeed: 5
-  MaxPropulsionSpeed: 20
+  MaxPropulsionSpeed: 30
   MaxPressedPropulsionTime: 2
   SlowTime: 0.2
   SlowTimeSpeed: 1

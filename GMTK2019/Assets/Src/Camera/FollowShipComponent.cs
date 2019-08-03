@@ -18,7 +18,7 @@ public class FollowShipComponent : MonoBehaviour
 		}
 		else
 		{
-			Debug.LogError("No Ship set on FollowShipComponent");
+			Debug.LogError("No Ship set on " + this + "FollowShipComponent");
 			Destroy(this);
 		}
 	}
