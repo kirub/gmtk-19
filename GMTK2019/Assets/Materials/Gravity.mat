@@ -21,13 +21,13 @@ Material:
     m_TexEnvs: []
     m_Floats:
     - _Alpha: 1
-    - _CounterFresneBias: 0.04
-    - _CounterFresnelPower: 2.12
-    - _CounterFresnelScale: 1.97
-    - _EmissiveValue: 2.04
-    - _FresnelBias: -0.38
-    - _FresnelPower: 1
-    - _FresnelScale: 2.45
+    - _CounterFresneBias: -0.32
+    - _CounterFresnelPower: 6.4
+    - _CounterFresnelScale: 1.41
+    - _EmissiveValue: 1.5
+    - _FresnelBias: -0.33
+    - _FresnelPower: 1.85
+    - _FresnelScale: 1.79
     - __dirty: 0
     m_Colors:
     - _MainColor: {r: 0.3915094, g: 0.87568486, b: 1, a: 0}
