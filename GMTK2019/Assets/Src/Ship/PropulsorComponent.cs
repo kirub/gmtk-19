@@ -12,14 +12,21 @@ public class PropulsorComponent : MonoBehaviour
 	[SerializeField] private float MinPropulsionSpeed = 5f;
 	[SerializeField] private float MaxPropulsionSpeed = 20f;
 	[SerializeField] private float MaxPressedPropulsionTime = 2f;
+	[SerializeField] private float _GoodPropulsionRatio = 0.3f;
+	[SerializeField] private float _BadPropulsionRatio = 0.2f;
 
 	[SerializeField] private float SlowTime = 0.5f;
 	[SerializeField] private float SlowTimeSpeed = 2f;
 
 	[SerializeField] private bool UseCameraShake = true;
 	[SerializeField] private float CameraShakeTime = 2f;
+	[SerializeField] private float PropulsingCameraShakeAmount = 2f;
 	[SerializeField] private float MinCameraShakeAmount = 2f;
 	[SerializeField] private float MaxCameraShakeAmount = 5f;
+	
+	public float NeutralPropulsionRatio { get { return 1f - _GoodPropulsionRatio - _BadPropulsionRatio; } }
+	public float GoodPropulsionRatio { get { return _GoodPropulsionRatio; } }
+	public float BadPropulsionRatio { get { return _BadPropulsionRatio; } }
 
 	public class OnCanPropulseEvent : UnityEvent { }
 	public OnCanPropulseEvent OnCanPropulseStartEvent { get; } = new OnCanPropulseEvent();
@@ -28,15 +35,31 @@ public class PropulsorComponent : MonoBehaviour
 	public class OnPropulseEvent : UnityEvent { }
 	public OnPropulseEvent OnPropulseStartEvent { get; } = new OnPropulseEvent();
 	public OnPropulseEvent OnPropulseEndEvent { get; } = new OnPropulseEvent();
+	public OnPropulseEvent OnPropulseCancelEvent { get; } = new OnPropulseEvent();
 
-	private List<GameObject> NearComets = new List<GameObject>();
+	[SerializeField] private List<GameObject> NearComets = new List<GameObject>();
 
-	private float CurrentPressedPropulsionTime = 0f;
+	private float CurrentPressedPropulsionTime = -1f;
 	private MovingComponent MovingComp = null;
 	private RotatorComponent RotatorComp = null;
 	private ShakeComponent CameraShakeComp = null;
 
 	public bool CanPropulse { get { return CanAlwaysPropulse || NearComets.Count > 0; } }
+	public bool IsPropulsing { get { return CurrentPressedPropulsionTime >= 0f; } }
+	public float CurrentPropulsionRatio { get { return CurrentPressedPropulsionTime / MaxPressedPropulsionTime; } }
+
+	void StopPropulse()
+	{
+		CameraShakeComp.StopContinuousShakeCamera();
+		CurrentPressedPropulsionTime = -1f;
+		Time.timeScale = 1f;
+	}
+
+	void CancelPropulse()
+	{
+		StopPropulse();
+		OnPropulseCancelEvent.Invoke();
+	}
 
 	private void Awake()
 	{
@@ -51,20 +74,31 @@ public class PropulsorComponent : MonoBehaviour
 
 	private void Update()
 	{
+		if ( IsPropulsing && !CanPropulse )
+		{
+			CancelPropulse();
+		}
+
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
 			if (CanPropulse)
 			{
+				CurrentPressedPropulsionTime = 0f;
 				OnPropulseStartEvent.Invoke();
+
+				if (UseCameraShake && CameraShakeComp)
+				{
+					CameraShakeComp.ContinuousShakeCamera(PropulsingCameraShakeAmount);
+				}
 			}
 		}
 
 		if ( Input.GetKey( KeyCode.Space ) )
 		{
-			if (CanPropulse)
+			if (IsPropulsing)
 			{
-				CurrentPressedPropulsionTime += Time.deltaTime;
-				float newTimeScale = Time.timeScale - SlowTimeSpeed * Time.deltaTime;
+				CurrentPressedPropulsionTime += Time.unscaledDeltaTime;
+				float newTimeScale = Time.timeScale - SlowTimeSpeed * Time.unscaledDeltaTime;
 				if (newTimeScale > SlowTime)
 				{
 					Time.timeScale = newTimeScale;
@@ -73,22 +107,39 @@ public class PropulsorComponent : MonoBehaviour
 				{
 					Time.timeScale = SlowTime;
 				}
+
+				if (CurrentPressedPropulsionTime > MaxPressedPropulsionTime)
+				{
+					OnCanPropulseEndEvent.Invoke();
+					CancelPropulse();
+					if (ShipUnit.Instance)
+					{
+						ShipUnit.Instance.Explode();
+					}
+					else
+					{
+						Debug.LogWarning("No Ship Instance found, will not be able to die");
+					}
+				}
 			}
 		}
 		
 		if ( Input.GetKeyUp( KeyCode.Space ) )
 		{
-			if (CanPropulse)
+			if (IsPropulsing)
 			{
-				float CameraShakeAmount = MaxCameraShakeAmount;
-				MovingComp.CurrentSpeed = MaxPropulsionSpeed;
+				OnPropulseEndEvent.Invoke();
 
-				if (CurrentPressedPropulsionTime < MaxPressedPropulsionTime)
+				if (NearComets.Count > 0)
 				{
-					float PressedRatio = CurrentPressedPropulsionTime / MaxPressedPropulsionTime;
-					CameraShakeAmount = MinCameraShakeAmount + (MaxCameraShakeAmount - MinCameraShakeAmount) * PressedRatio;
-					MovingComp.CurrentSpeed = MinPropulsionSpeed + (MaxPropulsionSpeed - MinPropulsionSpeed) * PressedRatio;
+					GameObject NearestComet = NearComets[0];
+					NearComets.RemoveAt(0);
+
+					Destroy(NearestComet);
 				}
+
+				float CameraShakeAmount = MinCameraShakeAmount + (MaxCameraShakeAmount - MinCameraShakeAmount) * CurrentPropulsionRatio;
+				MovingComp.CurrentSpeed = MinPropulsionSpeed + (MaxPropulsionSpeed - MinPropulsionSpeed) * CurrentPropulsionRatio;
 
 				if (RotatorComp.MeshRotated)
 				{
@@ -100,19 +151,9 @@ public class PropulsorComponent : MonoBehaviour
 				{
 					CameraShakeComp.ShakeCamera(CameraShakeTime, CameraShakeAmount);
 				}
-				
-				if (NearComets.Count > 0)
-				{
-					GameObject NearestComet = NearComets[0];
-					NearComets.RemoveAt(0);
-
-					Destroy(NearestComet);
-				}
 			}
 
-			CurrentPressedPropulsionTime = 0f;
-			Time.timeScale = 1f;
-			OnPropulseEndEvent.Invoke();
+			StopPropulse();
 		}
 	}
 

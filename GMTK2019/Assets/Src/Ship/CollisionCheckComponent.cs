@@ -3,23 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CollisionCheckComponent : MonoBehaviour
-{
-	[SerializeField] private bool UseCameraShake = true;
-	[SerializeField] private float CameraShakeTime = 2f;
-	[SerializeField] private float CameraShakeAmount = 2f;
-
-	private ShakeComponent CameraShakeComp = null;
-
-	private void Start()
-	{
-		CameraShakeComp = FindObjectOfType<ShakeComponent>();
-	}
+{	
 	private void OnTriggerEnter(Collider other)
-	{
-		if (UseCameraShake && CameraShakeComp)
+    {
+        if (other.CompareTag("OrbitalInnerRadius") || other.CompareTag("OrbitalOuterRadius"))
+            return;
+
+        if (!ShipUnit.Instance)
 		{
-			CameraShakeComp.ShakeCamera(CameraShakeTime, CameraShakeAmount);
+			Debug.LogWarning("No Ship Instance found, will not be able to die");
+			return;
 		}
-		Destroy(transform.parent.gameObject);
+
+		ShipUnit.Instance.Explode();
 	}
 }
