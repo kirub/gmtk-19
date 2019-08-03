@@ -7,6 +7,8 @@ using UnityEngine.Events;
 [RequireComponent(typeof(RotatorComponent))]
 public class PropulsorComponent : MonoBehaviour
 {
+	[SerializeField] private bool CanAlwaysPropulse = false;
+
 	[SerializeField] private float MinPropulsionSpeed = 5f;
 	[SerializeField] private float MaxPropulsionSpeed = 20f;
 	[SerializeField] private float MaxPressedPropulsionTime = 2f;
@@ -30,7 +32,7 @@ public class PropulsorComponent : MonoBehaviour
 	private RotatorComponent RotatorComp = null;
 	private ShakeComponent CameraShakeComp = null;
 
-	public bool CanPropulse { get { return NearComets.Count > 0; } }
+	public bool CanPropulse { get { return CanAlwaysPropulse || NearComets.Count > 0; } }
 
 	private void Awake()
 	{
@@ -87,10 +89,13 @@ public class PropulsorComponent : MonoBehaviour
 					CameraShakeComp.ShakeCamera(CameraShakeTime, CameraShakeAmount);
 				}
 				
-				GameObject NearestComet = NearComets[0];
-				NearComets.RemoveAt(0);
+				if (NearComets.Count > 0)
+				{
+					GameObject NearestComet = NearComets[0];
+					NearComets.RemoveAt(0);
 
-				Destroy(NearestComet);
+					Destroy(NearestComet);
+				}
 			}
 
 			CurrentPressedPropulsionTime = 0f;
