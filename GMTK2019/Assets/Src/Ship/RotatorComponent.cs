@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class RotatorComponent : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	[SerializeField] private float RotationSpeed = 1f;
+	[SerializeField] private Transform MeshContainer = null;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	private void Update()
+	{
+		MeshContainer.Rotate(Vector3.up, RotationSpeed * Time.deltaTime);
+	}
 }
