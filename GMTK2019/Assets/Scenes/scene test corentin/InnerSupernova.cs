@@ -13,9 +13,11 @@ public class InnerSupernova : MonoBehaviour
     private bool ExpantionIsOn = false;
     private Transform Novacore;
     private Vector3 VScale;
+    private Manager M;
 
     void Start()
     {
+        M = GameObject.FindObjectOfType<Manager>();
         Novacore = this.transform;
         VScale.Set(ExpantionSpeed, 0, ExpantionSpeed);
         StartCoroutine(TimerExpantionStart());
@@ -29,8 +31,10 @@ public class InnerSupernova : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        //je peux pas faire si other.tag=="player" ça passe pas ;'(
+        if ((other.tag != "Comet" )&&(other.tag != "OrbitalOuterRadius") && (other.tag != "OrbitalInnerRadius") && (other.tag != "Untagged") && (other.tag != "Planet"))
         {
+            Debug.Log("Enter Inner = gameover " + other.tag);
             OnEnterInnerSupernova.Invoke();
         }
         //Debug.Log("Enter Inner = gameover");
