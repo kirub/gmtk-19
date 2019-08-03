@@ -52779,6 +52779,8 @@ MonoBehaviour:
   UseCameraShakeOnExplode: 1
   ExplodeShakeTime: 1
   ExplodeShakeAmount: 5
+  ExplosionParticle: {fileID: 8372948693912248561, guid: 6218c146314cd9f4e84d28cb163bcde0,
+    type: 3}
 --- !u!54 &1191246663280468692
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -81801,6 +81803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307d96af49e170e4fa6e6b8a45774542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CollisionsExceptions: []
 --- !u!114 &6530761928582668124
 MonoBehaviour:
   m_ObjectHideFlags: 0

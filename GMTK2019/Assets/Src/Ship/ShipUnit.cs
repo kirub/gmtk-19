@@ -11,6 +11,8 @@ public class ShipUnit : MonoBehaviour
 	[SerializeField] private bool UseCameraShakeOnExplode = true;
 	[SerializeField] private float ExplodeShakeTime = 2f;
 	[SerializeField] private float ExplodeShakeAmount = 2f;
+	
+	[SerializeField] private GameObject ExplosionParticle = null;
 
 	private ShakeComponent CameraShakeComp = null;
 
@@ -23,6 +25,10 @@ public class ShipUnit : MonoBehaviour
 		if (UseCameraShakeOnExplode && CameraShakeComp)
 		{
 			CameraShakeComp.ShakeCamera(ExplodeShakeTime, ExplodeShakeAmount);
+		}
+		if (ExplosionParticle)
+		{
+			Instantiate(ExplosionParticle, transform.position, transform.rotation);
 		}
 		Destroy(transform.gameObject);
 	}

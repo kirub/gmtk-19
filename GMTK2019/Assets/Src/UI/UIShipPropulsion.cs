@@ -70,7 +70,7 @@ public class UIShipPropulsion : MonoBehaviour
 	{
 		if (!ShipUnit.Instance)
 		{
-			Destroy(this);
+			Destroy(gameObject);
 			return;
 		}
 
