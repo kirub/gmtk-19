@@ -16,6 +16,9 @@ public class CollisionCheckComponent : MonoBehaviour
 	}
 	private void OnTriggerEnter(Collider other)
 	{
+        if (other.CompareTag("OrbitalInnerRadius") || other.CompareTag("OrbitalOuterRadius"))
+            return;
+
 		if (UseCameraShake && CameraShakeComp)
 		{
 			CameraShakeComp.ShakeCamera(CameraShakeTime, CameraShakeAmount);
