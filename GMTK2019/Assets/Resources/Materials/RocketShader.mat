@@ -20,11 +20,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Emissive:
-        m_Texture: {fileID: 2800000, guid: d3e77d6094efb944a973e046bac8bf39, type: 3}
+        m_Texture: {fileID: 2800000, guid: 215ac30a2ca7c51409c5fcfe795d4de0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: d3e77d6094efb944a973e046bac8bf39, type: 3}
+        m_Texture: {fileID: 2800000, guid: 215ac30a2ca7c51409c5fcfe795d4de0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Metallic:
@@ -44,6 +44,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _ASEOutlineWidth: 0.06
+    - _EmissiveValue: 0.69
     - _FresnelBias: 1.82
     - _FresnelPower: 0.89
     - _FresnelScale: -1.39
@@ -52,6 +54,7 @@ Material:
     - _SmoothnessValue: 0.09
     - __dirty: 0
     m_Colors:
-    - _DiffuseColor: {r: 1, g: 0, b: 0, a: 0}
-    - _EmissiveColor: {r: 0.2719384, g: 0.44117755, b: 0.5943396, a: 0}
+    - _ASEOutlineColor: {r: 1, g: 1, b: 1, a: 0}
+    - _DiffuseColor: {r: 1, g: 1, b: 1, a: 0}
+    - _EmissiveColor: {r: 1, g: 1, b: 1, a: 0}
     - _OutlineColor: {r: 0, g: 1, b: 0.8844981, a: 0}
