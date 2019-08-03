@@ -25,6 +25,10 @@ public class PropulsorComponent : MonoBehaviour
 	public OnCanPropulseEvent OnCanPropulseStartEvent { get; } = new OnCanPropulseEvent();
 	public OnCanPropulseEvent OnCanPropulseEndEvent { get; } = new OnCanPropulseEvent();
 
+	public class OnPropulseEvent : UnityEvent { }
+	public OnPropulseEvent OnPropulseStartEvent { get; } = new OnPropulseEvent();
+	public OnPropulseEvent OnPropulseEndEvent { get; } = new OnPropulseEvent();
+
 	private List<GameObject> NearComets = new List<GameObject>();
 
 	private float CurrentPressedPropulsionTime = 0f;
@@ -47,6 +51,14 @@ public class PropulsorComponent : MonoBehaviour
 
 	private void Update()
 	{
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			if (CanPropulse)
+			{
+				OnPropulseStartEvent.Invoke();
+			}
+		}
+
 		if ( Input.GetKey( KeyCode.Space ) )
 		{
 			if (CanPropulse)
@@ -100,6 +112,7 @@ public class PropulsorComponent : MonoBehaviour
 
 			CurrentPressedPropulsionTime = 0f;
 			Time.timeScale = 1f;
+			OnPropulseEndEvent.Invoke();
 		}
 	}
 
