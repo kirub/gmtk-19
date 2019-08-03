@@ -31,7 +31,7 @@ public class InnerSupernova : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        M.GameOver();
+        OnEnterInnerSupernova.Invoke();
         //Debug.Log("Enter Inner = gameover");
     }
 
