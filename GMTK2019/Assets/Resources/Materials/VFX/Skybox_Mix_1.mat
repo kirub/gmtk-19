@@ -70,14 +70,14 @@ Material:
     - __dirty: 0
     m_Colors:
     - _Noise_1_Color: {r: 0.5283019, g: 0.15699537, b: 0.46490815, a: 1}
-    - _Noise_1_Panner: {r: -0.05, g: 0.02, b: 0, a: 0}
+    - _Noise_1_Panner: {r: -0.002, g: 0.003, b: 0, a: 0}
     - _Noise_1_Tiling: {r: 2, g: 1, b: 0, a: 0}
     - _Noise_2_Color: {r: 0.47450984, g: 0.638521, b: 1, a: 1}
-    - _Noise_2_Panner: {r: 0.09, g: -0.08, b: 0, a: 0}
+    - _Noise_2_Panner: {r: 0.008, g: -0.005, b: 0, a: 0}
     - _Noise_2_Tiling: {r: 1, g: 1, b: 0, a: 0}
     - _Noise_3_Color: {r: 0.9855346, g: 0.4575472, b: 1, a: 0}
-    - _Noise_3_Panner: {r: 0.03, g: 0.01, b: 0, a: 0}
+    - _Noise_3_Panner: {r: 0.007, g: 0.005, b: 0, a: 0}
     - _Noise_3_Tiling: {r: 1, g: 1, b: 0, a: 0}
     - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _UV_Distortion_Speed: {r: 0.01, g: 0.025, b: 0, a: 0}
+    - _UV_Distortion_Speed: {r: 0.005, g: 0.003, b: 0, a: 0}
     - _UV_Distortion_Tiling: {r: 2, g: 1, b: 0, a: 0}
