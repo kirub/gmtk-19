@@ -68,6 +68,12 @@ public class UIShipPropulsion : MonoBehaviour
 
 	private void Update()
 	{
+		if (!ShipUnit.Instance)
+		{
+			Destroy(this);
+			return;
+		}
+
 		Slider.anchoredPosition = new Vector2(TotalWidth * ShipUnit.Instance.PropulsorComp.CurrentPropulsionRatio, Slider.anchoredPosition.y);
 		UpdatePosition();
 	}

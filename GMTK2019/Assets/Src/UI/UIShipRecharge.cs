@@ -33,6 +33,12 @@ public class UIShipRecharge : MonoBehaviour
 
 	private void Update()
 	{
+		if (!ShipUnit.Instance)
+		{
+			Destroy(this);
+			return;
+		}
+
 		if (CurrentNumRecharges != ShipUnit.Instance.PropulsorComp.CurrentNumRecharge)
 		{
 			UpdateRechargesVisibility();
