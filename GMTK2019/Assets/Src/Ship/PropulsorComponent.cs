@@ -27,7 +27,14 @@ public class PropulsorComponent : MonoBehaviour
 	[SerializeField] private float PropulsingCameraShakeAmount = 2f;
 	[SerializeField] private float MinCameraShakeAmount = 2f;
 	[SerializeField] private float MaxCameraShakeAmount = 5f;
-	
+
+	[SerializeField] private ParticleSystem PropulsionParticle = null;
+	[SerializeField] private float WaitTimeToReactivateRotator = 1f;
+
+	[SerializeField] private AudioSource PropulsionChargeHeadSound = null;
+	[SerializeField] private AudioSource PropulsionChargeLoopSound = null;
+	[SerializeField] private AudioSource PropulsionImpulseSound = null;
+
 	public float NeutralPropulsionRatio { get { return 1f - _GoodPropulsionRatio - _BadPropulsionRatio; } }
 	public float GoodPropulsionRatio { get { return _GoodPropulsionRatio; } }
 	public float BadPropulsionRatio { get { return _BadPropulsionRatio; } }
@@ -41,7 +48,7 @@ public class PropulsorComponent : MonoBehaviour
 	public OnPropulseEvent OnPropulseEndEvent { get; } = new OnPropulseEvent();
 	public OnPropulseEvent OnPropulseCancelEvent { get; } = new OnPropulseEvent();
 
-	[SerializeField] private List<GameObject> NearComets = new List<GameObject>();
+	private List<GameObject> NearComets = new List<GameObject>();
 
 	public int CurrentNumRecharge { get; private set; } = 0;
 
@@ -49,6 +56,8 @@ public class PropulsorComponent : MonoBehaviour
 	private MovingComponent MovingComp = null;
 	private RotatorComponent RotatorComp = null;
 	private ShakeComponent CameraShakeComp = null;
+
+	private float CurrentWaitTimeBeforeReactivatingRotator = -1f;
 
 	public bool CanPropulse { get { return CanAlwaysPropulse || CurrentNumRecharge > 0 || NearComets.Count > 0; } }
 	public bool IsPropulsing { get { return CurrentPressedPropulsionTime >= 0f; } }
@@ -60,6 +69,15 @@ public class PropulsorComponent : MonoBehaviour
 		CameraShakeComp.StopContinuousShakeCamera();
 		CurrentPressedPropulsionTime = -1f;
 		Time.timeScale = 1f;
+		
+		if (PropulsionChargeHeadSound)
+		{
+			PropulsionChargeHeadSound.Stop();
+		}
+		if (PropulsionChargeLoopSound)
+		{
+			PropulsionChargeLoopSound.Stop();
+		}
 	}
 
 	void CancelPropulse()
@@ -79,6 +97,15 @@ public class PropulsorComponent : MonoBehaviour
 			{
 				CameraShakeComp.ContinuousShakeCamera(PropulsingCameraShakeAmount);
 			}
+
+			if (PropulsionChargeHeadSound)
+			{
+				PropulsionChargeHeadSound.Play();
+			}
+			else if (PropulsionChargeLoopSound)
+			{
+				PropulsionChargeLoopSound.Play();
+			}
 		}
 	}
 	
@@ -86,6 +113,14 @@ public class PropulsorComponent : MonoBehaviour
 	{
 		if (IsPropulsing)
 		{
+			if (PropulsionChargeHeadSound && PropulsionChargeLoopSound)
+			{
+				if (!PropulsionChargeHeadSound.isPlaying && !PropulsionChargeLoopSound.isPlaying)
+				{
+					PropulsionChargeLoopSound.Play();
+				}
+			}
+
 			CurrentPressedPropulsionTime += Time.unscaledDeltaTime;
 			float newTimeScale = Time.timeScale - SlowTimeSpeed * Time.unscaledDeltaTime;
 			if (newTimeScale > SlowTime)
@@ -118,6 +153,21 @@ public class PropulsorComponent : MonoBehaviour
 		if (IsValidPropulsion)
 		{
 			OnPropulseEndEvent.Invoke();
+
+			if (PropulsionParticle)
+			{
+				PropulsionParticle.Play();
+				if (WaitTimeToReactivateRotator > 0)
+				{
+					CurrentWaitTimeBeforeReactivatingRotator = WaitTimeToReactivateRotator;
+					RotatorComp.enabled = false;
+				}
+			}
+
+			if (PropulsionImpulseSound)
+			{
+				PropulsionImpulseSound.Play();
+			}
 
 			if (NearComets.Count > 0)
 			{
@@ -172,6 +222,15 @@ public class PropulsorComponent : MonoBehaviour
 
 	private void Update()
 	{
+		if (CurrentWaitTimeBeforeReactivatingRotator > 0f)
+		{
+			CurrentWaitTimeBeforeReactivatingRotator -= Time.deltaTime;
+			if (CurrentWaitTimeBeforeReactivatingRotator < 0f)
+			{
+				RotatorComp.enabled = true;
+			}
+		}
+
 		if (CanAddRechargeWithR && Input.GetKeyUp(KeyCode.R))
 		{
 			CurrentNumRecharge = Mathf.Min(MaxRecharge, CurrentNumRecharge + 1);
