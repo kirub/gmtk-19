@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(MovingComponent))]
 [RequireComponent(typeof(RotatorComponent))]
@@ -17,7 +18,11 @@ public class PropulsorComponent : MonoBehaviour
 	[SerializeField] private float CameraShakeTime = 2f;
 	[SerializeField] private float MinCameraShakeAmount = 2f;
 	[SerializeField] private float MaxCameraShakeAmount = 5f;
-	
+
+	public class OnCanPropulseEvent : UnityEvent { }
+	public OnCanPropulseEvent OnCanPropulseStartEvent { get; } = new OnCanPropulseEvent();
+	public OnCanPropulseEvent OnCanPropulseEndEvent { get; } = new OnCanPropulseEvent();
+
 	private List<GameObject> NearComets = new List<GameObject>();
 
 	private float CurrentPressedPropulsionTime = 0f;
@@ -98,6 +103,10 @@ public class PropulsorComponent : MonoBehaviour
 		if (other.CompareTag("Comet"))
 		{
 			NearComets.Add(other.gameObject);
+			if (NearComets.Count == 1)
+			{
+				OnCanPropulseStartEvent.Invoke();
+			}
 		}
 	}
 
@@ -106,6 +115,10 @@ public class PropulsorComponent : MonoBehaviour
 		if (other.CompareTag("Comet"))
 		{
 			NearComets.Remove(other.gameObject);
+			if (NearComets.Count == 0)
+			{
+				OnCanPropulseEndEvent.Invoke();
+			}
 		}
 	}
 }
