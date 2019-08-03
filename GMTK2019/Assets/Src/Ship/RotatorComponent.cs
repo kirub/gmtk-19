@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class RotatorComponent : MonoBehaviour
 {
+	[SerializeField] private float RotationAcceleration = 1f;
 	[SerializeField] private float RotationSpeed = 1f;
 	[SerializeField] private Transform MeshContainer = null;
 
 	public Transform MeshRotated { get { return MeshContainer; } }
+
+	private float CurrentRotationSpeed = 0f;
 
 	private void Awake()
 	{
@@ -19,6 +22,17 @@ public class RotatorComponent : MonoBehaviour
 
 	private void Update()
 	{
-		MeshContainer.Rotate(Vector3.up, RotationSpeed * Time.deltaTime);
+		CurrentRotationSpeed = Mathf.Min(RotationSpeed, CurrentRotationSpeed + RotationAcceleration * Time.deltaTime);
+		MeshContainer.Rotate(Vector3.up, CurrentRotationSpeed * Time.deltaTime);
+	}
+
+	private void OnEnable()
+	{
+		CurrentRotationSpeed = 0f;
+	}
+
+	private void OnDisable()
+	{
+		CurrentRotationSpeed = 0f;
 	}
 }

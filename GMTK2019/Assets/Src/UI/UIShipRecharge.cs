@@ -35,7 +35,7 @@ public class UIShipRecharge : MonoBehaviour
 	{
 		if (!ShipUnit.Instance)
 		{
-			Destroy(this);
+			Destroy(gameObject);
 			return;
 		}
 

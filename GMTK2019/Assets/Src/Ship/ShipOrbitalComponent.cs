@@ -60,7 +60,7 @@ public class ShipOrbitalComponent : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if( other.attachedRigidbody.gameObject.CompareTag("Planet") )
+        if( other.attachedRigidbody && other.attachedRigidbody.gameObject.CompareTag("Planet") )
         {
             GameObject CollidingPlanet = other.attachedRigidbody.gameObject;
             SphereCollider SphereCol = other as SphereCollider;
@@ -103,7 +103,7 @@ public class ShipOrbitalComponent : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.attachedRigidbody.gameObject.CompareTag("Planet") && other.attachedRigidbody.gameObject == Planet)
+        if (other.attachedRigidbody && other.attachedRigidbody.gameObject == Planet)
         {
             SphereCollider SphereCol = other as SphereCollider;
             if (SphereCol)

@@ -38,11 +38,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2238437456481884215}
     m_Modifications:
-    - target: {fileID: 469259248214625125, guid: 4b1f896f91934ef4d98284a2dfb47605,
-        type: 3}
-      propertyPath: m_Name
-      value: FX_Reactor_BURST_Particle
-      objectReference: {fileID: 0}
     - target: {fileID: 469259248214625126, guid: 4b1f896f91934ef4d98284a2dfb47605,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -98,20 +93,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90.00001
       objectReference: {fileID: 0}
-    - target: {fileID: 469259248214625126, guid: 4b1f896f91934ef4d98284a2dfb47605,
+    - target: {fileID: 469259248214625125, guid: 4b1f896f91934ef4d98284a2dfb47605,
         type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 469259248214625126, guid: 4b1f896f91934ef4d98284a2dfb47605,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 469259248214625126, guid: 4b1f896f91934ef4d98284a2dfb47605,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.7
+      propertyPath: m_Name
+      value: FX_Reactor_BURST_Particle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b1f896f91934ef4d98284a2dfb47605, type: 3}
