@@ -4,30 +4,29 @@ using UnityEngine;
 
 public class FollowShipComponent : MonoBehaviour
 {
-	[SerializeField] public Transform ShipTransform = null;
 	[SerializeField] public float DistanceToShip = 100f;
 
 	[SerializeField] public bool SmoothFollow = true;
 	[SerializeField] public float SmoothAmount = 1f;
 
-	private void Awake()
+	private void Start()
 	{
-		if (ShipTransform)
+		if (ShipUnit.Instance)
 		{
-			transform.position = ShipTransform.position + Vector3.up * DistanceToShip;
+			transform.position = ShipUnit.Instance.transform.position + Vector3.up * DistanceToShip;
 		}
 		else
 		{
-			Debug.LogError("No Ship set on " + this + "FollowShipComponent");
+			Debug.LogError("No Ship Instance found in " + this + "FollowShipComponent");
 			Destroy(this);
 		}
 	}
 
 	private void Update()
 	{
-		if (ShipTransform)
+		if (ShipUnit.Instance.transform)
 		{
-			transform.position = Vector3.Lerp( transform.position, ShipTransform.position + Vector3.up * DistanceToShip, Time.deltaTime * SmoothAmount );
+			transform.position = Vector3.Lerp( transform.position, ShipUnit.Instance.transform.position + Vector3.up * DistanceToShip, Time.deltaTime * SmoothAmount );
 		}
 		else
 		{
