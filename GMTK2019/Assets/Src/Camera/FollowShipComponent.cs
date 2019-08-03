@@ -26,7 +26,8 @@ public class FollowShipComponent : MonoBehaviour
 	{
 		if (ShipUnit.Instance)
 		{
-			transform.position = Vector3.Lerp( transform.position, ShipUnit.Instance.transform.position + Vector3.up * DistanceToShip, Time.deltaTime * SmoothAmount );
+			Vector3 FinalPosition = new Vector3(ShipUnit.Instance.transform.position.x, transform.position.y, ShipUnit.Instance.transform.position.z);
+			transform.position = Vector3.Lerp( transform.position, FinalPosition, Time.deltaTime * SmoothAmount );
 		}
 		else
 		{
