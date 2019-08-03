@@ -7,19 +7,27 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FlameShader_4
-  m_Shader: {fileID: 4800000, guid: f899fe9a4940c1e4295e55790218344c, type: 3}
+  m_Name: Distortion_Impulse
+  m_Shader: {fileID: 4800000, guid: c999a1f28a43a054f8e8ed9bffa7cd22, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: 5000
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTexture:
+        m_Texture: {fileID: 2800000, guid: 577092ac0e8d0544a87a892df40c767d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 577092ac0e8d0544a87a892df40c767d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture0:
         m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -28,13 +36,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _AdditiveValue: 2
-    - _CounterFresneBias: 0.24
-    - _CounterFresnelPower: 6.4
-    - _CounterFresnelScale: 1.41
-    - _EmissiveValue: 2
-    - _FresnelBias: -0.33
-    - _FresnelPower: 0.42
-    - _FresnelScale: 1.79
+    - _ChromaticAberration: 0.3
+    - _Cutoff: 0.5
+    - _DistortionValue: 0.05
     - __dirty: 0
     m_Colors: []
