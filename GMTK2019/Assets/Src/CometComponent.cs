@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class CometComponent : MonoBehaviour
 {
-	[SerializeField] private SpriteRenderer DistanceSprite = null;
-	[SerializeField] private float DisplaySpriteTime = 1f;
+	[SerializeField] private ParticleSystem RangeParticle = null;
 
 	private Color CurrentSpriteColor = new Color();
 	private float CurrentSpriteTransparency = 0f;
@@ -16,36 +15,24 @@ public class CometComponent : MonoBehaviour
 
 	void OnCanPropulseStart()
 	{
-		StartSpriteTransparency = 0f;
-		FinalSpriteTransparency = 1f;
-		enabled = true;
+		RangeParticle.gameObject.SetActive(true);
 	}
 
 	void OnCanPropulseEnd()
 	{
-		StartSpriteTransparency = 1f;
-		FinalSpriteTransparency = 0f;
-		enabled = true;
-	}
-
-	void UpdateSpriteColor( float NewTransparency )
-	{
-		CurrentSpriteColor.a = NewTransparency;
-		DistanceSprite.color = CurrentSpriteColor;
+		RangeParticle.gameObject.SetActive(false);
 	}
 
 	private void Awake()
 	{
-		if (!DistanceSprite)
+		if (!RangeParticle)
 		{
-			Debug.LogError("No DistanceSprite on " + this + " CometComponent");
+			Debug.LogError("No RangeParticle on " + this + " CometComponent");
 			Destroy(this);
+			return;
 		}
 
-		CurrentDisplaySpriteTime = 0f;
-		FinalSpriteTransparency = CurrentSpriteTransparency = 0f;
-		CurrentSpriteColor = DistanceSprite.color;
-		UpdateSpriteColor(FinalSpriteTransparency);
+		RangeParticle.gameObject.SetActive(false);
 	}
 
 	private void Start()
@@ -55,7 +42,6 @@ public class CometComponent : MonoBehaviour
 			ShipUnit.Instance.PropulsorComp.OnCanPropulseStartEvent.AddListener(OnCanPropulseStart);
 			ShipUnit.Instance.PropulsorComp.OnCanPropulseEndEvent.AddListener(OnCanPropulseEnd);
 		}
-		enabled = false;
 	}
 
 	private void OnDestroy()
@@ -64,22 +50,6 @@ public class CometComponent : MonoBehaviour
 		{
 			ShipUnit.Instance.PropulsorComp.OnCanPropulseStartEvent.RemoveListener(OnCanPropulseStart);
 			ShipUnit.Instance.PropulsorComp.OnCanPropulseEndEvent.RemoveListener(OnCanPropulseEnd);
-		}
-	}
-
-	private void Update()
-	{
-		CurrentDisplaySpriteTime += Time.deltaTime;
-		if (CurrentDisplaySpriteTime >= DisplaySpriteTime)
-		{
-			CurrentDisplaySpriteTime = 0f;
-			UpdateSpriteColor(FinalSpriteTransparency);
-			enabled = false;
-		}
-		else
-		{
-			CurrentSpriteTransparency = Mathf.Lerp(StartSpriteTransparency, FinalSpriteTransparency, CurrentDisplaySpriteTime / DisplaySpriteTime);
-			UpdateSpriteColor(CurrentSpriteTransparency);
 		}
 	}
 }
