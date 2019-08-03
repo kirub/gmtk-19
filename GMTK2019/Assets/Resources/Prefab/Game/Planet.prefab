@@ -42,7 +42,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.7
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4403454218683618128
 GameObject:
@@ -168,6 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfd4753b410d6ce4d9050739a5cee56d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AttractionForce: 1
   _AttractedBy: {fileID: 0}
   IsAStaticStar: 0
 --- !u!1 &5097563953613290669
@@ -212,5 +213,5 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.2
+  m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
