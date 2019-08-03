@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: RocketShader
+  m_Name: Rocket_Material
   m_Shader: {fileID: 4800000, guid: bdf6b707e38375041bb0c91fc5e83393, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -55,6 +55,6 @@ Material:
     - __dirty: 0
     m_Colors:
     - _ASEOutlineColor: {r: 1, g: 1, b: 1, a: 0}
-    - _DiffuseColor: {r: 1, g: 1, b: 1, a: 0}
-    - _EmissiveColor: {r: 1, g: 1, b: 1, a: 0}
+    - _DiffuseColor: {r: 0.8773585, g: 0.8773585, b: 0.8773585, a: 0}
+    - _EmissiveColor: {r: 0, g: 0, b: 0, a: 0}
     - _OutlineColor: {r: 0, g: 1, b: 0.8844981, a: 0}

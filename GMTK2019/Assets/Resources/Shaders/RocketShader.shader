@@ -115,7 +115,7 @@ Shader "RocketShader"
 }
 /*ASEBEGIN
 Version=16900
-2574;208;1906;987;81.10611;540.5474;1.263241;True;False
+2574;208;1906;987;119.0033;548.1268;1.263241;True;False
 Node;AmplifyShaderEditor.TexturePropertyNode;1;458.3994,-166.4533;Float;True;Property;_MainTexture;MainTexture;0;0;Create;True;0;0;False;0;None;d3e77d6094efb944a973e046bac8bf39;False;white;Auto;Texture2D;0;1;SAMPLER2D;0
 Node;AmplifyShaderEditor.TexturePropertyNode;3;460.9165,136.1495;Float;True;Property;_Emissive;Emissive;1;0;Create;True;0;0;False;0;None;d3e77d6094efb944a973e046bac8bf39;False;white;Auto;Texture2D;0;1;SAMPLER2D;0
 Node;AmplifyShaderEditor.SamplerNode;2;756.3777,-165.1791;Float;True;Property;_TextureSample0;Texture Sample 0;1;0;Create;True;0;0;False;0;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
@@ -138,4 +138,4 @@ WireConnection;47;0;7;0
 WireConnection;47;1;9;0
 WireConnection;46;0;47;0
 ASEEND*/
-//CHKSM=186583C9F13F753CB10BF6CAEE355B937B32FF03
+//CHKSM=038252C30200169588DC15C9AF1FDADBBCA01887
