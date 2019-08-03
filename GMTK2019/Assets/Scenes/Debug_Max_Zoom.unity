@@ -352,9 +352,18 @@ PrefabInstance:
       propertyPath: BaseMovingSpeed
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1547325111023061833, guid: 6db4bc42801954b49bf464a14a9e8ae2,
+        type: 3}
+      propertyPath: Deceleration
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1974838034, guid: 6db4bc42801954b49bf464a14a9e8ae2, type: 3}
       propertyPath: CanAlwaysPropulse
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1974838034, guid: 6db4bc42801954b49bf464a14a9e8ae2, type: 3}
+      propertyPath: UseCameraShake
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6db4bc42801954b49bf464a14a9e8ae2, type: 3}
@@ -390,10 +399,10 @@ MonoBehaviour:
   NumCubesToGenerate: 100
   MinCubeSize: 1
   MaxCubeSize: 5
-  MinX: -500
-  MaxX: 500
-  MinZ: -500
-  MaxZ: 500
+  MinX: -100
+  MaxX: 100
+  MinZ: -100
+  MaxZ: 100
   MinY: -10
   MaxY: -10
   GenerateOnStart: 1
