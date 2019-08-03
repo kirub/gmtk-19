@@ -33,18 +33,21 @@ public class ZoomComponent : MonoBehaviour
 
 	private void Start()
 	{
-		if (!ShipUnit.Instance)
+		if (ShipUnit.Instance)
 		{
-			Debug.LogWarning("No Ship Instance found, will not be able to use");
-			return;
+
+			ShipUnit.Instance.PropulsorComp.OnPropulseStartEvent.AddListener(OnZoomStart);
+			ShipUnit.Instance.PropulsorComp.OnPropulseEndEvent.AddListener(OnZoomEnd);
+			ShipUnit.Instance.PropulsorComp.OnPropulseCancelEvent.AddListener(OnZoomEnd);
+
+			ZoomSpeed = ZoomBaseSpeed;
+			enabled = false;
 		}
-
-		ShipUnit.Instance.PropulsorComp.OnPropulseStartEvent.AddListener(OnZoomStart);
-		ShipUnit.Instance.PropulsorComp.OnPropulseEndEvent.AddListener(OnZoomEnd);
-		ShipUnit.Instance.PropulsorComp.OnPropulseCancelEvent.AddListener(OnZoomEnd);
-
-		ZoomSpeed = ZoomBaseSpeed;
-		enabled = false;
+		else
+		{
+			Debug.LogWarning("No Ship Instance found in " + this + "ZoomComponent");
+			Destroy(this);
+		}
 	}
 
 	private void OnDestroy()

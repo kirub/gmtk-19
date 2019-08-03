@@ -17,7 +17,7 @@ public class FollowShipComponent : MonoBehaviour
 		}
 		else
 		{
-			Debug.LogError("No Ship Instance found in " + this + "FollowShipComponent");
+			Debug.LogWarning("No Ship Instance found in " + this + "FollowShipComponent");
 			Destroy(this);
 		}
 	}
