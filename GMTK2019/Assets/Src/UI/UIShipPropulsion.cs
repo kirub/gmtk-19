@@ -33,10 +33,7 @@ public class UIShipPropulsion : MonoBehaviour
 		}
 
 		RectTrans = GetComponent<RectTransform>();
-
-		Vector3 ScreenPos = Camera.main.WorldToScreenPoint(ShipUnit.Instance.transform.position);
-		ScreenPos.y += YOffset;
-		RectTrans.position = ScreenPos;
+		UpdatePosition();
 
 		TotalWidth = RectTrans.rect.width;
 		NeutralTransform.anchoredPosition = new Vector2(0f, 0f);
@@ -72,5 +69,13 @@ public class UIShipPropulsion : MonoBehaviour
 	private void Update()
 	{
 		Slider.anchoredPosition = new Vector2(TotalWidth * ShipUnit.Instance.PropulsorComp.CurrentPropulsionRatio, Slider.anchoredPosition.y);
+		UpdatePosition();
+	}
+
+	void UpdatePosition()
+	{
+		Vector3 ScreenPos = Camera.main.WorldToScreenPoint(ShipUnit.Instance.transform.position);
+		ScreenPos.y += YOffset;
+		RectTrans.position = ScreenPos;
 	}
 }

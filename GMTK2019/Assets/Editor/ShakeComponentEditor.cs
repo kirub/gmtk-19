@@ -19,13 +19,9 @@ public class ShakeComponentEditor : Editor
 
 			DebugShakeTime = EditorGUILayout.FloatField("Debug Time", DebugShakeTime);
 			DebugShakeAmount = EditorGUILayout.FloatField("Debug Amount", DebugShakeAmount);
-			if (EditorGUILayout.Toggle("Force Rotate Shake", false))
+			if (EditorGUILayout.Toggle("Force Shake", false))
 			{
-				(serializedObject.targetObject as ShakeComponent).ShakeCamera(DebugShakeTime, DebugShakeAmount, ShakeComponent.EShakeType.Rotate);
-			}
-			if (EditorGUILayout.Toggle("Force Translate Shake", false))
-			{
-				(serializedObject.targetObject as ShakeComponent).ShakeCamera(DebugShakeTime, DebugShakeAmount, ShakeComponent.EShakeType.Translate);
+				(serializedObject.targetObject as ShakeComponent).ShakeCamera(DebugShakeTime, DebugShakeAmount);
 			}
 		}
 	}
