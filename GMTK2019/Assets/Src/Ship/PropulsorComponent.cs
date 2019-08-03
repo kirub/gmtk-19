@@ -43,7 +43,7 @@ public class PropulsorComponent : MonoBehaviour
 
 	[SerializeField] private List<GameObject> NearComets = new List<GameObject>();
 
-	private int CurrentNumRecharge = 0;
+	public int CurrentNumRecharge { get; private set; } = 0;
 
 	private float CurrentPressedPropulsionTime = -1f;
 	private MovingComponent MovingComp = null;
@@ -161,13 +161,13 @@ public class PropulsorComponent : MonoBehaviour
 	{
 		MovingComp = GetComponent<MovingComponent>();
 		RotatorComp = GetComponent<RotatorComponent>();
+		CurrentNumRecharge = BaseRecharge;
+		Debug.Log("Starting recharge " + CurrentNumRecharge);
 	}
 
 	private void Start()
 	{
 		CameraShakeComp = FindObjectOfType<ShakeComponent>();
-		CurrentNumRecharge = BaseRecharge;
-		Debug.Log("Starting recharge " + CurrentNumRecharge);
 	}
 
 	private void Update()
