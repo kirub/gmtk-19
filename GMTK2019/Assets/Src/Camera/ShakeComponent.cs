@@ -6,7 +6,7 @@ public class ShakeComponent : MonoBehaviour
 {
 	[SerializeField] private bool IsSmoothShake = true;
 	[SerializeField] private float SmoothAmount = 5f;
-
+	
 	private float RemainingShakeTime = 0f;
 	private float RemainingShakeAmount = 0f;
 	private float ShakePercentage = 0f;
@@ -15,12 +15,6 @@ public class ShakeComponent : MonoBehaviour
 	private float TotalShakeAmount = 0f;
 
 	private bool IsRunning = false;
-
-	public enum EShakeType
-	{
-		Rotate,
-		Translate
-	}
 
 	private void InternalSetupShake(float Duration, float Amount)
 	{
@@ -31,83 +25,79 @@ public class ShakeComponent : MonoBehaviour
 		TotalShakeAmount = RemainingShakeAmount;
 	}
 
-	public void ShakeCamera(float Duration, float Amount, EShakeType ShakeType = EShakeType.Rotate)
+	public void ShakeCamera(float Duration, float Amount)
 	{
 		InternalSetupShake(Duration, Amount);
 
 		if (!IsRunning)
 		{
-			switch (ShakeType)
-			{
-				case EShakeType.Rotate:
-					StartCoroutine(DoRotateShake());
-					break;
-				case EShakeType.Translate:
-					StartCoroutine(DoTranslateShake());
-					break;
-			}
+			StartCoroutine(DoShake());
 		}
 	}
 
-	private IEnumerator DoTranslateShake()
+	public void ContinuousShakeCamera(float Amount)
 	{
-		Vector3 oldPosition = transform.localPosition;
-		IsRunning = true;
+		TotalShakeTime = RemainingShakeTime = -1f;
+		TotalShakeAmount = RemainingShakeAmount = Amount;
 
-		while ( RemainingShakeTime >= 0.05f )
+		if (!enabled)
 		{
-			float XAmount = Random.Range(-1f, 1f) * RemainingShakeAmount;
-			float YAmount = Random.Range(-1f, 1f) * RemainingShakeAmount;
-			Vector3 FinalPosition = oldPosition + transform.right * XAmount + transform.up * YAmount;
-
-			ShakePercentage = RemainingShakeTime / TotalShakeTime;
-
-			RemainingShakeAmount = TotalShakeAmount * ShakePercentage;
-			RemainingShakeTime = Mathf.Lerp(RemainingShakeTime, 0f, Time.deltaTime);
-
-			if (IsSmoothShake)
-			{
-				transform.localPosition = Vector3.Lerp(transform.localPosition, FinalPosition, Time.deltaTime * SmoothAmount);
-			}
-			else
-			{
-				transform.localPosition = FinalPosition; 
-			}
-
-			yield return null;
+			enabled = true;
 		}
-
-		transform.localPosition = oldPosition;
-		IsRunning = false;
 	}
 
-	private IEnumerator DoRotateShake()
+	public void StopContinuousShakeCamera()
+	{
+		if (!enabled)
+		{
+			return;
+		}
+
+		enabled = false;
+	}
+
+	void RotateShake(float Amount)
+	{
+		Vector3 RotationAmount = Random.insideUnitSphere * Amount;
+		RotationAmount.z = 0f; // looks weird
+
+		if (IsSmoothShake)
+		{
+			transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(RotationAmount), Time.unscaledDeltaTime * SmoothAmount);
+		}
+		else
+		{
+			transform.localRotation = Quaternion.Euler(RotationAmount);
+		}
+	}
+
+	private IEnumerator DoShake()
 	{
 		IsRunning = true;
 
 		while (RemainingShakeTime >= 0.05f)
 		{
-			Vector3 RotationAmount = Random.insideUnitSphere * RemainingShakeAmount;
-			RotationAmount.z = 0f; // looks weird
+			RotateShake(RemainingShakeAmount);
 
 			ShakePercentage = RemainingShakeTime / TotalShakeTime;
 
 			RemainingShakeAmount = TotalShakeAmount * ShakePercentage;
-			RemainingShakeTime = Mathf.Lerp(RemainingShakeTime, 0f, Time.deltaTime);
-
-			if (IsSmoothShake)
-			{
-				transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(RotationAmount), Time.deltaTime * SmoothAmount);
-			}
-			else
-			{
-				transform.localRotation = Quaternion.Euler(RotationAmount);
-			}
+			RemainingShakeTime = Mathf.Lerp(RemainingShakeTime, 0f, Time.unscaledDeltaTime);
 
 			yield return null;
 		}
 
 		transform.localRotation = Quaternion.identity;
 		IsRunning = false;
+	}
+
+	private void Start()
+	{
+		enabled = false;
+	}
+
+	private void Update()
+	{
+		RotateShake(TotalShakeAmount);
 	}
 }

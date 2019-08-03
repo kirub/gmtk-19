@@ -60,9 +60,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816fc20d59d74fc4881533f6c1e9ef5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DistanceToShip: 10
+  DistanceToShip: 30
   SmoothFollow: 1
-  SmoothAmount: 3
+  SmoothAmount: 10
 --- !u!114 &428178066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,11 +75,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f37ee0763e8a48a428e2e5d518695a62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxZoom: 50
+  MaxZoom: 80
   ZoomBaseSpeed: 0
   ZoomMaxSpeed: 30
   ZoomAcceleration: 5
-  ZoomSpeed: 0
 --- !u!1 &132206820246343098
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +138,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 0
-  orthographic size: 5
+  orthographic size: 15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

@@ -11,7 +11,7 @@ public class ZoomComponent : MonoBehaviour
 	[SerializeField] private float ZoomAcceleration = 1f;
 
 	private float BaseY = 0f;
-	[SerializeField] private float ZoomSpeed = 0f;
+	private float ZoomSpeed = 0f;
 	private float ZoomModifier = 0f;
 
 	void OnZoomStart()
@@ -41,9 +41,22 @@ public class ZoomComponent : MonoBehaviour
 
 		ShipUnit.Instance.PropulsorComp.OnPropulseStartEvent.AddListener(OnZoomStart);
 		ShipUnit.Instance.PropulsorComp.OnPropulseEndEvent.AddListener(OnZoomEnd);
+		ShipUnit.Instance.PropulsorComp.OnPropulseCancelEvent.AddListener(OnZoomEnd);
 
 		ZoomSpeed = ZoomBaseSpeed;
 		enabled = false;
+	}
+
+	private void OnDestroy()
+	{
+		if (!ShipUnit.Instance)
+		{
+			return;
+		}
+
+		ShipUnit.Instance.PropulsorComp.OnPropulseStartEvent.RemoveListener(OnZoomStart);
+		ShipUnit.Instance.PropulsorComp.OnPropulseEndEvent.RemoveListener(OnZoomEnd);
+		ShipUnit.Instance.PropulsorComp.OnPropulseCancelEvent.RemoveListener(OnZoomEnd);
 	}
 
 	private void Update()

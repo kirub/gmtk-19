@@ -46,7 +46,6 @@ public class CometComponent : MonoBehaviour
 		FinalSpriteTransparency = CurrentSpriteTransparency = 0f;
 		CurrentSpriteColor = DistanceSprite.color;
 		UpdateSpriteColor(FinalSpriteTransparency);
-		enabled = false;
 	}
 
 	private void Start()
@@ -56,6 +55,7 @@ public class CometComponent : MonoBehaviour
 			ShipUnit.Instance.PropulsorComp.OnCanPropulseStartEvent.AddListener(OnCanPropulseStart);
 			ShipUnit.Instance.PropulsorComp.OnCanPropulseEndEvent.AddListener(OnCanPropulseEnd);
 		}
+		enabled = false;
 	}
 
 	private void OnDestroy()
