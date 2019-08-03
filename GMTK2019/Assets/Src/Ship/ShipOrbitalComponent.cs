@@ -32,7 +32,7 @@ public class ShipOrbitalComponent : MonoBehaviour
     {
         if(OrbitalState == EOrbitalState.InInnerRadius)
         { 
-            //OrbitalState = EOrbitalState.InOuterRadius;
+            OrbitalState = EOrbitalState.InOuterRadius;
             AttractionComponent AttractionComp = gameObject.GetComponentInParent<AttractionComponent>();
             AttractionComp.AttractedBy = null;
             MovingComponent MovingComp = gameObject.GetComponentInParent<MovingComponent>();
@@ -62,11 +62,11 @@ public class ShipOrbitalComponent : MonoBehaviour
     {
         if( other.attachedRigidbody.gameObject.CompareTag("Planet") )
         {
-            Planet = other.attachedRigidbody.gameObject;
+            GameObject CollidingPlanet = other.attachedRigidbody.gameObject;
             SphereCollider SphereCol = other as SphereCollider;
             if(SphereCol)
             {
-                if (SphereCol.CompareTag("OrbitalInnerRadius"))
+                if (SphereCol.CompareTag("OrbitalInnerRadius") && CollidingPlanet == Planet)
                 {
                     if (ComputeWillCrash(Planet))
                     {
@@ -87,8 +87,9 @@ public class ShipOrbitalComponent : MonoBehaviour
                         MovingComp.enabled = false;
                     }
                 }
-                else if ( SphereCol.CompareTag("OrbitalOuterRadius") )
+                else if ( SphereCol.CompareTag("OrbitalOuterRadius") && !Planet)
                 {
+                    Planet = CollidingPlanet;
                     OrbitalState = EOrbitalState.InOuterRadius;
                     MovingComponent MovingComp = gameObject.GetComponentInParent<MovingComponent>();
                     MovingComp.UseDeceleration = false;
@@ -102,7 +103,7 @@ public class ShipOrbitalComponent : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.attachedRigidbody.gameObject.CompareTag("Planet"))
+        if (other.attachedRigidbody.gameObject.CompareTag("Planet") && other.attachedRigidbody.gameObject == Planet)
         {
             SphereCollider SphereCol = other as SphereCollider;
             if (SphereCol)

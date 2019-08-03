@@ -22,7 +22,7 @@ MonoBehaviour:
     defaultState: 1
   intensity:
     overrideState: 1
-    value: 0.351
+    value: 0.472
   fastMode:
     overrideState: 0
     value: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
     overrideState: 0
     value: 1
   ldrLut:
-    overrideState: 0
+    overrideState: 1
     value: {fileID: 0}
     defaultState: 4
   ldrLutContribution:
@@ -79,7 +79,7 @@ MonoBehaviour:
     value: 1
   temperature:
     overrideState: 1
-    value: -3.9
+    value: -0.1
   tint:
     overrideState: 1
     value: 0
@@ -91,7 +91,7 @@ MonoBehaviour:
     value: 0
   saturation:
     overrideState: 1
-    value: 27.3
+    value: 10.9
   brightness:
     overrideState: 0
     value: 0
