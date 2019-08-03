@@ -81501,6 +81501,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307d96af49e170e4fa6e6b8a45774542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CollisionsExceptions:
+  - Nova
+  - OrbitalInnerRadius
+  - OrbitalOuterRadius
 --- !u!114 &6530761928582668124
 MonoBehaviour:
   m_ObjectHideFlags: 0
