@@ -10,7 +10,7 @@ Material:
   m_Name: RocketShader
   m_Shader: {fileID: 4800000, guid: bdf6b707e38375041bb0c91fc5e83393, type: 3}
   m_ShaderKeywords: 
-  m_LightmapFlags: 0
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -45,7 +45,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _ASEOutlineWidth: 0.06
-    - _EmissiveValue: 0.69
+    - _EmissiveValue: 0
     - _FresnelBias: 1.82
     - _FresnelPower: 0.89
     - _FresnelScale: -1.39
