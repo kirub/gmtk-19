@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 132206820036382637}
   - component: {fileID: 132206820036382638}
   - component: {fileID: 132206820036382636}
+  - component: {fileID: 428178066}
   m_Layer: 0
   m_Name: CameraContainer
   m_TagString: Untagged
@@ -59,10 +60,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816fc20d59d74fc4881533f6c1e9ef5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShipTransform: {fileID: 0}
   DistanceToShip: 10
   SmoothFollow: 1
   SmoothAmount: 3
+--- !u!114 &428178066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132206820036382639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37ee0763e8a48a428e2e5d518695a62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxZoom: 50
+  ZoomBaseSpeed: 0
+  ZoomMaxSpeed: 30
+  ZoomAcceleration: 5
+  ZoomSpeed: 0
 --- !u!1 &132206820246343098
 GameObject:
   m_ObjectHideFlags: 0

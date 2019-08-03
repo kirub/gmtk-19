@@ -46,6 +46,7 @@ public class CometComponent : MonoBehaviour
 		FinalSpriteTransparency = CurrentSpriteTransparency = 0f;
 		CurrentSpriteColor = DistanceSprite.color;
 		UpdateSpriteColor(FinalSpriteTransparency);
+		enabled = false;
 	}
 
 	private void Start()
