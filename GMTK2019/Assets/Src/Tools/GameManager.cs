@@ -19,15 +19,19 @@ public class GameManager : MonoBehaviour
     public GameObject SoundOnButton;
     public GameObject SoundOffButton;
     public GameObject CanvasHighScores;
+    public GameObject CanvasTutorial;
 	public Text TextHighScores;
-
+	
 	public AudioSource StartGameSound = null;
-
+	
 	[SerializeField] private AudioSource AmbientMainMenu = null;
 	[SerializeField] private AudioSource AmbientInGame = null;
+	[SerializeField] private AudioLowPassFilter AmbientInGameLPF = null; 
 
 	private float AmbientMainMenuVolume = 0f;
 	private float AmbientInGameVolume = 0f;
+
+	private bool HasDoneTutorial = false;
 
 	// Start is called before the first frame update
 
@@ -190,29 +194,56 @@ public class GameManager : MonoBehaviour
 		UpdateMute();
     }
 
-    public void GameStart()
-    {
-        Debug.Log("GameStart");
-		IsInPause = false;
-		CanvasHighScores.SetActive(false);
+	public void TutorialStart()
+	{
+		Debug.Log("TutorialStart");
 		CanvasMenuStart.SetActive(false);
+		CanvasMenuOption.SetActive(false);
 		CanvasMenuIngame.SetActive(false);
+		CanvasTutorial.SetActive(true);
 
-		if (AmbientMainMenu)
-		{
-			AmbientMainMenu.Stop();
-		}
-		if (AmbientInGame)
-		{
-			AmbientInGame.Play();
-		}
+		HasDoneTutorial = true;
+	}
 
-		if (StartGameSound)
-		{
-			StartGameSound.Play();
-		}
+	public void TutorialStop()
+	{
+		Debug.Log("TutorialStop");
+		CanvasMenuStart.SetActive(true);
+		CanvasMenuOption.SetActive(false);
+		CanvasMenuIngame.SetActive(false);
+		CanvasTutorial.SetActive(false);
+	}
 
-		LoadSceneGame();
+	public void GameStart()
+    {
+		if (HasDoneTutorial)
+		{
+			Debug.Log("GameStart");
+			IsInPause = false;
+			CanvasHighScores.SetActive(false);
+			CanvasMenuStart.SetActive(false);
+			CanvasMenuIngame.SetActive(false);
+
+			if (AmbientMainMenu)
+			{
+				AmbientMainMenu.Stop();
+			}
+			if (AmbientInGame)
+			{
+				AmbientInGame.Play();
+			}
+
+			if (StartGameSound)
+			{
+				StartGameSound.Play();
+			}
+
+			LoadSceneGame();
+		}
+		else
+		{
+			TutorialStart();
+		}
     }
 
     public void GameRestart()
@@ -250,6 +281,14 @@ public class GameManager : MonoBehaviour
 		LastTimeScale = Time.timeScale;
 		Time.timeScale = 0f;
 
+		if (AmbientInGame) {
+			AmbientInGame.pitch = .5f;
+		}
+
+		if (AmbientInGameLPF) {
+			AmbientInGameLPF.cutoffFrequency = 500f;
+		}
+
 		CanvasHighScores.SetActive(true);
 		ResumeButton.SetActive(true);
 		CanvasMenuIngame.SetActive(true);
@@ -270,6 +309,14 @@ public class GameManager : MonoBehaviour
 		CanvasMenuIngame.SetActive(false);
 		
 		Time.timeScale = LastTimeScale;
+
+		if (AmbientInGame) {
+			AmbientInGame.pitch = 1f;
+		}
+
+		if (AmbientInGameLPF) {
+			AmbientInGameLPF.cutoffFrequency = 5000f;
+		}
 
 		OnPauseUnpauseEvent.Invoke(false);
 	}
