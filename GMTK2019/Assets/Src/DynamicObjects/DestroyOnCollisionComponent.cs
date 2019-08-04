@@ -9,7 +9,14 @@ public class DestroyOnCollisionComponent : MonoBehaviour
 	{
 		if (other.CompareTag("Planet"))
 		{
-			Destroy(transform.parent.gameObject);
+			if (transform.parent)
+			{
+				Destroy(transform.parent.gameObject);
+			}
+			else
+			{
+				Destroy(transform.gameObject);
+			}
 		}
 	}
 }
