@@ -31,6 +31,11 @@ public class ShipUnit : MonoBehaviour
     public class OnExplodeEvent : UnityEvent { }
 	public OnExplodeEvent OnExplodeShipEvent { get; } = new OnExplodeEvent();
 
+	public void BoostOnOrbitLeft()
+	{
+		MovingComp.BoostSpeed = 1.2f;
+	}
+
 	public void Explode()
 	{
 		if (UseCameraShakeOnExplode && CameraShakeComp)
@@ -59,6 +64,13 @@ public class ShipUnit : MonoBehaviour
 		MovingComp = GetComponent<MovingComponent>();
 		ChargerComp = GetComponent<ChargerComponent>();
 		OrbitalComp = GetComponentInChildren<ShipOrbitalComponent>();
+
+		OrbitalComp.OnOrbitEndEvent.RemoveListener(BoostOnOrbitLeft);
+	}
+
+	void OnDestroy()
+	{
+		OrbitalComp.OnOrbitEndEvent.RemoveListener(BoostOnOrbitLeft);
 	}
 
 	private void Start()

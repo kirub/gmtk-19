@@ -9,7 +9,7 @@ public class MovingComponent : MonoBehaviour
 	[SerializeField] private float MaxMovingSpeed = 1f;
 	[SerializeField] private float Deceleration = 1f;
 
-    private float BoostSpeed { get; set; } = 1f;
+    public float BoostSpeed { get; set; } = 1f;
     public float CurrentSpeed { get; set; } = 0f;
     public float DecelerationValue { get { return Deceleration; } }
 	public bool UseDeceleration { get; set; } = true;
@@ -22,22 +22,6 @@ public class MovingComponent : MonoBehaviour
 			MaxMovingSpeed = float.MaxValue;
 		}
 	}
-
-    void OnDestroy()
-    {
-        ShipUnit.Instance.OrbitalComp.OnOrbitEndEvent.RemoveListener(BoostOnOrbitLeft);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        ShipUnit.Instance.OrbitalComp.OnOrbitEndEvent.AddListener(BoostOnOrbitLeft);
-    }
-
-    public void BoostOnOrbitLeft()
-    {
-        BoostSpeed = 1.2f;
-    }
 
 	private void Update()
 	{

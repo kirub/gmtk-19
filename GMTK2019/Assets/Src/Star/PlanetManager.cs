@@ -69,7 +69,7 @@ public class PlanetManager : MonoBehaviour
     void GetPositionInGrid(Vector3 Position, ref Vector2Int PositionInGrid)
     {
         Vector3 OffsetPos = Position + MapSizeOffset;
-        Debug.Assert(OffsetPos.x >= 0.0f && OffsetPos.y >= 0.0f && OffsetPos.z >= 0.0f);
+        Debug.Assert(OffsetPos.x >= 0.0f && OffsetPos.z >= 0.0f);
 
         PositionInGrid.x = (int)OffsetPos.x / CellSize;
         PositionInGrid.y = (int)OffsetPos.z / CellSize;
