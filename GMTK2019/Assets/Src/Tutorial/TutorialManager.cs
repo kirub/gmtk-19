@@ -16,6 +16,12 @@ public class TutorialManager : MonoBehaviour
 	private void OnEnable()
 	{
 		CurrentPage = -1;
+
+		foreach (TutorialPage Page in Pages)
+		{
+			Page.gameObject.SetActive(false);
+		}
+
 		PrevBtn.SetActive(false);
 		NextInfo();
 	}
