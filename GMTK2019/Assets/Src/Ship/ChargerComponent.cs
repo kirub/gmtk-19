@@ -73,6 +73,7 @@ public class ChargerComponent : MonoBehaviour
 			if (CurrentRechargeTime > RechargeTime)
 			{
 				AddCharge();
+				CurrentRechargeTime = 0f;
 				--MaxRechargeAvailable;
 			}
 		}
