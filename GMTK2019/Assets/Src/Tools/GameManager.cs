@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     public GameObject CanvasHighScores;
 	public Text TextHighScores;
 
+	public AudioSource StartGameSound = null;
+
     // Start is called before the first frame update
 
     public List<int> HighScores = new List<int>();
@@ -84,6 +86,12 @@ public class GameManager : MonoBehaviour
 		IsInPause = false;
 		CanvasHighScores.SetActive(false);
 		CanvasMenuStart.SetActive(false);
+
+		if (StartGameSound)
+		{
+			StartGameSound.Play();
+		}
+
 		LoadSceneGame();
     }
 
@@ -93,7 +101,13 @@ public class GameManager : MonoBehaviour
 		//HandleHighScores(((int)LatestScore)*ScoreMultiplier);
 		CanvasHighScores.SetActive(false);
 		CanvasMenuIngame.SetActive(false);
-        LoadSceneGame();
+
+		if (StartGameSound)
+		{
+			StartGameSound.Play();
+		}
+
+		LoadSceneGame();
         
     }
 
