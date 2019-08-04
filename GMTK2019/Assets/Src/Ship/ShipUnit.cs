@@ -19,6 +19,7 @@ public class ShipUnit : MonoBehaviour
 	public static ShipUnit Instance { get; private set; } = null;
 
 	public PropulsorComponent PropulsorComp { get; private set; } = null;
+	public MovingComponent MovingComp { get; private set; } = null;
 
 	public void Explode()
 	{
@@ -35,7 +36,7 @@ public class ShipUnit : MonoBehaviour
 
 	void Awake()
     {
-		if (Instance && Instance != this)
+		if (Instance)
 		{
 			Debug.LogError("Multiple Instances of ShipUnit");
 			Destroy(this);
@@ -43,6 +44,7 @@ public class ShipUnit : MonoBehaviour
 		}
 		Instance = this;
 		PropulsorComp = GetComponent<PropulsorComponent>();
+		MovingComp = GetComponent<MovingComponent>();
 	}
 
 	private void Start()
