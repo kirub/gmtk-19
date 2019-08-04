@@ -38,6 +38,6 @@ Material:
     m_Floats:
     - _ChromaticAberration: 0.3
     - _Cutoff: 0.5
-    - _DistortionValue: 0.5
+    - _DistortionValue: 0.4
     - __dirty: 0
     m_Colors: []
