@@ -21,6 +21,9 @@ public class ShipUnit : MonoBehaviour
 	public PropulsorComponent PropulsorComp { get; private set; } = null;
 	public MovingComponent MovingComp { get; private set; } = null;
 
+	public class OnExplodeEvent : UnityEvent { }
+	public OnExplodeEvent OnExplodeShipEvent { get; } = new OnExplodeEvent();
+
 	public void Explode()
 	{
 		if (UseCameraShakeOnExplode && CameraShakeComp)
@@ -31,6 +34,8 @@ public class ShipUnit : MonoBehaviour
 		{
 			Instantiate(ExplosionParticle, transform.position, transform.rotation);
 		}
+
+		OnExplodeShipEvent.Invoke();
 		Destroy(transform.gameObject);
 	}
 
@@ -50,5 +55,10 @@ public class ShipUnit : MonoBehaviour
 	private void Start()
 	{
 		CameraShakeComp = FindObjectOfType<ShakeComponent>();
+
+		if (GameManager.Instance)
+		{
+			OnExplodeShipEvent.AddListener(GameManager.Instance.GameOver);
+		}
 	}
 }
