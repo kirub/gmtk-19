@@ -4,14 +4,29 @@ using UnityEngine;
 
 public class PlanetManager : MonoBehaviour
 {
-    public static float G = 9.81f;
+    public static float G   = 9.81f;
+    const int MapHalfSize   = 1000;
+    const int GridSize      = 10;
+    const int CellSize      = (MapHalfSize * 2) / GridSize;
+    Vector3 MapSizeOffset   = new Vector3();
+
+    List<GameObject>[,] ObjectGrid = new List<GameObject>[GridSize, GridSize];
 
     public static PlanetManager Instance { get; private set; } = null;
 
-    public ArrayList Planets { get; } = new ArrayList();
+    public ArrayList    Planets { get; }    = new ArrayList();
+    private Vector2Int  PositionInGrid      = new Vector2Int();
 
     private void Awake()
     {
+        for(int X = 0; X < GridSize; ++X)
+        {
+            for (int Y = 0; Y < GridSize; ++Y)
+            {
+                ObjectGrid[X, Y] = new List<GameObject>();
+            }
+        }
+
         if (Instance)
         {
             Destroy(gameObject);
@@ -20,6 +35,8 @@ public class PlanetManager : MonoBehaviour
         {
             Instance = this;
         }
+        MapSizeOffset.x = MapHalfSize;
+        MapSizeOffset.z = MapHalfSize;
     }
 
     // Start is called before the first frame update
@@ -32,6 +49,27 @@ public class PlanetManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public List<GameObject> GetPlanetsInGridFromPosition( Vector3 Position)
+    {
+        GetPositionInGrid(Position, ref PositionInGrid);
+        return ObjectGrid[PositionInGrid.x, PositionInGrid.y];
+    }
+
+    void GetPositionInGrid(Vector3 Position, ref Vector2Int PositionInGrid)
+    {
+        Vector3 OffsetPos = Position + MapSizeOffset;
+        Debug.Assert(OffsetPos.x >= 0.0f && OffsetPos.y >= 0.0f && OffsetPos.z >= 0.0f);
+
+        PositionInGrid.x = (int)OffsetPos.x / CellSize;
+        PositionInGrid.y = (int)OffsetPos.z / CellSize;
+    }
+
+    void AddPlanetInGrid(GameObject Planet)
+    {
+        GetPositionInGrid(Planet.transform.position, ref PositionInGrid);
+        ObjectGrid[PositionInGrid.x, PositionInGrid.y].Add(Planet);
     }
 
     public GameObject FindAttractedPlanet(GameObject Planet )
@@ -97,6 +135,7 @@ public class PlanetManager : MonoBehaviour
         GameObject AttractedByObj = null;
         //AttractedByObj = FindAttractedPlanet(Planet);
         Planets.Add(Planet);
+        AddPlanetInGrid(Planet);
         return AttractedByObj;
     }
 }
