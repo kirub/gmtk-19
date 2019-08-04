@@ -778,6 +778,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1951713364277217042, guid: 6db4bc42801954b49bf464a14a9e8ae2,
+        type: 3}
+      propertyPath: BaseRecharge
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1951713364277217042, guid: 6db4bc42801954b49bf464a14a9e8ae2,
+        type: 3}
+      propertyPath: RechargeTime
+      value: 0.8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6db4bc42801954b49bf464a14a9e8ae2, type: 3}
 --- !u!1001 &2821510152014253806

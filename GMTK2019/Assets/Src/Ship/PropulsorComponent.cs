@@ -33,7 +33,8 @@ public class PropulsorComponent : MonoBehaviour
 	[SerializeField] private AudioSource PropulsionChargeHeadSound = null;
 	[SerializeField] private AudioSource PropulsionChargeLoopSound = null;
 	[SerializeField] private AudioSource PropulsionImpulseSound = null;
-	
+	[SerializeField] private AudioSource PropulsionCancelSound = null;
+
 	public float NeutralPropulsionThreshold { get { return _NeutralPropulsionRatio; } }
 	public float GoodPropulsionThreshold { get { return NeutralPropulsionThreshold + _GoodPropulsionRatio; } }
 	public float BadPropulsionThreshold { get { return 1f; } }
@@ -120,6 +121,11 @@ public class PropulsorComponent : MonoBehaviour
 	{
 		ResetPropulse();
 		OnPropulseCancelEvent.Invoke();
+
+		if (PropulsionCancelSound)
+		{
+			PropulsionCancelSound.Play();
+		}
 	}
 
 	void StartPropulse()
@@ -243,15 +249,12 @@ public class PropulsorComponent : MonoBehaviour
 				CameraShakeComp.ShakeCamera(CameraShakeTime, CameraShakeAmount);
 			}
 		}
-
-		if (IsPropulsing)
+		else if (IsPropulsing)
 		{
 			CancelPropulse();
 		}
-		else
-		{
-			ResetPropulse();
-		}
+
+		ResetPropulse();
 	}
 
 	private void OnPause(bool IsPaused)

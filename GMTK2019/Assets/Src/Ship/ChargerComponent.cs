@@ -11,6 +11,8 @@ public class ChargerComponent : MonoBehaviour
 
 	[SerializeField] private float RechargeTime = 1f;
 
+	[SerializeField] private AudioSource RechargeCompleteSound = null;
+
 	public int CurrentNumRecharge { get; private set; } = 0;
 
 	public bool IsRecharging { get; private set; } = false;
@@ -45,6 +47,11 @@ public class ChargerComponent : MonoBehaviour
 	{
 		CurrentNumRecharge = Mathf.Min(MaxRecharge, CurrentNumRecharge + 1);
 		Debug.Log("New recharge " + CurrentNumRecharge);
+
+		if (RechargeCompleteSound)
+		{
+			RechargeCompleteSound.Play();
+		}
 	}
 
 	private void Awake()
