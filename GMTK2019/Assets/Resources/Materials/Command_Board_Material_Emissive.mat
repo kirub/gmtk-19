@@ -45,7 +45,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _ASEOutlineWidth: 0.06
-    - _EmissiveValue: 1
+    - _EmissiveValue: 0.25
     - _FresnelBias: 1.82
     - _FresnelPower: 0.89
     - _FresnelScale: -1.39
