@@ -12,6 +12,8 @@ public class Supernova : MonoBehaviour
 	public float TimerBeforeStart = 2f;
     public float ExpantionSpeed = 5f;
 
+	public AudioSource ExplosionSound = null;
+
     public UnityEvent OnEnterOuterSupernova;
     public UnityEvent OnExitOuterSupernova;
 	
@@ -40,6 +42,11 @@ public class Supernova : MonoBehaviour
         yield return new WaitForSeconds(TimerBeforeStart);
         ExpantionIsOn = true;
 		NovaCollider.enabled = true;
+
+		if (ExplosionSound)
+		{
+			ExplosionSound.Play();
+		}
 	}
 
     // Update is called once per frame
