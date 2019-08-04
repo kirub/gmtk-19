@@ -7,15 +7,13 @@ public class Supernova : MonoBehaviour
 {
     public const float DefaultExpantionSpeed = 5f;
 
-    public class Trigger
-    {
-        Time    Timer               = new Time();
-        float   ExpansionSpeedCoef  = DefaultExpantionSpeed;
-    }
+    [SerializeField]
+    List<float> TimersOffset    = new List<float>();
+    [SerializeField]
+    List<float> ExpansionSpeed  = new List<float>();
 
-    public List<Trigger> ExpansionTriggers = new List<Trigger>();
-
-    private List<Trigger> Triggers { get { return ExpansionTriggers; } }
+    private List<float> TriggersTimersOffset { get { return TimersOffset; } }
+    private List<float> TriggersExpansionSpeed { get { return ExpansionSpeed; } }
 
     public static Supernova Instance { get; private set; } = null;
 
@@ -52,8 +50,7 @@ public class Supernova : MonoBehaviour
     {
 		VScale.Set(DefaultExpantionSpeed, 0, DefaultExpantionSpeed);
         StartCoroutine(TimerExpantionStart());
-
-		if (!ShipUnit.Instance)
+        if (!ShipUnit.Instance)
 		{
 			Debug.LogError("No ShipUnit found !");
 		}
@@ -71,11 +68,24 @@ public class Supernova : MonoBehaviour
         ExpantionIsOn = true;
         yield return new WaitForSeconds(4*TimerOffsetBeforeStartForFX / 5.0f);
 		NovaCollider.enabled = true;
-	}
+        StartCoroutine(LaunchTriggers());
+    }
 
     public float GetPlayerDistance()
     {
         return Vector3.Distance(transform.position, ShipUnit.Instance.transform.position);
+    }
+
+    public IEnumerator LaunchTriggers()
+    {
+        while(TriggersTimersOffset.Count > 0)
+        {
+            yield return new WaitForSeconds(TriggersTimersOffset[0]);
+            VScale.x = VScale.z = TriggersExpansionSpeed[0];
+            
+            TriggersTimersOffset.RemoveAt(0);
+            TriggersExpansionSpeed.RemoveAt(0);
+        }
     }
 
     // Update is called once per frame
@@ -83,6 +93,7 @@ public class Supernova : MonoBehaviour
     {
         if(ExpantionIsOn)
         {
+            
             transform.localScale = transform.localScale + (VScale* Time.deltaTime);
 		}
 
