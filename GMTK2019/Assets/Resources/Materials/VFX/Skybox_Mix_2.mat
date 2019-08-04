@@ -69,10 +69,10 @@ Material:
     - _VertexOffset: -0.2
     - __dirty: 0
     m_Colors:
-    - _Noise_1_Color: {r: 0.7058824, g: 0.2627451, b: 0.5324214, a: 1}
+    - _Noise_1_Color: {r: 0.6886792, g: 0.30860624, b: 0.54068625, a: 1}
     - _Noise_1_Panner: {r: -0.005, g: 0.002, b: 0, a: 0}
     - _Noise_1_Tiling: {r: 2, g: 2, b: 0, a: 0}
-    - _Noise_2_Color: {r: 0.47450984, g: 1, b: 0.78041613, a: 1}
+    - _Noise_2_Color: {r: 0.47450984, g: 0.82089937, b: 1, a: 1}
     - _Noise_2_Panner: {r: 0.006, g: -0.005, b: 0, a: 0}
     - _Noise_2_Tiling: {r: 1, g: 1, b: 0, a: 0}
     - _Noise_3_Color: {r: 0.9855346, g: 0.4575472, b: 1, a: 0}
