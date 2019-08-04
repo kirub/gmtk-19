@@ -63,6 +63,7 @@ public class ZoomComponent : MonoBehaviour
 		if (!IsBaseYSetup)
 		{
 			BaseY = transform.position.y;
+			IsBaseYSetup = true;
 		}
 
 		ZoomSpeed = Mathf.Min(ZoomMaxSpeed, ZoomSpeed + ZoomAcceleration * Time.unscaledDeltaTime);
