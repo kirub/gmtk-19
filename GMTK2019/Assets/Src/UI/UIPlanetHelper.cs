@@ -52,8 +52,8 @@ public class UIPlanetHelper : MonoBehaviour
             {
                 Vector3 ViewportPos = Camera.main.WorldToViewportPoint(Planet.transform.position);
                 bool IsVisible =
-                    (ViewportPos.x > 0.2f && ViewportPos.x < 0.8f) &&
-                    (ViewportPos.y > 0.2f && ViewportPos.y < 0.8f);
+                    (ViewportPos.x >= 0.0f && ViewportPos.x < 1.0f) &&
+                    (ViewportPos.y >= 0.0f && ViewportPos.y < 1.0f);
 
                 List<SpriteRenderer> Sprites = new List<SpriteRenderer>();
                 Planet.GetComponentsInChildren<SpriteRenderer>(true, Sprites);
