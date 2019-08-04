@@ -39458,6 +39458,7 @@ MonoBehaviour:
   CollisionsExceptions:
   - OrbitalInnerRadius
   - OrbitalOuterRadius
+  - DynamicObjectTrigger
 --- !u!114 &6530761928582668124
 MonoBehaviour:
   m_ObjectHideFlags: 0

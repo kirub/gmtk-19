@@ -10,6 +10,8 @@ TagManager:
   - OrbitalInnerRadius
   - Nova
   - UIPlanetHelper
+  - DynamicObjectTrigger
+  - DynamicObject
   layers:
   - Default
   - TransparentFX
