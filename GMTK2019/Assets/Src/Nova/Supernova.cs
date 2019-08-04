@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class Supernova : MonoBehaviour
 {
-    public const float DefaultExpantionSpeed = 5f;
+    public float DefaultExpantionSpeed = 10f;
 
     [SerializeField]
     List<float> TimersOffset    = new List<float>();
@@ -94,7 +94,7 @@ public class Supernova : MonoBehaviour
         if(ExpantionIsOn)
         {
             
-            transform.localScale = transform.localScale + (VScale* Time.deltaTime);
+            transform.localScale = transform.localScale + (VScale * Time.deltaTime);
 		}
 
 		if (!ShipUnit.Instance)
