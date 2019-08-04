@@ -12,9 +12,13 @@ public class ShipUnit : MonoBehaviour
 	[SerializeField] private float ExplodeShakeTime = 2f;
 	[SerializeField] private float ExplodeShakeAmount = 2f;
 	
+	[SerializeField] private GameObject P1Particle = null;
+	[SerializeField] private float P1DisplayedTime = 2f;
+
 	[SerializeField] private GameObject ExplosionParticle = null;
 
 	private ShakeComponent CameraShakeComp = null;
+	private float CurrentP1DisplayedTime = 0f;
 
 	public static ShipUnit Instance { get; private set; } = null;
 
@@ -60,5 +64,21 @@ public class ShipUnit : MonoBehaviour
 		{
 			OnExplodeShipEvent.AddListener(GameManager.Instance.GameOver);
 		}
+
+		if (P1Particle)
+		{
+			StartCoroutine(UpdateP1Visibility());
+		}
+	}
+
+	private IEnumerator UpdateP1Visibility()
+	{
+		while (CurrentP1DisplayedTime < P1DisplayedTime)
+		{
+			CurrentP1DisplayedTime += Time.unscaledDeltaTime;
+			yield return null;
+		}
+
+		P1Particle.SetActive(false);
 	}
 }
