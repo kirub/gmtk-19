@@ -11,7 +11,10 @@ public class OrbitalComponent : AttractionComponent
     // Start is called before the first frame update
     new void Start()
     {
-        PlanetManager.Instance.RegisterPlanet(gameObject);
+		if (PlanetManager.Instance)
+		{
+			PlanetManager.Instance.RegisterPlanet(gameObject);
+		}
         base.Start();
     }
 
