@@ -5,34 +5,41 @@ using UnityEngine.Events;
 
 public class InnerSupernova : MonoBehaviour
 {
-    public float TimerBeforeStart = 2f;
+	public Collider NovaCollider;
+
+	public float TimerBeforeStart = 2f;
     public float ExpantionSpeed = 5f;
 
     public UnityEvent OnEnterInnerSupernova;
 
     private bool ExpantionIsOn = false;
-    private Transform Novacore;
     private Vector3 VScale;
-    private Manager M;
 
-    void Start()
+	private void Awake()
+	{
+		NovaCollider.enabled = false;
+	}
+
+	void Start()
     {
-        M = GameObject.FindObjectOfType<Manager>();
-        Novacore = this.transform;
         VScale.Set(ExpantionSpeed, 0, ExpantionSpeed);
         StartCoroutine(TimerExpantionStart());
-        OnEnterInnerSupernova.AddListener(FindObjectOfType<Manager>().GameOver);
+
+		if (GameManager.Instance)
+		{
+			OnEnterInnerSupernova.AddListener(GameManager.Instance.GameOver);
+		}
     }
     private IEnumerator TimerExpantionStart()
     {
         yield return new WaitForSeconds(TimerBeforeStart);
         ExpantionIsOn = true;
-    }
+		NovaCollider.enabled = true;
+	}
 
     public void OnTriggerEnter(Collider other)
     {
-        //je peux pas faire si other.tag=="player" ça passe pas ;'(
-        if ((other.tag != "Comet" )&&(other.tag != "OrbitalOuterRadius") && (other.tag != "OrbitalInnerRadius") && (other.tag != "Untagged") && (other.tag != "Planet"))
+        if (other.tag == "Player")
         {
             Debug.Log("Enter Inner = gameover " + other.tag);
             OnEnterInnerSupernova.Invoke();
@@ -44,6 +51,6 @@ public class InnerSupernova : MonoBehaviour
     void Update()
     {
         if (ExpantionIsOn)
-            Novacore.localScale = Novacore.localScale + (VScale * Time.deltaTime);
+            transform.localScale = transform.localScale + (VScale * Time.deltaTime);
     }
 }

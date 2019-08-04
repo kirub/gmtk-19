@@ -5,9 +5,11 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEditor;
 
-public class Manager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
-    public string SceneGame;
+	public static GameManager Instance { get; private set; }
+
+	public string SceneGame;
     public string SceneGameOver;
     public GameObject StartCam;
 
@@ -66,10 +68,21 @@ public class Manager : MonoBehaviour
         }
         StartCam.SetActive(true);
         CanvasMenuGameOver.SetActive(false);
-    }
+	}
+
+	private void Awake()
+	{
+		if (Instance)
+		{
+			Debug.LogError("Already an Instance of GameManager");
+			Destroy(this);
+			return;
+		}
+		Instance = this;
+	}
 
 
-    void Start()
+	void Start()
     {
         InitializeHighScores();
        // Debug.Log("Manager Start");

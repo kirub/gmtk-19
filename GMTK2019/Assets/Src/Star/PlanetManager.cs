@@ -12,9 +12,9 @@ public class PlanetManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (Instance)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
         else
         {

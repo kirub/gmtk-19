@@ -12,7 +12,7 @@ public class TestGameOver : MonoBehaviour
     private IEnumerator TimerStart()
     {
         yield return new WaitForSeconds(5);
-        GameObject.FindObjectOfType<Manager>().GameOver();
+        GameObject.FindObjectOfType<GameManager>().GameOver();
     }
 
     // Update is called once per frame

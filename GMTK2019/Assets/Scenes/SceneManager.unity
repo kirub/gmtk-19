@@ -130,7 +130,7 @@ PrefabInstance:
     - target: {fileID: 5760937505208048144, guid: 87eca0284f62064468a12e967ab51648,
         type: 3}
       propertyPath: m_Name
-      value: Manager
+      value: GameManager
       objectReference: {fileID: 0}
     - target: {fileID: 5760937505208048150, guid: 87eca0284f62064468a12e967ab51648,
         type: 3}
@@ -186,11 +186,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5760937505208048151, guid: 87eca0284f62064468a12e967ab51648,
-        type: 3}
-      propertyPath: SceneGame
-      value: FPP
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87eca0284f62064468a12e967ab51648, type: 3}

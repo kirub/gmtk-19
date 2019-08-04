@@ -6,9 +6,6 @@ using UnityEngine.Events;
 public class Supernova : MonoBehaviour
 {
     // Start is called before the first frame update
-
-    public Transform PlayerTransform;
-    public Rigidbody PlayerBody;
     
     public float TimerBeforeStart = 2f;
     public float ExpantionSpeed = 5f;
@@ -17,27 +14,28 @@ public class Supernova : MonoBehaviour
 
     public UnityEvent OnEnterOuterSupernova;
     public UnityEvent OnExitOuterSupernova;
-
-    private Transform Novacore;
+	
     private bool ExpantionIsOn = false;
     private bool NovaPullIsOn = false;
     private Vector3 VScale;
-    private Manager M;
     private float DistancePlayerNovacore = 0;
     private float NovaPullActualStrengh = 0;
-
-    void Start()
+	
+	void Start()
     {
-        Novacore = this.transform;
-        M = GameObject.FindObjectOfType<Manager>();
-        VScale.Set(ExpantionSpeed, 0, ExpantionSpeed);
+		VScale.Set(ExpantionSpeed, 0, ExpantionSpeed);
         StartCoroutine(TimerExpantionStart());
+
+		if (!ShipUnit.Instance)
+		{
+			Debug.LogError("No ShipUnit found !");
+		}
     }
     private IEnumerator TimerExpantionStart()
     {
         yield return new WaitForSeconds(TimerBeforeStart);
         ExpantionIsOn = true;
-    }
+	}
 
     //ajouter condition ou layer pour ne capter que le ship
     public void OnTriggerEnter(Collider other)
@@ -66,19 +64,23 @@ public class Supernova : MonoBehaviour
     {
         if(ExpantionIsOn)
         {
-            Novacore.localScale = Novacore.localScale + (VScale* Time.deltaTime);
-        }
-        if (NovaPullIsOn)
+            transform.localScale = transform.localScale + (VScale* Time.deltaTime);
+		}
+
+		if (!ShipUnit.Instance)
+		{
+			return;
+		}
+
+		if (NovaPullIsOn)
         {
             NovaPullActualStrengh += NovaPullStrenghIncreaseOverTime*Time.deltaTime;
-            if(PlayerTransform)
-                PlayerBody.AddForce((Novacore.position - PlayerTransform.position)* NovaPullActualStrengh);
+            ShipUnit.Instance.MovingComp.CurrentSpeed = Mathf.Max(ShipUnit.Instance.MovingComp.MinSpeed, ShipUnit.Instance.MovingComp.CurrentSpeed - NovaPullActualStrengh * Time.deltaTime);
            // Debug.Log(NovaPullActualStrengh);
         }
-        if (PlayerTransform)
-            DistancePlayerNovacore = Vector3.Distance(Novacore.position, PlayerTransform.position);
-        if (M)
-            M.LatestScore = DistancePlayerNovacore*100;
+        DistancePlayerNovacore = Vector3.Distance(transform.position, ShipUnit.Instance.transform.position);
+        if (GameManager.Instance)
+			GameManager.Instance.LatestScore = DistancePlayerNovacore*100;
     }
 
     

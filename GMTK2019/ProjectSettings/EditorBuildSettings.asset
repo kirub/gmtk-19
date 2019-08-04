@@ -6,12 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/scene test corentin/SceneManager.unity
-    guid: 621b956ccd54e464ebf55941168e2837
-  - enabled: 1
-    path: Assets/Scenes/scene test corentin/SceneGameOver.unity
-    guid: 58bcc0649680d2044b0ea242c037dc9b
-  - enabled: 1
     path: Assets/Scenes/FPP.unity
     guid: c18a79f7ccd711442a5c93e8665d339e
   m_configObjects: {}
