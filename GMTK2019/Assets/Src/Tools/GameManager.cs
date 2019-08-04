@@ -16,7 +16,6 @@ public class GameManager : MonoBehaviour
     public GameObject CanvasMenuIngame;
     public GameObject ResumeButton;
 	public Text TextHighScores;
-    public Text TextLatestScore;
 
     // Start is called before the first frame update
 
@@ -37,7 +36,6 @@ public class GameManager : MonoBehaviour
 	void LoadSceneGame()
     {
         SceneManager.LoadScene(SceneGameName);
-        TextLatestScore.gameObject.SetActive(true);
     }
 
 	private void Awake()
@@ -73,7 +71,6 @@ public class GameManager : MonoBehaviour
 				Pause();
 			}
         }
-        TextLatestScore.text = (((int)LatestScore) * ScoreMultiplier)+"";
     }
 
     public void GameStart()
@@ -98,7 +95,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("GameOver");
 		ResumeButton.SetActive(false);
 		CanvasMenuIngame.SetActive(true);
-		HandleHighScores(((int)LatestScore) * ScoreMultiplier);
+        LatestScore = Supernova.Instance.GetPlayerDistance() * 100;
+        HandleHighScores(((int)LatestScore) * ScoreMultiplier);
     }
 
     public void Pause()

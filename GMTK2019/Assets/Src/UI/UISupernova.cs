@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public static class CameraExtensions
@@ -19,15 +20,14 @@ public class UISupernova : MonoBehaviour
 {
     Vector3         SupernovaArrowPos   = new Vector3(0.0f, 0.0f, 0.0f);
     Supernova       SupernovaComp       = null;
+    TextMesh        UIInGameScore       = null;
 
     // Start is called before the first frame update
     void Start()
     {
+        UIInGameScore = GetComponentInChildren<TextMesh>();
+        UIInGameScore.transform.SetParent(this.transform);
         SupernovaComp = gameObject.transform.parent.GetComponentInChildren<Supernova>();
-
-        Vector3 VecShipToSupernova = SupernovaComp.gameObject.transform.position - ShipUnit.Instance.transform.position;
-        Bounds bounds = CameraExtensions.OrthographicBounds(Camera.main);
-        gameObject.transform.Rotate(Vector3.up, Vector3.Angle(VecShipToSupernova, Vector3.back));
     }
 
     // Update is called once per frame
@@ -39,8 +39,10 @@ public class UISupernova : MonoBehaviour
             Bounds bounds = CameraExtensions.OrthographicBounds(Camera.main);
 
             VecShipToSupernova.Normalize();
-            gameObject.transform.position = bounds.center - new Vector3(-VecShipToSupernova.x * (bounds.size.x / 2), 10.0f, -VecShipToSupernova.z * (bounds.size.y / 2));
+            transform.position = bounds.center - (new Vector3(-VecShipToSupernova.x * (bounds.size.x / 2), 10.0f, -VecShipToSupernova.z * (bounds.size.y / 2)) * 1.2f);
             transform.rotation = Quaternion.LookRotation(VecShipToSupernova);
+
+            UIInGameScore.text = ((int)Supernova.Instance.GetPlayerDistance()).ToString();
         }
     }
 }
