@@ -1,6 +1,10 @@
 # Soundtrack and sound effects for GMTK 19 (codename Impulse)
 ##### De Cooman Sammy
 
+## Tracks
+
+* intro: Maschine for arrangement and Ableton for mix and master
+
 ## SFX
 
 #### Ship
