@@ -119,14 +119,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Comet
       objectReference: {fileID: 0}
-    - target: {fileID: 602824289, guid: 260109e682f862a41b2a43248d72e7d1, type: 3}
-      propertyPath: playOnAwake
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 602824289, guid: 260109e682f862a41b2a43248d72e7d1, type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 7650581081985410182, guid: 260109e682f862a41b2a43248d72e7d1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -197,9 +189,19 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
-    - target: {fileID: 602824286, guid: 260109e682f862a41b2a43248d72e7d1, type: 3}
-      propertyPath: m_IsActive
+    - target: {fileID: 602824289, guid: 260109e682f862a41b2a43248d72e7d1, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517593889206662354, guid: 260109e682f862a41b2a43248d72e7d1,
+        type: 3}
+      propertyPath: looping
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5517593889206662354, guid: 260109e682f862a41b2a43248d72e7d1,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.a
+      value: 0.3137255
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 260109e682f862a41b2a43248d72e7d1, type: 3}
