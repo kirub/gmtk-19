@@ -13,8 +13,8 @@ public class PropulsorComponent : MonoBehaviour
 	[SerializeField] private float MinPropulsionSpeed = 5f;
 	[SerializeField] private float MaxPropulsionSpeed = 20f;
 	[SerializeField] private float MaxPressedPropulsionTime = 2f;
+	[SerializeField] private float _NeutralPropulsionRatio = 0.5f;
 	[SerializeField] private float _GoodPropulsionRatio = 0.3f;
-	[SerializeField] private float _BadPropulsionRatio = 0.2f;
 
 	[SerializeField] private float SlowTime = 0.5f;
 	[SerializeField] private float SlowTimeSpeed = 2f;
@@ -33,10 +33,11 @@ public class PropulsorComponent : MonoBehaviour
 	[SerializeField] private AudioSource PropulsionChargeHeadSound = null;
 	[SerializeField] private AudioSource PropulsionChargeLoopSound = null;
 	[SerializeField] private AudioSource PropulsionImpulseSound = null;
+	[SerializeField] private AudioSource PropulsionCancelSound = null;
 
-	public float NeutralPropulsionRatio { get { return 1f - _GoodPropulsionRatio - _BadPropulsionRatio; } }
-	public float GoodPropulsionRatio { get { return _GoodPropulsionRatio; } }
-	public float BadPropulsionRatio { get { return _BadPropulsionRatio; } }
+	public float NeutralPropulsionThreshold { get { return _NeutralPropulsionRatio; } }
+	public float GoodPropulsionThreshold { get { return NeutralPropulsionThreshold + _GoodPropulsionRatio; } }
+	public float BadPropulsionThreshold { get { return 1f; } }
 
 	public class OnCanPropulseEvent : UnityEvent { }
 	public OnCanPropulseEvent OnCanPropulseStartEvent { get; } = new OnCanPropulseEvent();
@@ -46,21 +47,55 @@ public class PropulsorComponent : MonoBehaviour
 	public OnPropulseEvent OnPropulseStartEvent { get; } = new OnPropulseEvent();
 	public OnPropulseEvent OnPropulseEndEvent { get; } = new OnPropulseEvent();
 	public OnPropulseEvent OnPropulseCancelEvent { get; } = new OnPropulseEvent();
-
+	
 	private List<GameObject> NearComets = new List<GameObject>();
+	private EnergySupplierComponent CurrentEnergySupplier = null;
 
 	private float CurrentPressedPropulsionTime = -1f;
 	private MovingComponent MovingComp = null;
 	private RotatorComponent RotatorComp = null;
 	private ChargerComponent ChargerComp = null;
+	private ShipOrbitalComponent ShipOrbitalComp = null;
 	private ShakeComponent CameraShakeComp = null;
 
 	private float CurrentWaitTimeBeforeReactivatingRotator = -1f;
 
 	public bool CanPropulse { get { return CanAlwaysPropulse || ChargerComp.CurrentNumRecharge > 0 || NearComets.Count > 0; } }
 	public bool IsPropulsing { get { return CurrentPressedPropulsionTime >= 0f; } }
-	public bool IsValidPropulsion { get { return IsPropulsing && CurrentPropulsionRatio > NeutralPropulsionRatio; } }
+	public bool IsValidPropulsion { get { return IsPropulsing && CurrentPropulsionRatio > NeutralPropulsionThreshold; } }
 	public float CurrentPropulsionRatio { get { return IsPropulsing ? CurrentPressedPropulsionTime / MaxPressedPropulsionTime : 0f; } }
+
+	EnergySupplierComponent GetLinkedEnergySupplier()
+	{
+		if (ShipOrbitalComp && ShipOrbitalComp.Planet)
+		{
+			return ShipOrbitalComp.Planet.GetComponent<EnergySupplierComponent>();
+		}
+		else if ( NearComets.Count > 0 )
+		{
+			return NearComets[0].GetComponent<EnergySupplierComponent>();
+		}
+
+		return null;
+	}
+
+	void UpdateEnergySupplier()
+	{
+		EnergySupplierComponent NewSupplier = GetLinkedEnergySupplier();
+
+		if (CurrentEnergySupplier != NewSupplier)
+		{
+			CurrentEnergySupplier = NewSupplier;
+			if (ChargerComp.IsRecharging)
+			{
+				ChargerComp.UpdateAvailability(CurrentEnergySupplier ? CurrentEnergySupplier.AvailableEnergy : 0);
+			}
+			else if (CurrentEnergySupplier)
+			{
+				ChargerComp.StartRecharge(CurrentEnergySupplier.AvailableEnergy);
+			}
+		}
+	}
 
 	void ResetPropulse()
 	{
@@ -83,12 +118,19 @@ public class PropulsorComponent : MonoBehaviour
 		{
 			PropulsionChargeLoopSound.Stop();
 		}
+
+		ChargerComp.StopRecharge();
 	}
 
 	void CancelPropulse()
 	{
 		ResetPropulse();
 		OnPropulseCancelEvent.Invoke();
+
+		if (PropulsionCancelSound)
+		{
+			PropulsionCancelSound.Play();
+		}
 	}
 
 	void StartPropulse()
@@ -119,6 +161,8 @@ public class PropulsorComponent : MonoBehaviour
 			{
 				PropulsionChargeLoopSound.Play();
 			}
+
+			UpdateEnergySupplier();
 		}
 	}
 	
@@ -158,6 +202,8 @@ public class PropulsorComponent : MonoBehaviour
 					Debug.LogWarning("No Ship Instance found, will not be able to die");
 				}
 			}
+			
+			UpdateEnergySupplier();
 		}
 	}
 
@@ -208,15 +254,12 @@ public class PropulsorComponent : MonoBehaviour
 				CameraShakeComp.ShakeCamera(CameraShakeTime, CameraShakeAmount);
 			}
 		}
-
-		if (IsPropulsing)
+		else if (IsPropulsing)
 		{
 			CancelPropulse();
 		}
-		else
-		{
-			ResetPropulse();
-		}
+
+		ResetPropulse();
 	}
 
 	private void OnPause(bool IsPaused)
@@ -236,6 +279,7 @@ public class PropulsorComponent : MonoBehaviour
 		MovingComp = GetComponent<MovingComponent>();
 		RotatorComp = GetComponent<RotatorComponent>();
 		ChargerComp = GetComponent<ChargerComponent>();
+		ShipOrbitalComp = GetComponentInChildren<ShipOrbitalComponent>();
 
 		if (ChargeParticle)
 		{

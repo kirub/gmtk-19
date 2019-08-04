@@ -5,9 +5,11 @@ using UnityEngine.Events;
 
 public class Supernova : MonoBehaviour
 {
-	// Start is called before the first frame update
+    // Start is called before the first frame update
 
-	public Collider NovaCollider;
+    public static Supernova Instance { get; private set; } = null;
+
+    public Collider NovaCollider;
 
 	public float TimerBeforeStart = 2f;
     public float ExpantionSpeed = 5f;
@@ -23,7 +25,14 @@ public class Supernova : MonoBehaviour
 
 	private void Awake()
 	{
-		NovaCollider.enabled = false;
+        if (Instance)
+        {
+            Debug.LogError("Multiple Instances of Supernova");
+            Destroy(this);
+            return;
+        }
+        Instance = this;
+        NovaCollider.enabled = false;
 	}
 
 	void Start()
@@ -49,6 +58,11 @@ public class Supernova : MonoBehaviour
 		}
 	}
 
+    public float GetPlayerDistance()
+    {
+        return Vector3.Distance(transform.position, ShipUnit.Instance.transform.position);
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -61,10 +75,6 @@ public class Supernova : MonoBehaviour
 		{
 			return;
 		}
-		
-        DistancePlayerNovacore = Vector3.Distance(transform.position, ShipUnit.Instance.transform.position);
-        if (GameManager.Instance)
-			GameManager.Instance.LatestScore = DistancePlayerNovacore*100;
     }
 
     

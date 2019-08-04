@@ -3,26 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Image))]
+[RequireComponent(typeof(Renderer))]
 public class UIShipPropulsion : MonoBehaviour
 {
-	private Image PropulsionObj = null;
+	[SerializeField] private GameObject WarningObjects = null;
+	private Renderer PropulsionObj = null;
 
 	void OnPropulsionStart()
 	{
 		enabled = true;
-		UpdatePropulsionValue();
+		UpdatePropulsionValue(0f);
 	}
 
 	void OnPropulsionEnd()
 	{
 		enabled = false;
-		UpdatePropulsionValue();
+		UpdatePropulsionValue(0f);
 	}
 
 	private void Awake()
 	{
-		PropulsionObj = GetComponent<Image>();
+		PropulsionObj = GetComponent<Renderer>();
 	}
 
 	void Start()
@@ -38,7 +39,7 @@ public class UIShipPropulsion : MonoBehaviour
 		ShipUnit.Instance.PropulsorComp.OnPropulseEndEvent.AddListener(OnPropulsionEnd);
 		ShipUnit.Instance.PropulsorComp.OnPropulseCancelEvent.AddListener(OnPropulsionEnd);
 
-		UpdatePropulsionValue();
+		UpdatePropulsionValue(0f);
 	}
 
 	private void OnDestroy()
@@ -61,11 +62,16 @@ public class UIShipPropulsion : MonoBehaviour
 			return;
 		}
 
-		UpdatePropulsionValue();
+		UpdatePropulsionValue(ShipUnit.Instance.PropulsorComp.CurrentPropulsionRatio);
 	}
 
-	void UpdatePropulsionValue()
+	void UpdatePropulsionValue(float NewValue)
 	{
-		PropulsionObj.material.SetFloat("Percent", ShipUnit.Instance.PropulsorComp.CurrentPropulsionRatio);
+		PropulsionObj.material.SetFloat("_Percent", NewValue);
+
+		if (WarningObjects)
+		{
+			WarningObjects.SetActive(NewValue > ShipUnit.Instance.PropulsorComp.GoodPropulsionThreshold);
+		}
 	}
 }
