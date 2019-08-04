@@ -99,6 +99,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("GameRestart");
 		//HandleHighScores(((int)LatestScore)*ScoreMultiplier);
+		IsInPause = false;
 		CanvasHighScores.SetActive(false);
 		CanvasMenuIngame.SetActive(false);
 
@@ -117,7 +118,10 @@ public class GameManager : MonoBehaviour
 		CanvasHighScores.SetActive(true);
 		ResumeButton.SetActive(false);
 		CanvasMenuIngame.SetActive(true);
-        LatestScore = Supernova.Instance.GetPlayerDistance() * 100;
+		if (Supernova.Instance)
+		{
+			LatestScore = Supernova.Instance.GetPlayerDistance() * 100;
+		}
         HandleHighScores(((int)LatestScore) * ScoreMultiplier);
     }
 
