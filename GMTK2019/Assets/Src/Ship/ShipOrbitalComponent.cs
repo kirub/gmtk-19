@@ -10,6 +10,7 @@ public class ShipOrbitalComponent : MonoBehaviour
         None,
         InOuterRadius,
         InInnerRadius,
+        InAttractorField,
         WillCrash
     }
 
@@ -58,9 +59,10 @@ public class ShipOrbitalComponent : MonoBehaviour
     {
         Debug.DrawLine(DebugPlanetPosition, TangentToReach, Color.cyan);
         Debug.DrawLine(DebugShipPosition, DebugPlanetPosition, Color.red);
-        
-        if( OrbitalState == EOrbitalState.WillCrash )
+
+        if ( OrbitalState == EOrbitalState.WillCrash || OrbitalState == EOrbitalState.InAttractorField)
         {
+            Debug.Log("OrbitalState: " + OrbitalState.ToString());
             GameObject Ship = gameObject.transform.parent.gameObject;
             Vector3 AttractionDir = Planet.transform.position - Ship.transform.position;
             AttractionDir.Normalize();
@@ -68,7 +70,11 @@ public class ShipOrbitalComponent : MonoBehaviour
 
             Debug.DrawLine(Ship.transform.position, Ship.transform.forward * 100, Color.green);
             Ship.transform.forward = Vector3.RotateTowards(Ship.transform.forward, AttractionDir, 0.05f * Planet.GetComponent<AttractionComponent>().AttractionForceCoefficient * Time.deltaTime, 100.0f);
-            Debug.Log("OrbitalState: " + OrbitalState.ToString());
+
+            if (OrbitalState == EOrbitalState.InAttractorField)
+            {
+                Ship.transform.position = Ship.transform.position + (AttractionDir * Planet.GetComponent<AttractionComponent>().AttractionForceCoefficient * Time.deltaTime);
+            }
         }
         else if( OrbitalState == EOrbitalState.InOuterRadius )
         {
@@ -161,6 +167,12 @@ public class ShipOrbitalComponent : MonoBehaviour
                 }
             }
         }
+        else if (other.gameObject.CompareTag("Attractor"))
+        {
+            GameObject CollidingPlanet = other.attachedRigidbody.gameObject;
+            Planet = CollidingPlanet;
+            OrbitalState = EOrbitalState.InAttractorField;
+        }
     }
 
 
@@ -173,7 +185,7 @@ public class ShipOrbitalComponent : MonoBehaviour
             SphereCollider SphereCol = other as SphereCollider;
             if (SphereCol)
             {
-                if (SphereCol.CompareTag("OrbitalOuterRadius"))
+                if (SphereCol.CompareTag("OrbitalOuterRadius") || SphereCol.CompareTag("Attractor"))
                 {
                     WillBeCounterClockWiseOrbit = false;
                     OrbitalState = EOrbitalState.None;
