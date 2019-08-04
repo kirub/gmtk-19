@@ -16,6 +16,8 @@ public class ShipOrbitalComponent : MonoBehaviour
     public EOrbitalState    OrbitalState { get; private set; } = EOrbitalState.None;
 
     private bool            WillBeCounterClockWiseOrbit { get; set; } = false;
+    private List<SphereCollider> Colliders = new List<SphereCollider>();
+    private Vector3 TangentToReach = new Vector3();
 
     void OnDestroy()
     {
@@ -32,7 +34,7 @@ public class ShipOrbitalComponent : MonoBehaviour
     {
         if(OrbitalState == EOrbitalState.InInnerRadius)
         { 
-            OrbitalState = EOrbitalState.InOuterRadius;
+            //OrbitalState = EOrbitalState.InOuterRadius;
             AttractionComponent AttractionComp = gameObject.GetComponentInParent<AttractionComponent>();
             AttractionComp.AttractedBy = null;
             MovingComponent MovingComp = gameObject.GetComponentInParent<MovingComponent>();
@@ -45,7 +47,9 @@ public class ShipOrbitalComponent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if( OrbitalState == EOrbitalState.InOuterRadius || OrbitalState == EOrbitalState.WillCrash )
+        if(Planet)
+        Debug.DrawLine(Planet.transform.position, TangentToReach, Color.cyan);
+        if( OrbitalState == EOrbitalState.WillCrash )
         {
             GameObject Ship = gameObject.transform.parent.gameObject;
             Vector3 AttractionDir = Planet.transform.position - Ship.transform.position;
@@ -55,6 +59,13 @@ public class ShipOrbitalComponent : MonoBehaviour
             Debug.DrawLine(Ship.transform.position, Ship.transform.forward * 100, Color.green);
             Ship.transform.forward = Vector3.RotateTowards(Ship.transform.forward, AttractionDir, 0.2f * Planet.GetComponent<AttractionComponent>().AttractionForceCoefficient * Time.deltaTime, 100.0f);
             Debug.Log("OrbitalState: " + OrbitalState.ToString());
+        }
+        else if( OrbitalState == EOrbitalState.InOuterRadius )
+        {
+            GameObject Ship = gameObject.transform.parent.gameObject;
+            Vector3 AttractionDir = TangentToReach - Ship.transform.position;
+            AttractionDir.Normalize();
+            Ship.transform.forward = Vector3.RotateTowards(Ship.transform.forward, AttractionDir, 0.2f * Planet.GetComponent<AttractionComponent>().AttractionForceCoefficient * Time.deltaTime, 100.0f);
         }
     }
 
@@ -90,7 +101,25 @@ public class ShipOrbitalComponent : MonoBehaviour
                 else if ( SphereCol.CompareTag("OrbitalOuterRadius") && !Planet)
                 {
                     Planet = CollidingPlanet;
-                    OrbitalState = EOrbitalState.InOuterRadius;
+                    if (ComputeWillCrash(Planet))
+                    {
+                        OrbitalState = EOrbitalState.WillCrash;
+                    }
+                    else
+                    {
+                        OrbitalState = EOrbitalState.InOuterRadius;
+
+                        GameObject Ship = gameObject.transform.parent.gameObject;
+                        Vector3 PerpShipToPlanetVector = ComputePerpShipToPlanetVector(Planet);
+                        Planet.GetComponentsInChildren<SphereCollider>(Colliders);
+                        SphereCollider InnerCollider = Colliders.Find(x => x.CompareTag("OrbitalInnerRadius"));
+                        PerpShipToPlanetVector.Normalize();
+
+                        float ForwardProjectionOnPerp = Vector3.Dot(gameObject.transform.parent.forward, PerpShipToPlanetVector);
+                        bool Inv = ForwardProjectionOnPerp < 0.0f;
+
+                        TangentToReach = Planet.transform.position + ( PerpShipToPlanetVector * InnerCollider.radius * Planet.transform.localScale.x) * (Inv ? -1 :1 );
+                    }
                     MovingComponent MovingComp = gameObject.GetComponentInParent<MovingComponent>();
                     MovingComp.UseDeceleration = false;
                 }
@@ -120,9 +149,15 @@ public class ShipOrbitalComponent : MonoBehaviour
         }
     }
 
+    Vector3 ComputePerpShipToPlanetVector(GameObject InPlanet)
+    {
+        return Vector3.Cross(InPlanet.transform.position - gameObject.transform.parent.position, Vector3.up);
+
+    }
+
     float ComputeTrajectoryDistanceFrom(GameObject InPlanet)
     {
-        Vector3 PerpShipToPlanetVector = Vector3.Cross(InPlanet.transform.position - gameObject.transform.parent.position, Vector3.up);
+        Vector3 PerpShipToPlanetVector = ComputePerpShipToPlanetVector(InPlanet);
         float ForwardProjectionOnPerp = Vector3.Dot(gameObject.transform.parent.forward, PerpShipToPlanetVector);
         WillBeCounterClockWiseOrbit = ForwardProjectionOnPerp < 0.0f;
         float TrajDistanceFromPlanet = Mathf.Abs(ForwardProjectionOnPerp);
