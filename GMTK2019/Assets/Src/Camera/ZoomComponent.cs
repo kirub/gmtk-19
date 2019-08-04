@@ -14,13 +14,10 @@ public class ZoomComponent : MonoBehaviour
 	private float ZoomSpeed = 0f;
 	private float ZoomModifier = 0f;
 
+	private bool IsBaseYSetup = false;
+
 	void OnZoomStart()
 	{
-		if (!enabled)
-		{
-			BaseY = transform.position.y;
-		}
-
 		ZoomModifier = -1f;
 		enabled = true;
 	}
@@ -35,7 +32,6 @@ public class ZoomComponent : MonoBehaviour
 	{
 		if (ShipUnit.Instance)
 		{
-
 			ShipUnit.Instance.PropulsorComp.OnPropulseStartEvent.AddListener(OnZoomStart);
 			ShipUnit.Instance.PropulsorComp.OnPropulseEndEvent.AddListener(OnZoomEnd);
 			ShipUnit.Instance.PropulsorComp.OnPropulseCancelEvent.AddListener(OnZoomEnd);
@@ -64,6 +60,11 @@ public class ZoomComponent : MonoBehaviour
 
 	private void Update()
 	{
+		if (!IsBaseYSetup)
+		{
+			BaseY = transform.position.y;
+		}
+
 		ZoomSpeed = Mathf.Min(ZoomMaxSpeed, ZoomSpeed + ZoomAcceleration * Time.unscaledDeltaTime);
 		transform.position = transform.position - Vector3.up * ZoomModifier * Time.unscaledDeltaTime * ZoomSpeed;
 		if (transform.position.y >= MaxZoom)
