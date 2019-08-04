@@ -10,9 +10,9 @@ TagManager:
   - OrbitalInnerRadius
   - Nova
   - UIPlanetHelper
-
   - DynamicObjectTrigger
-  - DynamicObject	Attractor  layers:
+  - Attractor
+  layers:
   - Default
   - TransparentFX
   - Ignore Raycast
