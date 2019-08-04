@@ -13,8 +13,11 @@ public class GameManager : MonoBehaviour
 	public string SceneGameName;
 
     public GameObject CanvasMenuStart;
+    public GameObject CanvasMenuOption;
     public GameObject CanvasMenuIngame;
     public GameObject ResumeButton;
+    public GameObject SoundOnButton;
+    public GameObject SoundOffButton;
     public GameObject CanvasHighScores;
 	public Text TextHighScores;
 
@@ -40,6 +43,7 @@ public class GameManager : MonoBehaviour
 	private float LastTimeScale = 0f;
 
 	private bool IsMute = false;
+    
 
 	public class OnPauseEvent : UnityEvent<bool> { }
 	public OnPauseEvent OnPauseUnpauseEvent { get; } = new OnPauseEvent();
@@ -98,14 +102,66 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	void UpdateMute()
+    public void OpenOptionMenu()
+    {
+        if(IsMute)
+        {
+            SoundOffButton.SetActive(true);
+            SoundOnButton.SetActive(false);
+        }
+        else
+        {
+            SoundOffButton.SetActive(false);
+            SoundOnButton.SetActive(true);
+        }
+        CanvasMenuStart.SetActive(false);
+        CanvasMenuOption.SetActive(true);
+    }
+    public void CloseOptionMenu()
+    {
+        CanvasMenuStart.SetActive(true);
+        CanvasMenuOption.SetActive(false);
+    }
+
+    public void MuteUnMute()
+    {
+        IsMute = !IsMute;
+        if (IsMute)
+        {
+            SoundOffButton.SetActive(true);
+            SoundOnButton.SetActive(false);
+            if (AmbientMainMenu)
+            {
+                AmbientMainMenu.volume = 0f;
+            }
+            if (AmbientInGame)
+            {
+                AmbientInGame.volume = 0f;
+            }
+        }
+        else
+        {
+            SoundOffButton.SetActive(false);
+            SoundOnButton.SetActive(true);
+            if (AmbientMainMenu)
+            {
+                AmbientMainMenu.volume = AmbientMainMenuVolume;
+            }
+            if (AmbientInGame)
+            {
+                AmbientInGame.volume = AmbientInGameVolume;
+            }
+        }
+    }
+
+    void UpdateMute()
 	{
-		if (Input.GetKeyDown(KeyCode.M))
+		if (Input.GetKeyDown(KeyCode.M)&&(!CanvasMenuOption.activeInHierarchy))
 		{
 			IsMute = !IsMute;
 			if (IsMute)
 			{
-				if (AmbientMainMenu)
+                if (AmbientMainMenu)
 				{
 					AmbientMainMenu.volume = 0f;
 				}
@@ -116,7 +172,7 @@ public class GameManager : MonoBehaviour
 			}
 			else
 			{
-				if (AmbientMainMenu)
+                if (AmbientMainMenu)
 				{
 					AmbientMainMenu.volume = AmbientMainMenuVolume;
 				}
