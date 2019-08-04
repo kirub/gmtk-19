@@ -15,7 +15,10 @@ public class GameManager : MonoBehaviour
     public GameObject CanvasMenuStart;
     public GameObject CanvasMenuIngame;
     public GameObject ResumeButton;
+    public GameObject CanvasHighScores;
 	public Text TextHighScores;
+
+	public AudioSource StartGameSound = null;
 
     // Start is called before the first frame update
 
@@ -49,6 +52,10 @@ public class GameManager : MonoBehaviour
 		Instance = this;
 
 		DontDestroyOnLoad(gameObject);
+
+		CanvasMenuStart.SetActive(true);
+		CanvasMenuIngame.SetActive(false);
+		CanvasHighScores.SetActive(false);
 	}
 	
 	void Start()
@@ -77,25 +84,44 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("GameStart");
 		IsInPause = false;
+		CanvasHighScores.SetActive(false);
 		CanvasMenuStart.SetActive(false);
+
+		if (StartGameSound)
+		{
+			StartGameSound.Play();
+		}
+
 		LoadSceneGame();
     }
 
     public void GameRestart()
     {
         Debug.Log("GameRestart");
-        //HandleHighScores(((int)LatestScore)*ScoreMultiplier);
-        CanvasMenuIngame.SetActive(false);
-        LoadSceneGame();
+		//HandleHighScores(((int)LatestScore)*ScoreMultiplier);
+		IsInPause = false;
+		CanvasHighScores.SetActive(false);
+		CanvasMenuIngame.SetActive(false);
+
+		if (StartGameSound)
+		{
+			StartGameSound.Play();
+		}
+
+		LoadSceneGame();
         
     }
 
     public void GameOver()
     {
         Debug.Log("GameOver");
+		CanvasHighScores.SetActive(true);
 		ResumeButton.SetActive(false);
 		CanvasMenuIngame.SetActive(true);
-        LatestScore = Supernova.Instance.GetPlayerDistance() * 100;
+		if (Supernova.Instance)
+		{
+			LatestScore = Supernova.Instance.GetPlayerDistance() * 100;
+		}
         HandleHighScores(((int)LatestScore) * ScoreMultiplier);
     }
 
@@ -115,6 +141,7 @@ public class GameManager : MonoBehaviour
 		LastTimeScale = Time.timeScale;
 		Time.timeScale = 0f;
 
+		CanvasHighScores.SetActive(true);
 		ResumeButton.SetActive(true);
 		CanvasMenuIngame.SetActive(true);
 	}
@@ -130,6 +157,7 @@ public class GameManager : MonoBehaviour
 		//handle unpause...
 		IsInPause = false;
 
+		CanvasHighScores.SetActive(false);
 		CanvasMenuIngame.SetActive(false);
 		
 		Time.timeScale = LastTimeScale;

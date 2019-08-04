@@ -12,13 +12,13 @@ public class UIShipPropulsion : MonoBehaviour
 	void OnPropulsionStart()
 	{
 		enabled = true;
-		UpdatePropulsionValue();
+		UpdatePropulsionValue(0f);
 	}
 
 	void OnPropulsionEnd()
 	{
 		enabled = false;
-		UpdatePropulsionValue();
+		UpdatePropulsionValue(0f);
 	}
 
 	private void Awake()
@@ -39,7 +39,7 @@ public class UIShipPropulsion : MonoBehaviour
 		ShipUnit.Instance.PropulsorComp.OnPropulseEndEvent.AddListener(OnPropulsionEnd);
 		ShipUnit.Instance.PropulsorComp.OnPropulseCancelEvent.AddListener(OnPropulsionEnd);
 
-		UpdatePropulsionValue();
+		UpdatePropulsionValue(0f);
 	}
 
 	private void OnDestroy()
@@ -62,16 +62,16 @@ public class UIShipPropulsion : MonoBehaviour
 			return;
 		}
 
-		UpdatePropulsionValue();
+		UpdatePropulsionValue(ShipUnit.Instance.PropulsorComp.CurrentPropulsionRatio);
 	}
 
-	void UpdatePropulsionValue()
+	void UpdatePropulsionValue(float NewValue)
 	{
-		PropulsionObj.material.SetFloat("_Percent", ShipUnit.Instance.PropulsorComp.CurrentPropulsionRatio);
+		PropulsionObj.material.SetFloat("_Percent", NewValue);
 
 		if (WarningObjects)
 		{
-			WarningObjects.SetActive(ShipUnit.Instance.PropulsorComp.CurrentPropulsionRatio > ShipUnit.Instance.PropulsorComp.GoodPropulsionThreshold);
+			WarningObjects.SetActive(NewValue > ShipUnit.Instance.PropulsorComp.GoodPropulsionThreshold);
 		}
 	}
 }

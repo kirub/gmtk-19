@@ -7,6 +7,10 @@
 
 ## SFX
 
+#### Splash screen
+
+* splash\_hover\_button_1 : Massive, edition in Ableton* splash\_hover\_button_2 : Massive, edition in Ableton* splash\_hover\_button_3 : Massive, edition in Ableton* splash\_hover\_button_4 : Massive, edition in Ableton
+
 #### Ship
 
 * ship\_fuel\_charge : Analog Lab, edition in Ableton
