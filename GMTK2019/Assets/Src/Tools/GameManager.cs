@@ -20,9 +20,15 @@ public class GameManager : MonoBehaviour
 
 	public AudioSource StartGameSound = null;
 
-    // Start is called before the first frame update
+	[SerializeField] private AudioSource AmbientMainMenu = null;
+	[SerializeField] private AudioSource AmbientInGame = null;
 
-    public List<int> HighScores = new List<int>();
+	private float AmbientMainMenuVolume = 0f;
+	private float AmbientInGameVolume = 0f;
+
+	// Start is called before the first frame update
+
+	public List<int> HighScores = new List<int>();
     public float DurationGameOverScreen = 5f;
     public int ScoreMultiplier = 1;
     public int MaxNumberOfHighScores = 5;
@@ -32,6 +38,8 @@ public class GameManager : MonoBehaviour
 	public bool IsInPause { get; private set; } = false;
 	private bool IsGameOver = false;
 	private float LastTimeScale = 0f;
+
+	private bool IsMute = false;
 
 	public class OnPauseEvent : UnityEvent<bool> { }
 	public OnPauseEvent OnPauseUnpauseEvent { get; } = new OnPauseEvent();
@@ -56,19 +64,29 @@ public class GameManager : MonoBehaviour
 		CanvasMenuStart.SetActive(true);
 		CanvasMenuIngame.SetActive(false);
 		CanvasHighScores.SetActive(false);
-	}
+
+		if (AmbientMainMenu)
+		{
+			AmbientMainMenu.Play();
+			AmbientMainMenuVolume = AmbientMainMenu.volume;
+		}
+		if (AmbientInGame)
+		{
+			AmbientInGame.Stop();
+			AmbientInGameVolume = AmbientInGame.volume;
+		}
+}
 	
 	void Start()
     {
         InitializeHighScores();
-       // Debug.Log("Manager Start");
-    }
+		// Debug.Log("Manager Start");
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (!IsGameOver && Input.GetKeyDown(KeyCode.Escape))
-        {
+	void UpdatePause()
+	{
+		if (!IsGameOver && Input.GetKeyDown(KeyCode.Escape))
+		{
 			if (IsInPause)
 			{
 				UnPause();
@@ -77,7 +95,43 @@ public class GameManager : MonoBehaviour
 			{
 				Pause();
 			}
-        }
+		}
+	}
+
+	void UpdateMute()
+	{
+		if (Input.GetKeyDown(KeyCode.M))
+		{
+			IsMute = !IsMute;
+			if (IsMute)
+			{
+				if (AmbientMainMenu)
+				{
+					AmbientMainMenu.volume = 0f;
+				}
+				if (AmbientInGame)
+				{
+					AmbientInGame.volume = 0f;
+				}
+			}
+			else
+			{
+				if (AmbientMainMenu)
+				{
+					AmbientMainMenu.volume = AmbientMainMenuVolume;
+				}
+				if (AmbientInGame)
+				{
+					AmbientInGame.volume = AmbientInGameVolume;
+				}
+			}
+		}
+	}
+
+	void Update()
+    {
+		UpdatePause();
+		UpdateMute();
     }
 
     public void GameStart()
@@ -86,6 +140,16 @@ public class GameManager : MonoBehaviour
 		IsInPause = false;
 		CanvasHighScores.SetActive(false);
 		CanvasMenuStart.SetActive(false);
+		CanvasMenuIngame.SetActive(false);
+
+		if (AmbientMainMenu)
+		{
+			AmbientMainMenu.Stop();
+		}
+		if (AmbientInGame)
+		{
+			AmbientInGame.Play();
+		}
 
 		if (StartGameSound)
 		{
@@ -98,18 +162,7 @@ public class GameManager : MonoBehaviour
     public void GameRestart()
     {
         Debug.Log("GameRestart");
-		//HandleHighScores(((int)LatestScore)*ScoreMultiplier);
-		IsInPause = false;
-		CanvasHighScores.SetActive(false);
-		CanvasMenuIngame.SetActive(false);
-
-		if (StartGameSound)
-		{
-			StartGameSound.Play();
-		}
-
-		LoadSceneGame();
-        
+		GameStart();        
     }
 
     public void GameOver()
