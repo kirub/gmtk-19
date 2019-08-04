@@ -102,13 +102,22 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-    void OpenOptionMenu()
+    public void OpenOptionMenu()
     {
-        
+        if(IsMute)
+        {
+            SoundOffButton.SetActive(true);
+            SoundOnButton.SetActive(false);
+        }
+        else
+        {
+            SoundOffButton.SetActive(false);
+            SoundOnButton.SetActive(true);
+        }
         CanvasMenuStart.SetActive(false);
         CanvasMenuOption.SetActive(true);
     }
-    void CloseOptionMenu()
+    public void CloseOptionMenu()
     {
         CanvasMenuStart.SetActive(true);
         CanvasMenuOption.SetActive(false);
