@@ -6,6 +6,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(MovingComponent))]
 [RequireComponent(typeof(RotatorComponent))]
 [RequireComponent(typeof(PropulsorComponent))]
+[RequireComponent(typeof(ChargerComponent))]
 public class ShipUnit : MonoBehaviour
 {
 	[SerializeField] private bool UseCameraShakeOnExplode = true;
@@ -24,7 +25,8 @@ public class ShipUnit : MonoBehaviour
 
 	public PropulsorComponent PropulsorComp { get; private set; } = null;
 	public MovingComponent MovingComp { get; private set; } = null;
-    public ShipOrbitalComponent OrbitalComp { get; private set; } = null;
+	public ChargerComponent ChargerComp { get; private set; } = null;
+	public ShipOrbitalComponent OrbitalComp { get; private set; } = null;
 
     public class OnExplodeEvent : UnityEvent { }
 	public OnExplodeEvent OnExplodeShipEvent { get; } = new OnExplodeEvent();
@@ -55,6 +57,7 @@ public class ShipUnit : MonoBehaviour
 		Instance = this;
 		PropulsorComp = GetComponent<PropulsorComponent>();
 		MovingComp = GetComponent<MovingComponent>();
+		ChargerComp = GetComponent<ChargerComponent>();
 		OrbitalComp = GetComponentInChildren<ShipOrbitalComponent>();
 	}
 

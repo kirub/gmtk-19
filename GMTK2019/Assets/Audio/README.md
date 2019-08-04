@@ -1,12 +1,17 @@
 # Soundtrack and sound effects for GMTK 19 (codename Impulse)
 ##### De Cooman Sammy
 
+## Tracks
+
+* intro: Maschine for arrangement and Ableton for mix and master
+
 ## SFX
 
 #### Ship
 
 * ship\_fuel\_charge : Analog Lab, edition in Ableton
 * ship\_boost\_charge : Massive, edition in Ableton
+* ship\_boost\_charge\_early\_release : Massive, edition in Ableton
 * ship\_boost\_impulse : [BLASTER 2 by tutarap](https://freesound.org/people/tutarap/sounds/366007/), edition in Ableton
 * ship\_fuel\_charge\_complete : Analog Lab, edition in Ableton
 * ship\_explosion : Polyplex and Massive, adition in Ableton

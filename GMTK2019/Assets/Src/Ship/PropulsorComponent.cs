@@ -5,19 +5,16 @@ using UnityEngine.Events;
 
 [RequireComponent(typeof(MovingComponent))]
 [RequireComponent(typeof(RotatorComponent))]
+[RequireComponent(typeof(ChargerComponent))]
 public class PropulsorComponent : MonoBehaviour
 {
 	[SerializeField] private bool CanAlwaysPropulse = false;
-	[SerializeField] private bool CanAddRechargeWithR = false;
 
 	[SerializeField] private float MinPropulsionSpeed = 5f;
 	[SerializeField] private float MaxPropulsionSpeed = 20f;
 	[SerializeField] private float MaxPressedPropulsionTime = 2f;
+	[SerializeField] private float _NeutralPropulsionRatio = 0.5f;
 	[SerializeField] private float _GoodPropulsionRatio = 0.3f;
-	[SerializeField] private float _BadPropulsionRatio = 0.2f;
-
-	[SerializeField] private int MaxRecharge = 3;
-	[SerializeField] private int BaseRecharge = 3;
 
 	[SerializeField] private float SlowTime = 0.5f;
 	[SerializeField] private float SlowTimeSpeed = 2f;
@@ -36,10 +33,10 @@ public class PropulsorComponent : MonoBehaviour
 	[SerializeField] private AudioSource PropulsionChargeHeadSound = null;
 	[SerializeField] private AudioSource PropulsionChargeLoopSound = null;
 	[SerializeField] private AudioSource PropulsionImpulseSound = null;
-
-	public float NeutralPropulsionRatio { get { return 1f - _GoodPropulsionRatio - _BadPropulsionRatio; } }
-	public float GoodPropulsionRatio { get { return _GoodPropulsionRatio; } }
-	public float BadPropulsionRatio { get { return _BadPropulsionRatio; } }
+	
+	public float NeutralPropulsionThreshold { get { return _NeutralPropulsionRatio; } }
+	public float GoodPropulsionThreshold { get { return NeutralPropulsionThreshold + _GoodPropulsionRatio; } }
+	public float BadPropulsionThreshold { get { return 1f; } }
 
 	public class OnCanPropulseEvent : UnityEvent { }
 	public OnCanPropulseEvent OnCanPropulseStartEvent { get; } = new OnCanPropulseEvent();
@@ -52,19 +49,18 @@ public class PropulsorComponent : MonoBehaviour
 
 	private List<GameObject> NearComets = new List<GameObject>();
 
-	public int CurrentNumRecharge { get; private set; } = 0;
-
 	private float CurrentPressedPropulsionTime = -1f;
 	private MovingComponent MovingComp = null;
 	private RotatorComponent RotatorComp = null;
+	private ChargerComponent ChargerComp = null;
 	private ShakeComponent CameraShakeComp = null;
 
 	private float CurrentWaitTimeBeforeReactivatingRotator = -1f;
 
-	public bool CanPropulse { get { return CanAlwaysPropulse || CurrentNumRecharge > 0 || NearComets.Count > 0; } }
+	public bool CanPropulse { get { return CanAlwaysPropulse || ChargerComp.CurrentNumRecharge > 0 || NearComets.Count > 0; } }
 	public bool IsPropulsing { get { return CurrentPressedPropulsionTime >= 0f; } }
-	public bool IsValidPropulsion { get { return IsPropulsing && CurrentPropulsionRatio > NeutralPropulsionRatio; } }
-	public float CurrentPropulsionRatio { get { return CurrentPressedPropulsionTime / MaxPressedPropulsionTime; } }
+	public bool IsValidPropulsion { get { return IsPropulsing && CurrentPropulsionRatio > NeutralPropulsionThreshold; } }
+	public float CurrentPropulsionRatio { get { return IsPropulsing ? CurrentPressedPropulsionTime / MaxPressedPropulsionTime : 0f; } }
 
 	void ResetPropulse()
 	{
@@ -110,6 +106,10 @@ public class PropulsorComponent : MonoBehaviour
 			if (ChargeParticle)
 			{
 				ChargeParticle.SetActive(true);
+			}
+			if (ReactorParticle)
+			{
+				ReactorParticle.SetActive(true);
 			}
 			if (PropulsionChargeHeadSound)
 			{
@@ -191,8 +191,7 @@ public class PropulsorComponent : MonoBehaviour
 			}
 			else
 			{
-				CurrentNumRecharge = Mathf.Max(0, CurrentNumRecharge - 1);
-				Debug.Log("Remaining recharge " + CurrentNumRecharge);
+				ChargerComp.UseCharge();
 			}
 
 			float CameraShakeAmount = MinCameraShakeAmount + (MaxCameraShakeAmount - MinCameraShakeAmount) * CurrentPropulsionRatio;
@@ -236,8 +235,7 @@ public class PropulsorComponent : MonoBehaviour
 	{
 		MovingComp = GetComponent<MovingComponent>();
 		RotatorComp = GetComponent<RotatorComponent>();
-		CurrentNumRecharge = BaseRecharge;
-		Debug.Log("Starting recharge " + CurrentNumRecharge);
+		ChargerComp = GetComponent<ChargerComponent>();
 
 		if (ChargeParticle)
 		{
@@ -245,7 +243,7 @@ public class PropulsorComponent : MonoBehaviour
 		}
 		if (ReactorParticle)
 		{
-			ReactorParticle.SetActive(CurrentNumRecharge > 0);
+			ReactorParticle.SetActive(false);
 		}
 	}
 
@@ -285,19 +283,9 @@ public class PropulsorComponent : MonoBehaviour
 				RotatorComp.enabled = true;
 				if (ReactorParticle)
 				{
-					ReactorParticle.SetActive(CurrentNumRecharge > 0);
+					ReactorParticle.SetActive(false);
 				}
 			}
-		}
-
-		if (CanAddRechargeWithR && Input.GetKeyUp(KeyCode.R))
-		{
-			CurrentNumRecharge = Mathf.Min(MaxRecharge, CurrentNumRecharge + 1);
-			if (ReactorParticle)
-			{
-				ReactorParticle.SetActive(CurrentNumRecharge > 0);
-			}
-			Debug.Log("New recharge " + CurrentNumRecharge);
 		}
 
 		if ( IsPropulsing && !CanPropulse )

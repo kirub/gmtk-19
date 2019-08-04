@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 public class TextOverTime : MonoBehaviour
 {
-    
+    [Header("if 0 text will not appear without calling StartWriting()")]
+    public float DelayTextAppear = 1f;
+    public float DelayTextHide = 10f;
     [Header("char '£' will switch delay to DelayBtwnLetters1 (default)")]
     public float DelayBtwnLetters1 = 0.1f;
     [Header("char '%' will switch delay to DelayBtwnLetters2")]
@@ -23,12 +25,25 @@ public class TextOverTime : MonoBehaviour
     {
         DelayUsed = DelayBtwnLetters1;
         T = this.GetComponent<Text>();
+        if(DelayTextAppear>0)
+            StartCoroutine(TimerShow());
     }
     
     public void StartWriting()
     {
         StartCoroutine(ShowText());
     }
+    IEnumerator TimerShow()
+    {
+        yield return new WaitForSeconds(DelayTextAppear);
+        StartCoroutine(ShowText());
+    }
+    IEnumerator TimerHide()
+    {
+        yield return new WaitForSeconds(DelayTextHide);
+        this.gameObject.SetActive(false);
+    }
+
 
     IEnumerator ShowText()
     {
@@ -52,6 +67,7 @@ public class TextOverTime : MonoBehaviour
                 yield return new WaitForSeconds(DelayUsed);
             }
         }
+        StartCoroutine(TimerHide());
     }
 
 

@@ -1,15 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIShipRecharge : MonoBehaviour
 {
-	[SerializeField] private float YOffset = 20f;
-	[SerializeField] private GameObject RechargesContainerObj = null;
-	[SerializeField] private List<GameObject> FullRechargesObj = new List<GameObject>();
+	[SerializeField] private float TransparencyWhenUsed = 0.2f;
+	[SerializeField] private List<Image> FullRechargesObj = new List<Image>();
 
-	private RectTransform RectTrans = null;
 	private int CurrentNumRecharges = 0;
+	private Color DefaultColor = new Color();
+	private Color UsedColor = new Color();
 
 	void Start()
     {
@@ -20,47 +21,36 @@ public class UIShipRecharge : MonoBehaviour
 			return;
 		}
 
-		RectTrans = GetComponent<RectTransform>();
-		UpdatePosition();
-
-		CurrentNumRecharges = ShipUnit.Instance.PropulsorComp.CurrentNumRecharge;
-		for ( int r = 0; r < FullRechargesObj.Count; ++r )
+		if (FullRechargesObj.Count > 1)
 		{
-			FullRechargesObj[r].SetActive(r < CurrentNumRecharges);
+			DefaultColor = FullRechargesObj[0].color;
 		}
-		RechargesContainerObj.SetActive(CurrentNumRecharges < FullRechargesObj.Count);
+		UsedColor = DefaultColor;
+		UsedColor.a = TransparencyWhenUsed;
+
+		UpdateRechargesVisibility();
 	}
 
 	private void Update()
 	{
 		if (!ShipUnit.Instance)
 		{
-			Destroy(gameObject);
+			enabled = false;
 			return;
 		}
 
-		if (CurrentNumRecharges != ShipUnit.Instance.PropulsorComp.CurrentNumRecharge)
+		if (CurrentNumRecharges != ShipUnit.Instance.ChargerComp.CurrentNumRecharge)
 		{
 			UpdateRechargesVisibility();
 		}
-
-		UpdatePosition();
 	}
 
 	void UpdateRechargesVisibility()
 	{
-		CurrentNumRecharges = ShipUnit.Instance.PropulsorComp.CurrentNumRecharge;
+		CurrentNumRecharges = ShipUnit.Instance.ChargerComp.CurrentNumRecharge;
 		for (int r = 0; r < FullRechargesObj.Count; ++r)
 		{
-			FullRechargesObj[r].SetActive(r < CurrentNumRecharges);
+			FullRechargesObj[r].color = (r < CurrentNumRecharges) ? DefaultColor : UsedColor;
 		}
-		RechargesContainerObj.SetActive(CurrentNumRecharges < FullRechargesObj.Count);
-	}
-
-	void UpdatePosition()
-	{
-		Vector3 ScreenPos = Camera.main.WorldToScreenPoint(ShipUnit.Instance.transform.position);
-		ScreenPos.y += YOffset;
-		RectTrans.position = ScreenPos;
 	}
 }
