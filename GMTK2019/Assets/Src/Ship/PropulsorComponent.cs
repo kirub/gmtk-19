@@ -353,11 +353,31 @@ public class PropulsorComponent : MonoBehaviour
 		}
 	}
 
-	private void OnTriggerEnter(Collider other)
+	GameObject GetCometFromCollider(Collider other)
 	{
 		if (other.CompareTag("Comet"))
 		{
-			NearComets.Add(other.gameObject);
+			return other.gameObject;
+		}
+		else if (other.CompareTag("DynamicObjectTrigger"))
+		{
+			CometComponent ChildComp = other.gameObject.GetComponentInChildren<CometComponent>();
+			if (ChildComp)
+			{
+				return ChildComp.gameObject;
+			}
+		}
+
+		return null;
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		GameObject Comet = GetCometFromCollider(other);
+
+		if (Comet)
+		{
+			NearComets.Add(Comet);
 			if (NearComets.Count == 1)
 			{
 				OnCanPropulseStartEvent.Invoke();
@@ -367,9 +387,11 @@ public class PropulsorComponent : MonoBehaviour
 
 	private void OnTriggerExit(Collider other)
 	{
-		if (other.CompareTag("Comet"))
+		GameObject Comet = GetCometFromCollider(other);
+
+		if (Comet)
 		{
-			NearComets.Remove(other.gameObject);
+			NearComets.Remove(Comet);
 			if (NearComets.Count == 0)
 			{
 				OnCanPropulseEndEvent.Invoke();
