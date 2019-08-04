@@ -65,7 +65,13 @@ public class AttractionComponent : MonoBehaviour
             float k = (4 * Mathf.PI * Mathf.PI) / ;
             //float PeriodSq = k * Mathf.Pow(Dist, 3);
             float PeriodSq = k * Dist * Dist;*/
-            float Speed = Time.deltaTime * AttractionSpeed;// Mathf.Sqrt(PlanetManager.G * AttractionMass / Dist);
+            float AdditionalSpeed = 0.0f;
+            MovingComponent MovingComp = gameObject.GetComponent<MovingComponent>();
+            if(MovingComp)
+            {
+                AdditionalSpeed = MovingComp.CurrentSpeed;
+            }
+            float Speed = (AdditionalSpeed + AttractionSpeed) * Time.deltaTime;// Mathf.Sqrt(PlanetManager.G * AttractionMass / Dist);
 
             gameObject.transform.RotateAround(AttractedBy.transform.position, Vector3.up, Speed * (OrbitCounterClockWise ? -1 : 1));
         }
