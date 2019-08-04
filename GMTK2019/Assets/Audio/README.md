@@ -4,6 +4,7 @@
 ## Tracks
 
 * intro: Maschine for arrangement and Ableton for mix and master
+* game\_track : Maschine for arrangement and Ableton for mix and master
 
 ## SFX
 
