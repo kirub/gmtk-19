@@ -28,6 +28,8 @@ public class PropulsorComponent : MonoBehaviour
 	[SerializeField] private float MinCameraShakeAmount = 2f;
 	[SerializeField] private float MaxCameraShakeAmount = 5f;
 
+	[SerializeField] private GameObject ReactorParticle = null;
+	[SerializeField] private GameObject ChargeParticle = null;
 	[SerializeField] private ParticleSystem PropulsionParticle = null;
 	[SerializeField] private float WaitTimeToReactivateRotator = 1f;
 
@@ -72,7 +74,11 @@ public class PropulsorComponent : MonoBehaviour
 		}
 		CurrentPressedPropulsionTime = -1f;
 		Time.timeScale = 1f;
-		
+
+		if (ChargeParticle)
+		{
+			ChargeParticle.SetActive(false);
+		}
 		if (PropulsionChargeHeadSound)
 		{
 			PropulsionChargeHeadSound.Stop();
@@ -101,6 +107,10 @@ public class PropulsorComponent : MonoBehaviour
 				CameraShakeComp.ContinuousShakeCamera(PropulsingCameraShakeAmount);
 			}
 
+			if (ChargeParticle)
+			{
+				ChargeParticle.SetActive(true);
+			}
 			if (PropulsionChargeHeadSound)
 			{
 				PropulsionChargeHeadSound.Play();
@@ -228,6 +238,15 @@ public class PropulsorComponent : MonoBehaviour
 		RotatorComp = GetComponent<RotatorComponent>();
 		CurrentNumRecharge = BaseRecharge;
 		Debug.Log("Starting recharge " + CurrentNumRecharge);
+
+		if (ChargeParticle)
+		{
+			ChargeParticle.SetActive(false);
+		}
+		if (ReactorParticle)
+		{
+			ReactorParticle.SetActive(CurrentNumRecharge > 0);
+		}
 	}
 
 	private void Start()
@@ -264,12 +283,20 @@ public class PropulsorComponent : MonoBehaviour
 			if (CurrentWaitTimeBeforeReactivatingRotator < 0f)
 			{
 				RotatorComp.enabled = true;
+				if (ReactorParticle)
+				{
+					ReactorParticle.SetActive(CurrentNumRecharge > 0);
+				}
 			}
 		}
 
 		if (CanAddRechargeWithR && Input.GetKeyUp(KeyCode.R))
 		{
 			CurrentNumRecharge = Mathf.Min(MaxRecharge, CurrentNumRecharge + 1);
+			if (ReactorParticle)
+			{
+				ReactorParticle.SetActive(CurrentNumRecharge > 0);
+			}
 			Debug.Log("New recharge " + CurrentNumRecharge);
 		}
 
