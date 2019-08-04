@@ -48,6 +48,7 @@ public class PropulsorComponent : MonoBehaviour
 	public OnPropulseEvent OnPropulseCancelEvent { get; } = new OnPropulseEvent();
 
 	private List<GameObject> NearComets = new List<GameObject>();
+	private EnergySupplierComponent CurrentEnergySupplier = null;
 
 	private float CurrentPressedPropulsionTime = -1f;
 	private MovingComponent MovingComp = null;
@@ -61,6 +62,34 @@ public class PropulsorComponent : MonoBehaviour
 	public bool IsPropulsing { get { return CurrentPressedPropulsionTime >= 0f; } }
 	public bool IsValidPropulsion { get { return IsPropulsing && CurrentPropulsionRatio > NeutralPropulsionThreshold; } }
 	public float CurrentPropulsionRatio { get { return IsPropulsing ? CurrentPressedPropulsionTime / MaxPressedPropulsionTime : 0f; } }
+
+	EnergySupplierComponent GetLinkedEnergySupplier()
+	{
+		if ( NearComets.Count > 0 )
+		{
+			return NearComets[0].GetComponent<EnergySupplierComponent>();
+		}
+
+		return null;
+	}
+
+	void UpdateEnergySupplier()
+	{
+		EnergySupplierComponent NewSupplier = GetLinkedEnergySupplier();
+
+		if (CurrentEnergySupplier != NewSupplier)
+		{
+			CurrentEnergySupplier = NewSupplier;
+			if (ChargerComp.IsRecharging)
+			{
+				ChargerComp.UpdateAvailability(CurrentEnergySupplier ? CurrentEnergySupplier.AvailableEnergy : 0);
+			}
+			else
+			{
+				ChargerComp.StartRecharge(CurrentEnergySupplier.AvailableEnergy);
+			}
+		}
+	}
 
 	void ResetPropulse()
 	{
@@ -83,6 +112,8 @@ public class PropulsorComponent : MonoBehaviour
 		{
 			PropulsionChargeLoopSound.Stop();
 		}
+
+		ChargerComp.StopRecharge();
 	}
 
 	void CancelPropulse()
@@ -119,6 +150,8 @@ public class PropulsorComponent : MonoBehaviour
 			{
 				PropulsionChargeLoopSound.Play();
 			}
+
+			UpdateEnergySupplier();
 		}
 	}
 	
@@ -158,6 +191,8 @@ public class PropulsorComponent : MonoBehaviour
 					Debug.LogWarning("No Ship Instance found, will not be able to die");
 				}
 			}
+			
+			UpdateEnergySupplier();
 		}
 	}
 
