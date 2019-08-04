@@ -124,7 +124,7 @@ ParticleSystem:
   looping: 1
   prewarm: 0
   playOnAwake: 1
-  useUnscaledTime: 0
+  useUnscaledTime: 1
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
   startDelay:
@@ -4935,7 +4935,7 @@ ParticleSystem:
   looping: 1
   prewarm: 0
   playOnAwake: 1
-  useUnscaledTime: 0
+  useUnscaledTime: 1
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
   startDelay:
@@ -9860,6 +9860,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbec5eb48aae53340a32a7dfc0b0de62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  WarningObjects: {fileID: 1357314821}
 --- !u!1 &1185768466
 GameObject:
   m_ObjectHideFlags: 0

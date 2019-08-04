@@ -13,8 +13,8 @@ public class PropulsorComponent : MonoBehaviour
 	[SerializeField] private float MinPropulsionSpeed = 5f;
 	[SerializeField] private float MaxPropulsionSpeed = 20f;
 	[SerializeField] private float MaxPressedPropulsionTime = 2f;
+	[SerializeField] private float _NeutralPropulsionRatio = 0.5f;
 	[SerializeField] private float _GoodPropulsionRatio = 0.3f;
-	[SerializeField] private float _BadPropulsionRatio = 0.2f;
 
 	[SerializeField] private float SlowTime = 0.5f;
 	[SerializeField] private float SlowTimeSpeed = 2f;
@@ -33,10 +33,10 @@ public class PropulsorComponent : MonoBehaviour
 	[SerializeField] private AudioSource PropulsionChargeHeadSound = null;
 	[SerializeField] private AudioSource PropulsionChargeLoopSound = null;
 	[SerializeField] private AudioSource PropulsionImpulseSound = null;
-
-	public float NeutralPropulsionRatio { get { return 1f - _GoodPropulsionRatio - _BadPropulsionRatio; } }
-	public float GoodPropulsionRatio { get { return _GoodPropulsionRatio; } }
-	public float BadPropulsionRatio { get { return _BadPropulsionRatio; } }
+	
+	public float NeutralPropulsionThreshold { get { return _NeutralPropulsionRatio; } }
+	public float GoodPropulsionThreshold { get { return NeutralPropulsionThreshold + _GoodPropulsionRatio; } }
+	public float BadPropulsionThreshold { get { return 1f; } }
 
 	public class OnCanPropulseEvent : UnityEvent { }
 	public OnCanPropulseEvent OnCanPropulseStartEvent { get; } = new OnCanPropulseEvent();
@@ -59,7 +59,7 @@ public class PropulsorComponent : MonoBehaviour
 
 	public bool CanPropulse { get { return CanAlwaysPropulse || ChargerComp.CurrentNumRecharge > 0 || NearComets.Count > 0; } }
 	public bool IsPropulsing { get { return CurrentPressedPropulsionTime >= 0f; } }
-	public bool IsValidPropulsion { get { return IsPropulsing && CurrentPropulsionRatio > NeutralPropulsionRatio; } }
+	public bool IsValidPropulsion { get { return IsPropulsing && CurrentPropulsionRatio > NeutralPropulsionThreshold; } }
 	public float CurrentPropulsionRatio { get { return IsPropulsing ? CurrentPressedPropulsionTime / MaxPressedPropulsionTime : 0f; } }
 
 	void ResetPropulse()

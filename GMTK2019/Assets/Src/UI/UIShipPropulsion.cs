@@ -6,6 +6,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Image))]
 public class UIShipPropulsion : MonoBehaviour
 {
+	[SerializeField] private GameObject WarningObjects = null;
 	private Image PropulsionObj = null;
 
 	void OnPropulsionStart()
@@ -67,5 +68,10 @@ public class UIShipPropulsion : MonoBehaviour
 	void UpdatePropulsionValue()
 	{
 		PropulsionObj.material.SetFloat("Percent", ShipUnit.Instance.PropulsorComp.CurrentPropulsionRatio);
+
+		if (WarningObjects)
+		{
+			WarningObjects.SetActive(ShipUnit.Instance.PropulsorComp.CurrentPropulsionRatio > ShipUnit.Instance.PropulsorComp.GoodPropulsionThreshold);
+		}
 	}
 }
