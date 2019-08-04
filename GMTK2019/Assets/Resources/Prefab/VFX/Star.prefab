@@ -9631,7 +9631,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3adcac0658cd62438c36a7b26d9f73e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttractionForce: 5
+  AttractionForce: 2
   _AttractedBy: {fileID: 0}
   IsAStaticStar: 0
 --- !u!1001 &7705325609573769726
