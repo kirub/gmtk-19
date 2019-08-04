@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public GameObject CanvasMenuStart;
     public GameObject CanvasMenuIngame;
     public GameObject ResumeButton;
+    public GameObject CanvasHighScores;
 	public Text TextHighScores;
 
     // Start is called before the first frame update
@@ -49,6 +50,10 @@ public class GameManager : MonoBehaviour
 		Instance = this;
 
 		DontDestroyOnLoad(gameObject);
+
+		CanvasMenuStart.SetActive(true);
+		CanvasMenuIngame.SetActive(false);
+		CanvasHighScores.SetActive(false);
 	}
 	
 	void Start()
@@ -77,6 +82,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("GameStart");
 		IsInPause = false;
+		CanvasHighScores.SetActive(false);
 		CanvasMenuStart.SetActive(false);
 		LoadSceneGame();
     }
@@ -84,8 +90,9 @@ public class GameManager : MonoBehaviour
     public void GameRestart()
     {
         Debug.Log("GameRestart");
-        //HandleHighScores(((int)LatestScore)*ScoreMultiplier);
-        CanvasMenuIngame.SetActive(false);
+		//HandleHighScores(((int)LatestScore)*ScoreMultiplier);
+		CanvasHighScores.SetActive(false);
+		CanvasMenuIngame.SetActive(false);
         LoadSceneGame();
         
     }
@@ -93,6 +100,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Debug.Log("GameOver");
+		CanvasHighScores.SetActive(true);
 		ResumeButton.SetActive(false);
 		CanvasMenuIngame.SetActive(true);
         LatestScore = Supernova.Instance.GetPlayerDistance() * 100;
@@ -115,6 +123,7 @@ public class GameManager : MonoBehaviour
 		LastTimeScale = Time.timeScale;
 		Time.timeScale = 0f;
 
+		CanvasHighScores.SetActive(true);
 		ResumeButton.SetActive(true);
 		CanvasMenuIngame.SetActive(true);
 	}
@@ -130,6 +139,7 @@ public class GameManager : MonoBehaviour
 		//handle unpause...
 		IsInPause = false;
 
+		CanvasHighScores.SetActive(false);
 		CanvasMenuIngame.SetActive(false);
 		
 		Time.timeScale = LastTimeScale;

@@ -131,6 +131,7 @@ MonoBehaviour:
   CanvasMenuStart: {fileID: 8080030700462790280}
   CanvasMenuIngame: {fileID: 4057201931690409212}
   ResumeButton: {fileID: 4773162913056846320}
+  CanvasHighScores: {fileID: 5840878046768165617}
   TextHighScores: {fileID: 5840878048103128716}
   HighScores: 
   DurationGameOverScreen: 5
@@ -189,7 +190,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5840878046768165618
 RectTransform:
   m_ObjectHideFlags: 0
@@ -693,6 +694,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5760937505208048150}
     m_Modifications:
+    - target: {fileID: 6597163232700313929, guid: 6e5d29db2650b4741b7eaf855ae9481f,
+        type: 3}
+      propertyPath: m_Name
+      value: CanvasInGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 6597163232700313929, guid: 6e5d29db2650b4741b7eaf855ae9481f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6597163232700313933, guid: 6e5d29db2650b4741b7eaf855ae9481f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -796,16 +807,6 @@ PrefabInstance:
     - target: {fileID: 6597163232700313933, guid: 6e5d29db2650b4741b7eaf855ae9481f,
         type: 3}
       propertyPath: m_Pivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6597163232700313929, guid: 6e5d29db2650b4741b7eaf855ae9481f,
-        type: 3}
-      propertyPath: m_Name
-      value: CanvasInGame
-      objectReference: {fileID: 0}
-    - target: {fileID: 6597163232700313929, guid: 6e5d29db2650b4741b7eaf855ae9481f,
-        type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8085475833095521600, guid: 6e5d29db2650b4741b7eaf855ae9481f,
