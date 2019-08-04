@@ -223,6 +223,7 @@ public class GameManager : MonoBehaviour
 			CanvasHighScores.SetActive(false);
 			CanvasMenuStart.SetActive(false);
 			CanvasMenuIngame.SetActive(false);
+			CanvasTutorial.SetActive(false);
 
 			if (AmbientMainMenu)
 			{

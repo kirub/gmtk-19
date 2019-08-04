@@ -75,6 +75,7 @@ public class ChargerComponent : MonoBehaviour
 				AddCharge();
 				CurrentRechargeTime = 0f;
 				--MaxRechargeAvailable;
+				Debug.Log("Recharge available " + MaxRechargeAvailable);
 			}
 		}
 	}

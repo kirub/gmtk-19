@@ -67,6 +67,7 @@ public class PropulsorComponent : MonoBehaviour
 
 	EnergySupplierComponent GetLinkedEnergySupplier()
 	{
+		NearComets.RemoveAll(x => x == null);
 		if (ShipOrbitalComp && ShipOrbitalComp.Planet)
 		{
 			return ShipOrbitalComp.Planet.GetComponent<EnergySupplierComponent>();
@@ -228,6 +229,7 @@ public class PropulsorComponent : MonoBehaviour
 				PropulsionImpulseSound.Play();
 			}
 
+			NearComets.RemoveAll(x => x == null);
 			if (NearComets.Count > 0)
 			{
 				GameObject NearestComet = NearComets[0];
