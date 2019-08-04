@@ -51,10 +51,19 @@ public class PlanetManager : MonoBehaviour
         
     }
 
-    public List<GameObject> GetPlanetsInGridFromPosition( Vector3 Position)
+    public List<GameObject> GetPlanetsInGridFromPosition( Vector3 Position, int Extent = 1)
     {
+        List<GameObject> PlanetsCopy = new List<GameObject>();
         GetPositionInGrid(Position, ref PositionInGrid);
-        return ObjectGrid[PositionInGrid.x, PositionInGrid.y];
+        for (int X = PositionInGrid.x - Extent; X < PositionInGrid.x + Extent; ++X)
+        {
+            for (int Y = PositionInGrid.x - Extent; Y < PositionInGrid.x + Extent; ++Y)
+            {
+                PlanetsCopy.AddRange(ObjectGrid[PositionInGrid.x, PositionInGrid.y]);
+            }
+        }
+
+        return PlanetsCopy;
     }
 
     void GetPositionInGrid(Vector3 Position, ref Vector2Int PositionInGrid)

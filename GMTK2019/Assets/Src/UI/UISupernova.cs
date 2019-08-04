@@ -21,6 +21,7 @@ public class UISupernova : MonoBehaviour
     Vector3         SupernovaArrowPos   = new Vector3(0.0f, 0.0f, 0.0f);
     Supernova       SupernovaComp       = null;
     TextMesh        UIInGameScore       = null;
+    private bool    IsVisible           = false;
 
     // Start is called before the first frame update
     void Start()
@@ -35,14 +36,21 @@ public class UISupernova : MonoBehaviour
     {
         if (ShipUnit.Instance)
         {
-            Vector3 VecShipToSupernova = SupernovaComp.gameObject.transform.position - ShipUnit.Instance.transform.position;
-            Bounds bounds = CameraExtensions.OrthographicBounds(Camera.main);
+            Vector3 ViewportPos = Camera.main.WorldToViewportPoint(SupernovaComp.gameObject.transform.position);
+            IsVisible =
+                (ViewportPos.x > -0.1f && ViewportPos.x < 1.1f) &&
+                (ViewportPos.y > -0.1f && ViewportPos.y < 1.1f);
+            if (!IsVisible)
+            {
+                Vector3 VecShipToSupernova = SupernovaComp.gameObject.transform.position - ShipUnit.Instance.transform.position;
+                Bounds bounds = CameraExtensions.OrthographicBounds(Camera.main);
 
-            VecShipToSupernova.Normalize();
-            transform.position = bounds.center - (new Vector3(-VecShipToSupernova.x * (bounds.size.x / 2), 10.0f, -VecShipToSupernova.z * (bounds.size.y / 2)) * 1.2f);
-            transform.rotation = Quaternion.LookRotation(VecShipToSupernova);
+                VecShipToSupernova.Normalize();
+                transform.position = bounds.center - (new Vector3(-VecShipToSupernova.x * (bounds.size.x / 2), 10.0f, -VecShipToSupernova.z * (bounds.size.y / 2)) * 1.2f);
+                transform.rotation = Quaternion.LookRotation(VecShipToSupernova);
 
-            UIInGameScore.text = ((int)Supernova.Instance.GetPlayerDistance()).ToString();
+                UIInGameScore.text = ((int)Supernova.Instance.GetPlayerDistance()).ToString();
+            }
         }
     }
 }

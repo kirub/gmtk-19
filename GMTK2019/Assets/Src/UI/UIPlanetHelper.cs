@@ -52,11 +52,11 @@ public class UIPlanetHelper : MonoBehaviour
             {
                 Vector3 ViewportPos = Camera.main.WorldToViewportPoint(Planet.transform.position);
                 bool IsVisible =
-                    (ViewportPos.x > -0.5f && ViewportPos.x < 1.5f) &&
-                    (ViewportPos.z > -0.5f && ViewportPos.z < 1.5f);
+                    (ViewportPos.x > 0.2f && ViewportPos.x < 0.8f) &&
+                    (ViewportPos.y > 0.2f && ViewportPos.y < 0.8f);
 
                 List<SpriteRenderer> Sprites = new List<SpriteRenderer>();
-                Planet.GetComponentsInChildren<SpriteRenderer>(Sprites);
+                Planet.GetComponentsInChildren<SpriteRenderer>(true, Sprites);
                 SpriteRenderer UIPlanetHelper = Sprites.Find(x => x.CompareTag("UIPlanetHelper"));
                 UIPlanetHelper.gameObject.SetActive(!IsVisible);
 
