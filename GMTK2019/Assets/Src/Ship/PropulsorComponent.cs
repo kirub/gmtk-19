@@ -47,7 +47,7 @@ public class PropulsorComponent : MonoBehaviour
 	public OnPropulseEvent OnPropulseStartEvent { get; } = new OnPropulseEvent();
 	public OnPropulseEvent OnPropulseEndEvent { get; } = new OnPropulseEvent();
 	public OnPropulseEvent OnPropulseCancelEvent { get; } = new OnPropulseEvent();
-
+	
 	private List<GameObject> NearComets = new List<GameObject>();
 	private EnergySupplierComponent CurrentEnergySupplier = null;
 
@@ -55,6 +55,7 @@ public class PropulsorComponent : MonoBehaviour
 	private MovingComponent MovingComp = null;
 	private RotatorComponent RotatorComp = null;
 	private ChargerComponent ChargerComp = null;
+	private ShipOrbitalComponent ShipOrbitalComp = null;
 	private ShakeComponent CameraShakeComp = null;
 
 	private float CurrentWaitTimeBeforeReactivatingRotator = -1f;
@@ -66,7 +67,11 @@ public class PropulsorComponent : MonoBehaviour
 
 	EnergySupplierComponent GetLinkedEnergySupplier()
 	{
-		if ( NearComets.Count > 0 )
+		if (ShipOrbitalComp && ShipOrbitalComp.Planet)
+		{
+			return ShipOrbitalComp.Planet.GetComponent<EnergySupplierComponent>();
+		}
+		else if ( NearComets.Count > 0 )
 		{
 			return NearComets[0].GetComponent<EnergySupplierComponent>();
 		}
@@ -85,7 +90,7 @@ public class PropulsorComponent : MonoBehaviour
 			{
 				ChargerComp.UpdateAvailability(CurrentEnergySupplier ? CurrentEnergySupplier.AvailableEnergy : 0);
 			}
-			else
+			else if (CurrentEnergySupplier)
 			{
 				ChargerComp.StartRecharge(CurrentEnergySupplier.AvailableEnergy);
 			}
@@ -274,6 +279,7 @@ public class PropulsorComponent : MonoBehaviour
 		MovingComp = GetComponent<MovingComponent>();
 		RotatorComp = GetComponent<RotatorComponent>();
 		ChargerComp = GetComponent<ChargerComponent>();
+		ShipOrbitalComp = GetComponentInChildren<ShipOrbitalComponent>();
 
 		if (ChargeParticle)
 		{
