@@ -3028,6 +3028,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Supernova
       objectReference: {fileID: 0}
+    - target: {fileID: 3137513463102791612, guid: 0759e9800a3bc7047ae598ca0eb9f52d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3137513463102791613, guid: 0759e9800a3bc7047ae598ca0eb9f52d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3636,6 +3641,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CameraContainer
+      objectReference: {fileID: 0}
+    - target: {fileID: 132206820036382639, guid: 6d0a491c024c7634d8d194beb5ca7fd3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 132206820036382637, guid: 6d0a491c024c7634d8d194beb5ca7fd3,
         type: 3}
@@ -5703,6 +5713,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PostProcess_Base
+      objectReference: {fileID: 0}
+    - target: {fileID: 8360990582372456567, guid: ef343937d3a05e34e9f6f53bf04e609f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8360990582372456553, guid: ef343937d3a05e34e9f6f53bf04e609f,
         type: 3}
@@ -10852,6 +10867,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HUD_Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4329550969595194459, guid: a540c759a551faa4b8a897e65ec67bb2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4329550969595194463, guid: a540c759a551faa4b8a897e65ec67bb2,
         type: 3}

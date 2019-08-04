@@ -14810,8 +14810,8 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     m_glareMaxPassCount: 4
-    m_currentWidth: 960
-    m_currentHeight: 501
+    m_currentWidth: 224
+    m_currentHeight: 126
     m_currentGlareType: 0
     m_currentGlareIdx: 0
     m_perPassDisplacement: 4
@@ -14873,6 +14873,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 79c2ac82a87636a418bb24a47e279b55,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8052994932809076077, guid: 79c2ac82a87636a418bb24a47e279b55,
         type: 3}
