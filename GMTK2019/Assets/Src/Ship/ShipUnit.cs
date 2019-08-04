@@ -20,8 +20,9 @@ public class ShipUnit : MonoBehaviour
 
 	public PropulsorComponent PropulsorComp { get; private set; } = null;
 	public MovingComponent MovingComp { get; private set; } = null;
+    public ShipOrbitalComponent OrbitalComp { get; private set; } = null;
 
-	public class OnExplodeEvent : UnityEvent { }
+    public class OnExplodeEvent : UnityEvent { }
 	public OnExplodeEvent OnExplodeShipEvent { get; } = new OnExplodeEvent();
 
 	public void Explode()
@@ -50,6 +51,7 @@ public class ShipUnit : MonoBehaviour
 		Instance = this;
 		PropulsorComp = GetComponent<PropulsorComponent>();
 		MovingComp = GetComponent<MovingComponent>();
+		OrbitalComp = GetComponentInChildren<ShipOrbitalComponent>();
 	}
 
 	private void Start()
