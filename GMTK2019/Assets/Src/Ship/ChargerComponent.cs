@@ -67,7 +67,7 @@ public class ChargerComponent : MonoBehaviour
 			AddCharge();
 		}
 
-		if (IsRecharging && MaxRechargeAvailable > 0)
+		if (IsRecharging && MaxRechargeAvailable > 0 && CurrentNumRecharge < MaxRecharge)
 		{
 			CurrentRechargeTime += Time.unscaledDeltaTime;
 			if (CurrentRechargeTime > RechargeTime)
