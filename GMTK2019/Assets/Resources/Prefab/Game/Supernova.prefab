@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1317755582977320674}
   - component: {fileID: 7287635666562206877}
   - component: {fileID: 3144248953086033891}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: UISupernova
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2957632709576147143}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 10, z: -3.18}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_Children: []
   m_Father: {fileID: 3137513463102791613}
   m_RootOrder: 1
@@ -81,8 +81,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  m_SortingOrder: 50
+  m_Sprite: {fileID: 21300000, guid: ed8c1e1e96f4d31468b44ac84f282022, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -196,8 +196,6 @@ MonoBehaviour:
   NovaCollider: {fileID: 7610911190483160622}
   TimerBeforeStart: 5
   ExpantionSpeed: 5
-  NovaPullBaseStrengh: 0.5
-  NovaPullStrenghIncreaseOverTime: 0.001
   OnEnterOuterSupernova:
     m_PersistentCalls:
       m_Calls: []
