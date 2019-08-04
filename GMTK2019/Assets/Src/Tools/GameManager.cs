@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
     public void GameRestart()
     {
         Debug.Log("GameRestart");
-        HandleHighScores(((int)LatestScore)*ScoreMultiplier);
+        //HandleHighScores(((int)LatestScore)*ScoreMultiplier);
         CanvasMenuIngame.SetActive(false);
         LoadSceneGame();
         
