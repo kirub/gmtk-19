@@ -9,9 +9,7 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance { get; private set; }
 
-	public string SceneGame;
-    public string SceneGameOver;
-    public GameObject StartCam;
+	public string SceneGameName;
 
     public GameObject CanvasMenuStart;
     public GameObject CanvasMenuIngame;
@@ -25,50 +23,14 @@ public class GameManager : MonoBehaviour
     public float DurationGameOverScreen = 5f;
     public int ScoreMultiplier = 1;
     public int MaxNumberOfHighScores = 5;
-
-    private bool IsSceneGameLoaded = false;
+	
     public float LatestScore = 0;
-    
 
-    IEnumerator LoadSceneGame()
+	void LoadSceneGame()
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneGame, LoadSceneMode.Additive);
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
-        }
-        IsSceneGameLoaded = true;
+        SceneManager.LoadScene(SceneGameName);
         TextLatestScore.gameObject.SetActive(true);
     }
-    IEnumerator LoadSceneGameOver()
-    {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneGameOver, LoadSceneMode.Additive);
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
-        }
-        CanvasMenuGameOver.SetActive(true);
-    }
-
-
-    IEnumerator UnLoadSceneGame()
-    {
-        AsyncOperation asyncUnLoad = SceneManager.UnloadSceneAsync(SceneGame);
-        while (!asyncUnLoad.isDone)
-        {
-            yield return null;
-        }
-    }
-    IEnumerator UnLoadSceneGameOver()
-    {
-        AsyncOperation asyncUnLoad = SceneManager.UnloadSceneAsync(SceneGameOver);
-        while (!asyncUnLoad.isDone)
-        {
-            yield return null;
-        }
-        StartCam.SetActive(true);
-        CanvasMenuGameOver.SetActive(false);
-	}
 
 	private void Awake()
 	{
@@ -79,9 +41,10 @@ public class GameManager : MonoBehaviour
 			return;
 		}
 		Instance = this;
+
+		DontDestroyOnLoad(gameObject);
 	}
-
-
+	
 	void Start()
     {
         InitializeHighScores();
@@ -91,50 +54,43 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(IsSceneGameLoaded == true)
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                Pause();
-            }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Pause();
+        }
         TextLatestScore.text = (((int)LatestScore) * ScoreMultiplier)+"";
     }
 
     public void GameStart()
     {
         Debug.Log("GameStart");
-        StartCam.SetActive(false);
-        StartCoroutine(LoadSceneGame());
-        CanvasMenuStart.SetActive(false);
+		CanvasMenuStart.SetActive(false);
+		LoadSceneGame();
     }
 
     public void RestartWhileIngame()
     {
         Debug.Log("RestartWhileIngame");
         HandleHighScores(((int)LatestScore)*ScoreMultiplier);
-        IsSceneGameLoaded = false;
         CanvasMenuIngame.SetActive(false);
-        StartCoroutine(UnLoadSceneGame());
-        StartCoroutine(LoadSceneGame());
+        LoadSceneGame();
         
     }
     public void RestartWhileGameOver()
     {
-        CanvasMenuStart.SetActive(false);
         Debug.Log("RestartWhileGameOver");
+        CanvasMenuStart.SetActive(false);
+		CanvasMenuGameOver.SetActive(false);
         HandleHighScores(((int)LatestScore) * ScoreMultiplier);
-        StartCoroutine(UnLoadSceneGameOver());
-        StartCoroutine(LoadSceneGame());
-        CanvasMenuGameOver.SetActive(false);
+		LoadSceneGame();
     }
 
     public void GameOver()
     {
-        CanvasMenuIngame.SetActive(false);//au cas ou menu pdt jeu actif puis meurt
-        HandleHighScores(((int)LatestScore) * ScoreMultiplier);
-        IsSceneGameLoaded = false;
-        StartCoroutine(UnLoadSceneGame());
-        StartCoroutine(LoadSceneGameOver());
         Debug.Log("GameOver");
+        CanvasMenuIngame.SetActive(false);//au cas ou menu pdt jeu actif puis meurt
+		CanvasMenuGameOver.SetActive(true);
+		HandleHighScores(((int)LatestScore) * ScoreMultiplier);
     }
 
     public void Pause()

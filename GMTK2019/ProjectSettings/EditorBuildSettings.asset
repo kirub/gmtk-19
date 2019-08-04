@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/FPP.unity
     guid: c18a79f7ccd711442a5c93e8665d339e
+  - enabled: 1
+    path: Assets/Scenes/MenuFPP.unity
+    guid: 621b956ccd54e464ebf55941168e2837
   m_configObjects: {}
