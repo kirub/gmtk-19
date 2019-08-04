@@ -196,6 +196,11 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 402175763}
+    - target: {fileID: 5760937505208048151, guid: 87eca0284f62064468a12e967ab51648,
+        type: 3}
+      propertyPath: AmbientInGameLPF
+      value: 
+      objectReference: {fileID: 1342048165}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87eca0284f62064468a12e967ab51648, type: 3}
 --- !u!4 &223234320 stripped
@@ -437,7 +442,7 @@ MonoBehaviour:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    m_lensFlareGradTexture: {fileID: 935398801}
+    m_lensFlareGradTexture: {fileID: 962688899}
     m_lensFlareHaloParams: {x: 0.3, y: 0.573, z: 1, w: 128}
     m_lensFlareHaloChrDistortion: 1.51
     m_lensFlareGaussianBlurAmount: 3
@@ -483,8 +488,8 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     m_glareMaxPassCount: 4
-    m_currentWidth: 585
-    m_currentHeight: 330
+    m_currentWidth: 831
+    m_currentHeight: 452
     m_currentGlareType: 0
     m_currentGlareIdx: 0
     m_perPassDisplacement: 4
@@ -875,7 +880,7 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1279890596}
   m_PrefabAsset: {fileID: 0}
---- !u!28 &935398801
+--- !u!28 &962688899
 Texture2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1089,6 +1094,37 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f7faee6a27bc1447991a62705faffaa, type: 3}
+--- !u!1 &1342048162 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8785971328093643134, guid: 87eca0284f62064468a12e967ab51648,
+    type: 3}
+  m_PrefabInstance: {fileID: 151410026}
+  m_PrefabAsset: {fileID: 0}
+--- !u!169 &1342048165
+AudioLowPassFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1342048162}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_LowpassResonanceQ: 1
+  lowpassLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.22727273
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1371629999
 GameObject:
   m_ObjectHideFlags: 0

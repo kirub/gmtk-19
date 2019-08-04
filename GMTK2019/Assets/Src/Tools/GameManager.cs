@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
 	
 	[SerializeField] private AudioSource AmbientMainMenu = null;
 	[SerializeField] private AudioSource AmbientInGame = null;
+	[SerializeField] private AudioLowPassFilter AmbientInGameLPF = null; 
 
 	private float AmbientMainMenuVolume = 0f;
 	private float AmbientInGameVolume = 0f;
@@ -280,6 +281,14 @@ public class GameManager : MonoBehaviour
 		LastTimeScale = Time.timeScale;
 		Time.timeScale = 0f;
 
+		if (AmbientInGame) {
+			AmbientInGame.pitch = .5f;
+		}
+
+		if (AmbientInGameLPF) {
+			AmbientInGameLPF.cutoffFrequency = 500f;
+		}
+
 		CanvasHighScores.SetActive(true);
 		ResumeButton.SetActive(true);
 		CanvasMenuIngame.SetActive(true);
@@ -300,6 +309,14 @@ public class GameManager : MonoBehaviour
 		CanvasMenuIngame.SetActive(false);
 		
 		Time.timeScale = LastTimeScale;
+
+		if (AmbientInGame) {
+			AmbientInGame.pitch = 1f;
+		}
+
+		if (AmbientInGameLPF) {
+			AmbientInGameLPF.cutoffFrequency = 5000f;
+		}
 
 		OnPauseUnpauseEvent.Invoke(false);
 	}
