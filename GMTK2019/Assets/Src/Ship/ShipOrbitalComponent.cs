@@ -106,6 +106,7 @@ public class ShipOrbitalComponent : MonoBehaviour
 
                         MovingComponent MovingComp = gameObject.GetComponentInParent<MovingComponent>();
                         MovingComp.enabled = false;
+                        OnOrbitStartEvent.Invoke();
                     }
                 }
                 else if ( SphereCol.CompareTag("OrbitalOuterRadius") && !Planet)
@@ -157,7 +158,6 @@ public class ShipOrbitalComponent : MonoBehaviour
                     }
                     MovingComponent MovingComp = gameObject.GetComponentInParent<MovingComponent>();
                     MovingComp.UseDeceleration = false;
-                    OnOrbitStartEvent.Invoke();
                 }
             }
         }
