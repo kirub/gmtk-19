@@ -19182,7 +19182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3adcac0658cd62438c36a7b26d9f73e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttractionForce: 5
+  AttractionForce: 3
   _AttractedBy: {fileID: 0}
   IsAStaticStar: 0
 --- !u!54 &6725865219602741202
@@ -19283,16 +19283,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.0118151
       objectReference: {fileID: 0}
-    - target: {fileID: 1129695113834253058, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 5c51f7e755f43d14fbd638273ffe48fa, type: 2}
     - target: {fileID: 1129695113834253059, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
         type: 3}
       propertyPath: m_Radius
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 1129695113834253058, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5c51f7e755f43d14fbd638273ffe48fa, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e8c7d5769a3a1a45bae99a6aa862eba, type: 3}
 --- !u!4 &4926188828037838890 stripped
@@ -19388,16 +19388,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1129695113834253058, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 8f7f5653e21266e459771de5d484ff45, type: 2}
     - target: {fileID: 1129695113834253059, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
         type: 3}
       propertyPath: m_Radius
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1129695113834253058, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8f7f5653e21266e459771de5d484ff45, type: 2}
     - target: {fileID: 1129695113834253057, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
         type: 3}
       propertyPath: m_Mesh
