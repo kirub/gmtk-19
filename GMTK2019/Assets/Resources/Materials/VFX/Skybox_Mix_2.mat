@@ -61,8 +61,8 @@ Material:
     - _FogHeight: 1
     - _FogSmoothness: 0.01
     - _Keyword0: 1
-    - _Noise_1_Value: 2
-    - _Noise_2_Value: 3
+    - _Noise_1_Value: 1.5
+    - _Noise_2_Value: 2
     - _Rotation: 0
     - _RotationSpeed: 1
     - _StarsValue: 1
