@@ -11,11 +11,16 @@ public class MovingComponent : MonoBehaviour
 
     private float BoostSpeed { get; set; } = 1f;
     public float CurrentSpeed { get; set; } = 0f;
+    public float DecelerationValue { get { return Deceleration; } }
 	public bool UseDeceleration { get; set; } = true;
 
 	private void Awake()
 	{
 		CurrentSpeed = BaseMovingSpeed;
+		if (MaxMovingSpeed <= 0f)
+		{
+			MaxMovingSpeed = float.MaxValue;
+		}
 	}
 
     void OnDestroy()
