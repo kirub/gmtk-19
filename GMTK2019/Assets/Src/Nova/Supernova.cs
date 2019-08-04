@@ -5,14 +5,27 @@ using UnityEngine.Events;
 
 public class Supernova : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public const float DefaultExpantionSpeed = 5f;
+
+    public class Trigger
+    {
+        Time    Timer               = new Time();
+        float   ExpansionSpeedCoef  = DefaultExpantionSpeed;
+    }
+
+    public List<Trigger> ExpansionTriggers = new List<Trigger>();
+
+    private List<Trigger> Triggers { get { return ExpansionTriggers; } }
 
     public static Supernova Instance { get; private set; } = null;
 
+    public GameObject FXStartExplosion = null;
+
+    
     public Collider NovaCollider;
 
-	public float TimerBeforeStart = 2f;
-    public float ExpantionSpeed = 5f;
+	public float TimerOffsetBeforeStartForFX = 1f;
+	public float TimerBeforeStart = 3f;
 
 	public AudioSource ExplosionSound = null;
 
@@ -21,7 +34,6 @@ public class Supernova : MonoBehaviour
 	
     private bool ExpantionIsOn = false;
     private Vector3 VScale;
-    private float DistancePlayerNovacore = 0;
 
 	private void Awake()
 	{
@@ -33,11 +45,12 @@ public class Supernova : MonoBehaviour
         }
         Instance = this;
         NovaCollider.enabled = false;
-	}
+        FXStartExplosion.SetActive(false);
+    }
 
 	void Start()
     {
-		VScale.Set(ExpantionSpeed, 0, ExpantionSpeed);
+		VScale.Set(DefaultExpantionSpeed, 0, DefaultExpantionSpeed);
         StartCoroutine(TimerExpantionStart());
 
 		if (!ShipUnit.Instance)
@@ -48,14 +61,16 @@ public class Supernova : MonoBehaviour
 
     private IEnumerator TimerExpantionStart()
     {
-        yield return new WaitForSeconds(TimerBeforeStart);
+        yield return new WaitForSeconds(TimerBeforeStart - TimerOffsetBeforeStartForFX);
+        FXStartExplosion.SetActive(true);
+        yield return new WaitForSeconds(TimerOffsetBeforeStartForFX/5.0f);
+        if (ExplosionSound)
+        {
+            ExplosionSound.Play();
+        }
         ExpantionIsOn = true;
+        yield return new WaitForSeconds(4*TimerOffsetBeforeStartForFX / 5.0f);
 		NovaCollider.enabled = true;
-
-		if (ExplosionSound)
-		{
-			ExplosionSound.Play();
-		}
 	}
 
     public float GetPlayerDistance()
