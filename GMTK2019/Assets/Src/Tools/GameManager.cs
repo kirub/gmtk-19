@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public GameObject CanvasMenuStart;
     public GameObject CanvasMenuIngame;
     public GameObject ResumeButton;
+    public GameObject SoundButton;
     public GameObject CanvasHighScores;
 	public Text TextHighScores;
 
@@ -40,6 +41,8 @@ public class GameManager : MonoBehaviour
 	private float LastTimeScale = 0f;
 
 	private bool IsMute = false;
+    private string SoundButtonText = "ON";
+    
 
 	public class OnPauseEvent : UnityEvent<bool> { }
 	public OnPauseEvent OnPauseUnpauseEvent { get; } = new OnPauseEvent();
@@ -105,7 +108,8 @@ public class GameManager : MonoBehaviour
 			IsMute = !IsMute;
 			if (IsMute)
 			{
-				if (AmbientMainMenu)
+                SoundButtonText = "OFF";
+                if (AmbientMainMenu)
 				{
 					AmbientMainMenu.volume = 0f;
 				}
@@ -116,7 +120,8 @@ public class GameManager : MonoBehaviour
 			}
 			else
 			{
-				if (AmbientMainMenu)
+                SoundButtonText = "ON";
+                if (AmbientMainMenu)
 				{
 					AmbientMainMenu.volume = AmbientMainMenuVolume;
 				}
