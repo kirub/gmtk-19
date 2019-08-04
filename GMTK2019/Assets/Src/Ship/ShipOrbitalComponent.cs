@@ -18,7 +18,9 @@ public class ShipOrbitalComponent : MonoBehaviour
 
     private bool            WillBeCounterClockWiseOrbit { get; set; } = false;
     private List<SphereCollider> Colliders = new List<SphereCollider>();
-    private Vector3 TangentToReach = new Vector3();
+    private Vector3 TangentToReach      = new Vector3(0.0f, 0.0f, 0.0f);
+    private Vector3 DebugPlanetPosition = new Vector3();
+    private Vector3 DebugShipPosition = new Vector3();
 
     public class OnOrbitEvent : UnityEvent { }
     public OnOrbitEvent OnOrbitStartEvent { get; }   = new OnOrbitEvent();
@@ -54,8 +56,9 @@ public class ShipOrbitalComponent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Planet)
-        Debug.DrawLine(Planet.transform.position, TangentToReach, Color.cyan);
+        Debug.DrawLine(DebugPlanetPosition, TangentToReach, Color.cyan);
+        Debug.DrawLine(DebugShipPosition, DebugPlanetPosition, Color.red);
+        
         if( OrbitalState == EOrbitalState.WillCrash )
         {
             GameObject Ship = gameObject.transform.parent.gameObject;
@@ -64,7 +67,7 @@ public class ShipOrbitalComponent : MonoBehaviour
             //Ship.transform.position = Ship.transform.position + (AttractionDir * Planet.GetComponent<AttractionComponent>().AttractionForceCoefficient * Time.deltaTime);
 
             Debug.DrawLine(Ship.transform.position, Ship.transform.forward * 100, Color.green);
-            Ship.transform.forward = Vector3.RotateTowards(Ship.transform.forward, AttractionDir, 0.2f * Planet.GetComponent<AttractionComponent>().AttractionForceCoefficient * Time.deltaTime, 100.0f);
+            Ship.transform.forward = Vector3.RotateTowards(Ship.transform.forward, AttractionDir, 0.05f * Planet.GetComponent<AttractionComponent>().AttractionForceCoefficient * Time.deltaTime, 100.0f);
             Debug.Log("OrbitalState: " + OrbitalState.ToString());
         }
         else if( OrbitalState == EOrbitalState.InOuterRadius )
@@ -72,7 +75,7 @@ public class ShipOrbitalComponent : MonoBehaviour
             GameObject Ship = gameObject.transform.parent.gameObject;
             Vector3 AttractionDir = TangentToReach - Ship.transform.position;
             AttractionDir.Normalize();
-            Ship.transform.forward = Vector3.RotateTowards(Ship.transform.forward, AttractionDir, 0.2f * Planet.GetComponent<AttractionComponent>().AttractionForceCoefficient * Time.deltaTime, 100.0f);
+            Ship.transform.forward = Vector3.RotateTowards(Ship.transform.forward, AttractionDir, 0.2f /*Mathf.Lerp(0.2f, 1.0f, ShipUnit.Instance.MovingComp.CurrentSpeed)*/ * Planet.GetComponent<AttractionComponent>().AttractionForceCoefficient * Time.deltaTime, 100.0f);
         }
     }
 
@@ -117,6 +120,8 @@ public class ShipOrbitalComponent : MonoBehaviour
                         OrbitalState = EOrbitalState.InOuterRadius;
 
                         GameObject Ship = gameObject.transform.parent.gameObject;
+                        DebugPlanetPosition = Planet.transform.position;
+                        DebugShipPosition = gameObject.transform.parent.position;
                         Vector3 PerpShipToPlanetVector = ComputePerpShipToPlanetVector(Planet);
                         Planet.GetComponentsInChildren<SphereCollider>(Colliders);
                         SphereCollider InnerCollider = Colliders.Find(x => x.CompareTag("OrbitalInnerRadius"));
@@ -124,8 +129,31 @@ public class ShipOrbitalComponent : MonoBehaviour
 
                         float ForwardProjectionOnPerp = Vector3.Dot(gameObject.transform.parent.forward, PerpShipToPlanetVector);
                         bool Inv = ForwardProjectionOnPerp < 0.0f;
+                        Vector3 ShipPos = gameObject.transform.parent.position;
+                        Vector3 PlanetPos = Planet.transform.position;
+                        float radius = InnerCollider.radius * Planet.transform.localScale.x;
 
-                        TangentToReach = Planet.transform.position + ( PerpShipToPlanetVector * InnerCollider.radius * Planet.transform.localScale.x) * (Inv ? -1 :1 );
+
+                        float b = Mathf.Sqrt(Mathf.Pow(gameObject.transform.parent.position.x - Planet.transform.position.x, 2) + Mathf.Pow(gameObject.transform.parent.position.z - Planet.transform.position.z, 2));
+                        float th = Mathf.Acos(radius / b);  // angle theta
+
+                        float d = Mathf.Atan2(gameObject.transform.parent.position.z - Planet.transform.position.z, gameObject.transform.parent.position.x - Planet.transform.position.x);  // direction angle of point P from C
+                        float d1 = d + th;  // direction angle of point T1 from C
+                        float d2 = d - th;  // direction angle of point T2 from C
+
+                        if (Inv)
+                        {
+                            TangentToReach.x = Planet.transform.position.x + radius * Mathf.Cos(d1);
+                            TangentToReach.z = Planet.transform.position.z + radius * Mathf.Sin(d1);
+                        }
+                        else
+                        {
+                            TangentToReach.x = Planet.transform.position.x + radius * Mathf.Cos(d2);
+                            TangentToReach.z = Planet.transform.position.z + radius * Mathf.Sin(d2);
+
+                        }
+
+                        //TangentToReach = Planet.transform.position + ( PerpShipToPlanetVector * InnerCollider.radius * Planet.transform.localScale.x) * (Inv ? -1 :1 );
                     }
                     MovingComponent MovingComp = gameObject.GetComponentInParent<MovingComponent>();
                     MovingComp.UseDeceleration = false;
@@ -175,7 +203,7 @@ public class ShipOrbitalComponent : MonoBehaviour
     bool ComputeWillCrash(GameObject InPlanet)
     {
         SphereCollider PlanetSphere = InPlanet.GetComponent<SphereCollider>();
-        return ComputeTrajectoryDistanceFrom(InPlanet) < PlanetSphere.radius;
+        return ComputeTrajectoryDistanceFrom(InPlanet) < PlanetSphere.radius * InPlanet.transform.localScale.x;
     }
 
     /*
