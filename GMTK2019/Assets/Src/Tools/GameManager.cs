@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEditor;
@@ -25,6 +26,13 @@ public class GameManager : MonoBehaviour
     public int MaxNumberOfHighScores = 5;
 	
     public float LatestScore = 0;
+
+	public bool IsInPause { get; private set; } = false;
+	private bool IsGameOver = false;
+	private float LastTimeScale = 0f;
+
+	public class OnPauseEvent : UnityEvent<bool> { }
+	public OnPauseEvent OnPauseUnpauseEvent { get; } = new OnPauseEvent();
 
 	void LoadSceneGame()
     {
@@ -54,9 +62,16 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (!IsGameOver && Input.GetKeyDown(KeyCode.Escape))
         {
-            Pause();
+			if (IsInPause)
+			{
+				UnPause();
+			}
+			else
+			{
+				Pause();
+			}
         }
         TextLatestScore.text = (((int)LatestScore) * ScoreMultiplier)+"";
     }
@@ -64,6 +79,7 @@ public class GameManager : MonoBehaviour
     public void GameStart()
     {
         Debug.Log("GameStart");
+		IsInPause = false;
 		CanvasMenuStart.SetActive(false);
 		LoadSceneGame();
     }
@@ -95,19 +111,54 @@ public class GameManager : MonoBehaviour
 
     public void Pause()
     {
+		if (IsGameOver || IsInPause)
+		{
+			return;
+		}
+
         Debug.Log("Pause ( a faire ?) ");
-        //handle pause
-        CanvasMenuIngame.SetActive(true);
-    }
+		//handle pause
+		IsInPause = true;
+
+		OnPauseUnpauseEvent.Invoke(true);
+
+		LastTimeScale = Time.timeScale;
+		Time.timeScale = 0f;
+
+		CanvasMenuIngame.SetActive(true);
+	}
 
     public void UnPause()
     {
-        Debug.Log("UnPause ( a faire ?) ");
-        //handle unpause...
-        CanvasMenuIngame.SetActive(false);
-    }
+		if (IsGameOver || !IsInPause)
+		{
+			return;
+		}
 
-    private void InitializeHighScores()
+        Debug.Log("UnPause ( a faire ?) ");
+		//handle unpause...
+		IsInPause = false;
+
+		CanvasMenuIngame.SetActive(false);
+		
+		Time.timeScale = LastTimeScale;
+
+		OnPauseUnpauseEvent.Invoke(false);
+	}
+
+	private void OnApplicationPause(bool pause)
+	{
+		if (pause)
+		{
+			Pause();
+		}
+		else
+		{
+			UnPause();
+		}
+	}
+
+	private void InitializeHighScores()
     {
         for (int i = 0; i < MaxNumberOfHighScores; i++)
         {
@@ -146,7 +197,6 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Exit sauf que ça marche que en build^^");
         Application.Quit();
-        EditorApplication.isPlaying = false;
     }
     
 

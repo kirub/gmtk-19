@@ -8,8 +8,7 @@ public class MovingComponent : MonoBehaviour
 	[SerializeField] private float MinMovingSpeed = 1f;
 	[SerializeField] private float MaxMovingSpeed = 1f;
 	[SerializeField] private float Deceleration = 1f;
-
-	public float MinSpeed { get { return MinMovingSpeed; } }
+	
 	public float CurrentSpeed { get; set; } = 0f;
 	public bool UseDeceleration { get; set; } = true;
 

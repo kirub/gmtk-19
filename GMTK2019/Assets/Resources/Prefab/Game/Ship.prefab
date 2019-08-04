@@ -52679,7 +52679,7 @@ GameObject:
   - component: {fileID: 71644567}
   m_Layer: 0
   m_Name: Ship
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81757,7 +81757,7 @@ GameObject:
   - component: {fileID: 6530761928582668124}
   m_Layer: 0
   m_Name: MeshContainer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81803,7 +81803,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307d96af49e170e4fa6e6b8a45774542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CollisionsExceptions: []
+  CollisionsExceptions:
+  - OrbitalInnerRadius
+  - OrbitalOuterRadius
 --- !u!114 &6530761928582668124
 MonoBehaviour:
   m_ObjectHideFlags: 0

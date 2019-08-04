@@ -66,7 +66,10 @@ public class PropulsorComponent : MonoBehaviour
 
 	void ResetPropulse()
 	{
-		CameraShakeComp.StopContinuousShakeCamera();
+		if (CameraShakeComp)
+		{
+			CameraShakeComp.StopContinuousShakeCamera();
+		}
 		CurrentPressedPropulsionTime = -1f;
 		Time.timeScale = 1f;
 		
@@ -207,6 +210,18 @@ public class PropulsorComponent : MonoBehaviour
 		}
 	}
 
+	private void OnPause(bool IsPaused)
+	{
+		if (IsPropulsing)
+		{
+			CancelPropulse();
+		}
+		else
+		{
+			ResetPropulse();
+		}
+	}
+
 	private void Awake()
 	{
 		MovingComp = GetComponent<MovingComponent>();
@@ -218,10 +233,31 @@ public class PropulsorComponent : MonoBehaviour
 	private void Start()
 	{
 		CameraShakeComp = FindObjectOfType<ShakeComponent>();
+
+		if (GameManager.Instance)
+		{
+			GameManager.Instance.OnPauseUnpauseEvent.AddListener(OnPause);
+		}
+	}
+
+	private void OnDestroy()
+	{
+		if (GameManager.Instance)
+		{
+			GameManager.Instance.OnPauseUnpauseEvent.RemoveListener(OnPause);
+		}
+
+		OnCanPropulseEndEvent.Invoke();
+		CancelPropulse();
 	}
 
 	private void Update()
 	{
+		if (GameManager.Instance && GameManager.Instance.IsInPause)
+		{
+			return;
+		}
+
 		if (CurrentWaitTimeBeforeReactivatingRotator > 0f)
 		{
 			CurrentWaitTimeBeforeReactivatingRotator -= Time.deltaTime;
