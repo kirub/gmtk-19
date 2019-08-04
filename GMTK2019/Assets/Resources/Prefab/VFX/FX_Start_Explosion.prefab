@@ -9703,7 +9703,7 @@ Transform:
   m_GameObject: {fileID: 3583756650479542310}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.06, y: 0.36, z: -0.58}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.43307, y: 0.43307, z: 0.43307}
   m_Children:
   - {fileID: 3583756651335146937}
   - {fileID: 3583756650920732376}
@@ -14543,7 +14543,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -24084,7 +24084,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3583756650920732376
 Transform:
   m_ObjectHideFlags: 0
