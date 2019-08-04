@@ -60,8 +60,8 @@ public class PropulsorComponent : MonoBehaviour
 
 	private float CurrentWaitTimeBeforeReactivatingRotator = -1f;
 
-	public bool CanPropulse { get { return CanAlwaysPropulse || ChargerComp.CurrentNumRecharge > 0 || NearComets.Count > 0; } }
-	public bool IsPropulsing { get { return CurrentPressedPropulsionTime >= 0f; } }
+    public bool CanPropulse { get { return CanAlwaysPropulse || ChargerComp.CurrentNumRecharge > 0 || NearComets.Count > 0 || (ShipOrbitalComp && ShipOrbitalComp.Planet); } }
+    public bool IsPropulsing { get { return CurrentPressedPropulsionTime >= 0f; } }
 	public bool IsValidPropulsion { get { return IsPropulsing && CurrentPropulsionRatio > NeutralPropulsionThreshold; } }
 	public float CurrentPropulsionRatio { get { return IsPropulsing ? CurrentPressedPropulsionTime / MaxPressedPropulsionTime : 0f; } }
 
