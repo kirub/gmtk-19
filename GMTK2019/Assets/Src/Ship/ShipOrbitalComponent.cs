@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ShipOrbitalComponent : MonoBehaviour
 {
@@ -18,6 +19,10 @@ public class ShipOrbitalComponent : MonoBehaviour
     private bool            WillBeCounterClockWiseOrbit { get; set; } = false;
     private List<SphereCollider> Colliders = new List<SphereCollider>();
     private Vector3 TangentToReach = new Vector3();
+
+    public class OnOrbitEvent : UnityEvent { }
+    public OnOrbitEvent OnOrbitStartEvent { get; }   = new OnOrbitEvent();
+    public OnOrbitEvent OnOrbitEndEvent { get; }     = new OnOrbitEvent();
 
     void OnDestroy()
     {
@@ -39,6 +44,8 @@ public class ShipOrbitalComponent : MonoBehaviour
             AttractionComp.AttractedBy = null;
             MovingComponent MovingComp = gameObject.GetComponentInParent<MovingComponent>();
             MovingComp.enabled = true;
+
+            OnOrbitEndEvent.Invoke();
             //Vector3 PlanetToShipVector = gameObject.transform.parent.position - Planet.transform.position;
             //gameObject.transform.parent.forward = Vector3.Cross(PlanetToShipVector, Vector3.up);
         }
@@ -122,6 +129,7 @@ public class ShipOrbitalComponent : MonoBehaviour
                     }
                     MovingComponent MovingComp = gameObject.GetComponentInParent<MovingComponent>();
                     MovingComp.UseDeceleration = false;
+                    OnOrbitStartEvent.Invoke();
                 }
             }
         }
