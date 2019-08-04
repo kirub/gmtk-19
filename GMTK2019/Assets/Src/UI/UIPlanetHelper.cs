@@ -9,7 +9,6 @@ public class UIPlanetHelper : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -63,6 +62,11 @@ public class UIPlanetHelper : MonoBehaviour
 
                 if (!IsVisible)
                 {
+                    float CurrentPlanetDistance = Vector3.Distance(Planet.transform.position, ShipUnit.Instance.transform.position);
+                    TextMesh UIPlanetDistanceText = UIPlanetHelper.gameObject.GetComponentInChildren<TextMesh>();
+                    UIPlanetDistanceText.transform.SetParent(UIPlanetHelper.gameObject.transform);
+                    UIPlanetDistanceText.text = ((int)CurrentPlanetDistance).ToString();
+
                     Vector3 VecShipToPlanet = Planet.gameObject.transform.position - ShipUnit.Instance.transform.position;
                     Bounds bounds = CameraExtensions.OrthographicBounds(Camera.main);
 
