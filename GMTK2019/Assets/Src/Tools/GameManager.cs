@@ -14,8 +14,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject CanvasMenuStart;
     public GameObject CanvasMenuIngame;
-    public GameObject CanvasMenuGameOver;
-    public Text TextHighScores;
+    public GameObject ResumeButton;
+	public Text TextHighScores;
     public Text TextLatestScore;
 
     // Start is called before the first frame update
@@ -84,28 +84,20 @@ public class GameManager : MonoBehaviour
 		LoadSceneGame();
     }
 
-    public void RestartWhileIngame()
+    public void GameRestart()
     {
-        Debug.Log("RestartWhileIngame");
+        Debug.Log("GameRestart");
         HandleHighScores(((int)LatestScore)*ScoreMultiplier);
         CanvasMenuIngame.SetActive(false);
         LoadSceneGame();
         
     }
-    public void RestartWhileGameOver()
-    {
-        Debug.Log("RestartWhileGameOver");
-        CanvasMenuStart.SetActive(false);
-		CanvasMenuGameOver.SetActive(false);
-        HandleHighScores(((int)LatestScore) * ScoreMultiplier);
-		LoadSceneGame();
-    }
 
     public void GameOver()
     {
         Debug.Log("GameOver");
-        CanvasMenuIngame.SetActive(false);//au cas ou menu pdt jeu actif puis meurt
-		CanvasMenuGameOver.SetActive(true);
+		ResumeButton.SetActive(false);
+		CanvasMenuIngame.SetActive(true);
 		HandleHighScores(((int)LatestScore) * ScoreMultiplier);
     }
 
@@ -125,6 +117,7 @@ public class GameManager : MonoBehaviour
 		LastTimeScale = Time.timeScale;
 		Time.timeScale = 0f;
 
+		ResumeButton.SetActive(true);
 		CanvasMenuIngame.SetActive(true);
 	}
 
