@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Image))]
+[RequireComponent(typeof(Renderer))]
 public class UIShipPropulsion : MonoBehaviour
 {
 	[SerializeField] private GameObject WarningObjects = null;
-	private Image PropulsionObj = null;
+	private Renderer PropulsionObj = null;
 
 	void OnPropulsionStart()
 	{
@@ -23,7 +23,7 @@ public class UIShipPropulsion : MonoBehaviour
 
 	private void Awake()
 	{
-		PropulsionObj = GetComponent<Image>();
+		PropulsionObj = GetComponent<Renderer>();
 	}
 
 	void Start()
@@ -67,7 +67,7 @@ public class UIShipPropulsion : MonoBehaviour
 
 	void UpdatePropulsionValue()
 	{
-		PropulsionObj.material.SetFloat("Percent", ShipUnit.Instance.PropulsorComp.CurrentPropulsionRatio);
+		PropulsionObj.material.SetFloat("_Percent", ShipUnit.Instance.PropulsorComp.CurrentPropulsionRatio);
 
 		if (WarningObjects)
 		{
