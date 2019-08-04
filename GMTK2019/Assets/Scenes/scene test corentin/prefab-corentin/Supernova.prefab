@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 3137513463362170744}
   m_Layer: 0
   m_Name: SupernovaInner
-  m_TagString: Untagged
+  m_TagString: Nova
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TimerBeforeStart: 5
-  ExpantionSpeed: 0.5
+  ExpantionSpeed: 5
   OnEnterInnerSupernova:
     m_PersistentCalls:
       m_Calls: []
@@ -160,7 +160,7 @@ GameObject:
   - component: {fileID: 9025155223566090683}
   m_Layer: 0
   m_Name: SupernovaOuter
-  m_TagString: Untagged
+  m_TagString: Nova
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -235,7 +235,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 7252979668779875255}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -255,7 +255,7 @@ MonoBehaviour:
   PlayerTransform: {fileID: 0}
   PlayerBody: {fileID: 0}
   TimerBeforeStart: 5
-  ExpantionSpeed: 0.3
+  ExpantionSpeed: 5
   NovaPullBaseStrengh: 0.5
   NovaPullStrenghIncreaseOverTime: 0.001
   OnEnterOuterSupernova:

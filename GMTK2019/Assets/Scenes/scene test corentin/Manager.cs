@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using UnityEditor;
 
 public class Manager : MonoBehaviour
 {
@@ -45,6 +45,7 @@ public class Manager : MonoBehaviour
         {
             yield return null;
         }
+        CanvasMenuGameOver.SetActive(true);
     }
 
 
@@ -115,19 +116,12 @@ public class Manager : MonoBehaviour
 
     public void GameOver()
     {
+        CanvasMenuIngame.SetActive(false);//au cas ou menu pdt jeu actif puis meurt
         HandleHighScores(((int)LatestScore) * ScoreMultiplier);
         IsSceneGameLoaded = false;
         StartCoroutine(UnLoadSceneGame());
-        StartCoroutine(GameOverScreen());
-    }
-    private IEnumerator GameOverScreen()
-    {
         StartCoroutine(LoadSceneGameOver());
-        CanvasMenuGameOver.SetActive(true);
         Debug.Log("GameOver");
-        yield return new WaitForSeconds(DurationGameOverScreen);
-        StartCoroutine(UnLoadSceneGameOver());
-        CanvasMenuStart.SetActive(true);
     }
 
     public void Pause()
@@ -183,6 +177,7 @@ public class Manager : MonoBehaviour
     {
         Debug.Log("Exit sauf que ça marche que en build^^");
         Application.Quit();
+        EditorApplication.isPlaying = false;
     }
     
 
