@@ -13,9 +13,11 @@ public class GameManager : MonoBehaviour
 	public string SceneGameName;
 
     public GameObject CanvasMenuStart;
+    public GameObject CanvasMenuOption;
     public GameObject CanvasMenuIngame;
     public GameObject ResumeButton;
-    public GameObject SoundButton;
+    public GameObject SoundOnButton;
+    public GameObject SoundOffButton;
     public GameObject CanvasHighScores;
 	public Text TextHighScores;
 
@@ -41,7 +43,6 @@ public class GameManager : MonoBehaviour
 	private float LastTimeScale = 0f;
 
 	private bool IsMute = false;
-    private string SoundButtonText = "ON";
     
 
 	public class OnPauseEvent : UnityEvent<bool> { }
@@ -101,14 +102,56 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	void UpdateMute()
+    void OpenOptionMenu()
+    {
+        
+        CanvasMenuStart.SetActive(false);
+        CanvasMenuOption.SetActive(true);
+    }
+    void CloseOptionMenu()
+    {
+        CanvasMenuStart.SetActive(true);
+        CanvasMenuOption.SetActive(false);
+    }
+
+    public void MuteUnMute()
+    {
+        IsMute = !IsMute;
+        if (IsMute)
+        {
+            SoundOffButton.SetActive(true);
+            SoundOnButton.SetActive(false);
+            if (AmbientMainMenu)
+            {
+                AmbientMainMenu.volume = 0f;
+            }
+            if (AmbientInGame)
+            {
+                AmbientInGame.volume = 0f;
+            }
+        }
+        else
+        {
+            SoundOffButton.SetActive(false);
+            SoundOnButton.SetActive(true);
+            if (AmbientMainMenu)
+            {
+                AmbientMainMenu.volume = AmbientMainMenuVolume;
+            }
+            if (AmbientInGame)
+            {
+                AmbientInGame.volume = AmbientInGameVolume;
+            }
+        }
+    }
+
+    void UpdateMute()
 	{
-		if (Input.GetKeyDown(KeyCode.M))
+		if (Input.GetKeyDown(KeyCode.M)&&(!CanvasMenuOption.activeInHierarchy))
 		{
 			IsMute = !IsMute;
 			if (IsMute)
 			{
-                SoundButtonText = "OFF";
                 if (AmbientMainMenu)
 				{
 					AmbientMainMenu.volume = 0f;
@@ -120,7 +163,6 @@ public class GameManager : MonoBehaviour
 			}
 			else
 			{
-                SoundButtonText = "ON";
                 if (AmbientMainMenu)
 				{
 					AmbientMainMenu.volume = AmbientMainMenuVolume;
