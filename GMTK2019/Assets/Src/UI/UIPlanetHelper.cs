@@ -55,15 +55,18 @@ public class UIPlanetHelper : MonoBehaviour
                 bool IsVisible =
                     (ViewportPos.x > -0.5f && ViewportPos.x < 1.5f) &&
                     (ViewportPos.z > -0.5f && ViewportPos.z < 1.5f);
+
+                List<SpriteRenderer> Sprites = new List<SpriteRenderer>();
+                Planet.GetComponentsInChildren<SpriteRenderer>(Sprites);
+                SpriteRenderer UIPlanetHelper = Sprites.Find(x => x.CompareTag("UIPlanetHelper"));
+                UIPlanetHelper.gameObject.SetActive(!IsVisible);
+
                 if (!IsVisible)
                 {
                     Vector3 VecShipToPlanet = Planet.gameObject.transform.position - ShipUnit.Instance.transform.position;
                     Bounds bounds = CameraExtensions.OrthographicBounds(Camera.main);
 
                     VecShipToPlanet.Normalize();
-                    List<SpriteRenderer> Sprites = new List<SpriteRenderer>();
-                    Planet.GetComponentsInChildren<SpriteRenderer>(Sprites);
-                    SpriteRenderer UIPlanetHelper = Sprites.Find( x => x.CompareTag("UIPlanetHelper"));
                     UIPlanetHelper.gameObject.transform.position = bounds.center - (new Vector3(-VecShipToPlanet.x * (bounds.size.x / 2), 10.0f, -VecShipToPlanet.z * (bounds.size.y / 2)) * 1.2f);
                     UIPlanetHelper.gameObject.transform.rotation = Quaternion.LookRotation(VecShipToPlanet);
                 }

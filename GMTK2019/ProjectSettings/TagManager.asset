@@ -8,6 +8,8 @@ TagManager:
   - Planet
   - OrbitalOuterRadius
   - OrbitalInnerRadius
+  - Nova
+  - UIPlanetHelper
   layers:
   - Default
   - TransparentFX
