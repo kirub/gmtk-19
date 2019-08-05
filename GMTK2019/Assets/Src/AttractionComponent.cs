@@ -42,16 +42,11 @@ public class AttractionComponent : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
-        /*AttractedBy =*/
         if (AttractedBy)
         {
             gameObject.transform.SetParent(AttractedBy.gameObject.transform, true);
             AttractionMass = gameObject.GetComponent<Rigidbody>().mass + AttractedBy.gameObject.GetComponent<Rigidbody>().mass;
             AttractionSpeed = AttractionForceCoefficient * 10000 / (AttractionMass * AttractionMass) /*/ Vector3.Distance(AttractedBy.transform.position, gameObject.transform.position)*/;
-        }
-        else
-        { 
-            Debug.Log("no Attracted by");
         }
     }
 

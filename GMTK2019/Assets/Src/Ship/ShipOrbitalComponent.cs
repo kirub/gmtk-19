@@ -57,18 +57,18 @@ public class ShipOrbitalComponent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.DrawLine(DebugPlanetPosition, TangentToReach, Color.cyan);
-        Debug.DrawLine(DebugShipPosition, DebugPlanetPosition, Color.red);
+        //Debug.DrawLine(DebugPlanetPosition, TangentToReach, Color.cyan);
+        //Debug.DrawLine(DebugShipPosition, DebugPlanetPosition, Color.red);
 
         if ( OrbitalState == EOrbitalState.WillCrash || OrbitalState == EOrbitalState.InAttractorField)
         {
-            Debug.Log("OrbitalState: " + OrbitalState.ToString());
+            //Debug.Log("OrbitalState: " + OrbitalState.ToString());
             GameObject Ship = gameObject.transform.parent.gameObject;
             Vector3 AttractionDir = Planet.transform.position - Ship.transform.position;
             AttractionDir.Normalize();
             //Ship.transform.position = Ship.transform.position + (AttractionDir * Planet.GetComponent<AttractionComponent>().AttractionForceCoefficient * Time.deltaTime);
 
-            Debug.DrawLine(Ship.transform.position, Ship.transform.forward * 100, Color.green);
+            //Debug.DrawLine(Ship.transform.position, Ship.transform.forward * 100, Color.green);
             Ship.transform.forward = Vector3.RotateTowards(Ship.transform.forward, AttractionDir, 0.05f * Planet.GetComponent<AttractionComponent>().AttractionForceCoefficient * Time.deltaTime, 100.0f);
 
             if (OrbitalState == EOrbitalState.InAttractorField)
@@ -107,7 +107,7 @@ public class ShipOrbitalComponent : MonoBehaviour
                         AttractionComponent AttractionComp = gameObject.GetComponentInParent<AttractionComponent>();
                         AttractionComp.AttractedBy = other.attachedRigidbody.gameObject;
                         AttractionComp.OrbitCounterClockWise = WillBeCounterClockWiseOrbit;
-                        Debug.Log("AttachTo: " + Planet.name + " CCW: " + AttractionComp.OrbitCounterClockWise.ToString());
+                        //Debug.Log("AttachTo: " + Planet.name + " CCW: " + AttractionComp.OrbitCounterClockWise.ToString());//
 
 
                         MovingComponent MovingComp = gameObject.GetComponentInParent<MovingComponent>();

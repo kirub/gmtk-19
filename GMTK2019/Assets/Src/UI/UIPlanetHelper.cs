@@ -5,7 +5,8 @@ using UnityEngine;
 public class UIPlanetHelper : MonoBehaviour
 {
     public const int HintedPlanetCount = 5;
-    List<GameObject> Planets = new List<GameObject>(HintedPlanetCount); 
+    List<GameObject> Planets = new List<GameObject>(HintedPlanetCount);
+    private float CurrentMaxDistance = -1.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,24 +17,30 @@ public class UIPlanetHelper : MonoBehaviour
     {
         if (ShipUnit.Instance)
         {
-            List<GameObject> PlanetsInCell = PlanetManager.Instance.GetPlanetsInGridFromPosition(ShipUnit.Instance.transform.position);
+            List<GameObject> PlanetsInCell = PlanetManager.Instance.GetPlanetsInGridFromPosition(ShipUnit.Instance.transform.position, 1, true);
             if (PlanetsInCell != null)
             {
+                PlanetsInCell.RemoveAll( x => Planets.Contains(x) );
                 foreach (GameObject CurrentPlanet in PlanetsInCell)
                 {
-                    if (Planets.Contains(CurrentPlanet))
+                    float CurrentPlanetDistance = Vector3.Distance(CurrentPlanet.transform.position, ShipUnit.Instance.transform.position);
+                    if (CurrentMaxDistance != -1 && CurrentMaxDistance < CurrentPlanetDistance)
                         continue;
 
-                    float CurrentPlanetDistance = Vector3.Distance(CurrentPlanet.transform.position, ShipUnit.Instance.transform.position);
                     if(Planets.Count < HintedPlanetCount)
                     {
                         Planets.Add(CurrentPlanet);
+                        if (CurrentPlanetDistance > CurrentMaxDistance)
+                        {
+                            CurrentMaxDistance = CurrentPlanetDistance;
+                        }
                     }
                     else
                     {
+                        GameObject AlreadyInPlanet = null;
                         for (int Idx = Planets.Count - 1; Idx >= 0; Idx--)
                         {
-                            GameObject AlreadyInPlanet = Planets[Idx];
+                            AlreadyInPlanet = Planets[Idx];
                             if (AlreadyInPlanet)
                             {
                                 float AlreadyInDistance = Vector3.Distance(AlreadyInPlanet.transform.position, ShipUnit.Instance.transform.position);
@@ -41,6 +48,11 @@ public class UIPlanetHelper : MonoBehaviour
                                 {
                                     Planets.RemoveAt(Idx);
                                     Planets.Add(CurrentPlanet);
+                                    if (CurrentPlanetDistance > CurrentMaxDistance)
+                                    {
+                                        CurrentMaxDistance = CurrentPlanetDistance;
+                                    }
+                                    break;
                                 }
                             }
                         }

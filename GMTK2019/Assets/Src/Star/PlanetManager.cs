@@ -17,6 +17,25 @@ public class PlanetManager : MonoBehaviour
     public ArrayList    Planets { get; }    = new ArrayList();
     private Vector2Int  PositionInGrid      = new Vector2Int();
 
+    private class PlanetGridInfos
+    {
+        List<GameObject> Objects    = new List<GameObject>();
+        Vector2Int CurrentPos       = new Vector2Int();
+
+        public bool Check(Vector2Int InPos, out List<GameObject> InObjects)
+        {
+            InObjects = Objects;
+            return CurrentPos == InPos;
+        }
+
+        public void UpdatePos(Vector2Int InPos)
+        {
+            CurrentPos = InPos;
+        }
+    }
+
+    private PlanetGridInfos PlanetCache = new PlanetGridInfos();
+
     private void Awake()
     {
         for(int X = 0; X < GridSize; ++X)
@@ -37,6 +56,11 @@ public class PlanetManager : MonoBehaviour
         }
         MapSizeOffset.x = MapHalfSize;
         MapSizeOffset.z = MapHalfSize;
+
+        List<OrbitalComponent> OrbitalComps = new List<OrbitalComponent>();
+        GetComponentsInChildren<OrbitalComponent>(OrbitalComps);
+        List<OrbitalComponent> PlanetsOrbitalComps = OrbitalComps.FindAll(x => x.CompareTag("Planet"));
+        PlanetsOrbitalComps.ForEach(x => RegisterPlanet(x.gameObject));
     }
 
     // Start is called before the first frame update
@@ -51,19 +75,35 @@ public class PlanetManager : MonoBehaviour
         
     }
 
-    public List<GameObject> GetPlanetsInGridFromPosition( Vector3 Position, int Extent = 1)
+    public List<GameObject> GetPlanetsInGridFromPosition( Vector3 Position, int Extent = 1, bool Cache = false)
     {
-        List<GameObject> PlanetsCopy = new List<GameObject>();
+        List<GameObject> OutPlanets = null;
         GetPositionInGrid(Position, ref PositionInGrid);
-        for (int X = PositionInGrid.x - Extent; X < PositionInGrid.x + Extent; ++X)
+        if (!PlanetCache.Check(PositionInGrid, out OutPlanets))
         {
-            for (int Y = PositionInGrid.x - Extent; Y < PositionInGrid.x + Extent; ++Y)
+            List<GameObject> CopyOldPlanetCache = new List<GameObject>(OutPlanets);
+            if (!Cache)
+                OutPlanets = new List<GameObject>();
+            else
+                OutPlanets.Clear();
+            for (int X = PositionInGrid.x - Extent; X <= PositionInGrid.x + Extent; ++X)
             {
-                PlanetsCopy.AddRange(ObjectGrid[PositionInGrid.x, PositionInGrid.y]);
+                for (int Y = PositionInGrid.y - Extent; Y <= PositionInGrid.y + Extent; ++Y)
+                {
+                    ObjectGrid[X, Y].ForEach(Planet =>
+                    {
+                        OutPlanets.Add(Planet);
+                        CopyOldPlanetCache.Remove(Planet);
+                        Planet.SetActive(true);
+                    });
+                }
             }
+
+            PlanetCache.UpdatePos(PositionInGrid);
+            CopyOldPlanetCache.ForEach(x => x.gameObject.SetActive(false));
         }
 
-        return PlanetsCopy;
+        return OutPlanets;
     }
 
     void GetPositionInGrid(Vector3 Position, ref Vector2Int PositionInGrid)
@@ -145,6 +185,7 @@ public class PlanetManager : MonoBehaviour
         //AttractedByObj = FindAttractedPlanet(Planet);
         Planets.Add(Planet);
         AddPlanetInGrid(Planet);
+        Planet.SetActive(false);
         return AttractedByObj;
     }
 }
