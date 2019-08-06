@@ -11,6 +11,8 @@ public class MovingComponent : MonoBehaviour
 
     public float BoostSpeed { get; set; } = 1f;
     public float CurrentSpeed { get; set; } = 0f;
+    public float MinMovingSpeedValue { get { return MinMovingSpeed; } }
+    public float MaxMovingSpeed { get { return MaxMovingSpeed; } }
     public float DecelerationValue { get { return Deceleration; } }
 	public bool UseDeceleration { get; set; } = true;
 
