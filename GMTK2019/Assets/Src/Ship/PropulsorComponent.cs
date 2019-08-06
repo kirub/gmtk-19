@@ -30,8 +30,7 @@ public class PropulsorComponent : MonoBehaviour
 	[SerializeField] private ParticleSystem PropulsionParticle = null;
 	[SerializeField] private float WaitTimeToReactivateRotator = 1f;
 
-	[SerializeField] private AudioSource PropulsionChargeHeadSound = null;
-	[SerializeField] private AudioSource PropulsionChargeLoopSound = null;
+	[SerializeField] private AudioSource PropulsionChargeSound = null;
 	[SerializeField] private AudioSource PropulsionImpulseSound = null;
 	[SerializeField] private AudioSource PropulsionCancelSound = null;
 
@@ -111,13 +110,9 @@ public class PropulsorComponent : MonoBehaviour
 		{
 			ChargeParticle.SetActive(false);
 		}
-		if (PropulsionChargeHeadSound)
+		if (PropulsionChargeSound)
 		{
-			PropulsionChargeHeadSound.Stop();
-		}
-		if (PropulsionChargeLoopSound)
-		{
-			PropulsionChargeLoopSound.Stop();
+			PropulsionChargeSound.Stop();
 		}
 
 		ChargerComp.StopRecharge();
@@ -154,13 +149,9 @@ public class PropulsorComponent : MonoBehaviour
 			{
 				ReactorParticle.SetActive(true);
 			}
-			if (PropulsionChargeHeadSound)
+			if (PropulsionChargeSound)
 			{
-				PropulsionChargeHeadSound.Play();
-			}
-			else if (PropulsionChargeLoopSound)
-			{
-				PropulsionChargeLoopSound.Play();
+				PropulsionChargeSound.Play();
 			}
 
 			UpdateEnergySupplier();
@@ -171,14 +162,6 @@ public class PropulsorComponent : MonoBehaviour
 	{
 		if (IsPropulsing)
 		{
-			if (PropulsionChargeHeadSound && PropulsionChargeLoopSound)
-			{
-				if (!PropulsionChargeHeadSound.isPlaying && !PropulsionChargeLoopSound.isPlaying)
-				{
-					PropulsionChargeLoopSound.Play();
-				}
-			}
-
 			CurrentPressedPropulsionTime += Time.unscaledDeltaTime;
 			float newTimeScale = Time.timeScale - SlowTimeSpeed * Time.unscaledDeltaTime;
 			if (newTimeScale > SlowTime)
