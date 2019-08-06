@@ -118,12 +118,12 @@ public class PropulsorComponent : MonoBehaviour
 		ChargerComp.StopRecharge();
 	}
 
-	void CancelPropulse()
+	void CancelPropulse( bool PlaySound = true )
 	{
 		ResetPropulse();
 		OnPropulseCancelEvent.Invoke();
 
-		if (PropulsionCancelSound)
+		if (PlaySound && PropulsionCancelSound)
 		{
 			PropulsionCancelSound.Play();
 		}
@@ -294,7 +294,7 @@ public class PropulsorComponent : MonoBehaviour
 		}
 
 		OnCanPropulseEndEvent.Invoke();
-		CancelPropulse();
+		CancelPropulse(false);
 	}
 
 	private void Update()
