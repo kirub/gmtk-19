@@ -11,11 +11,17 @@ public class DynamicObjectComponent : MonoBehaviour
 	[SerializeField] private float MinTime = 0.5f;
 
 	private bool IsLaunched = false;
+	private GameObject MeshContainer = null;
 	private MovingComponent MovingComp = null;
 
 	void LaunchDynamicObject()
 	{
 		IsLaunched = true;
+
+		if (MeshContainer)
+		{
+			MeshContainer.SetActive(true);
+		}
 
 		float ExpectedTimeSpeedZero = ShipUnit.Instance.MovingComp.CurrentSpeed / ShipUnit.Instance.MovingComp.DecelerationValue;
 		float ExpectedTime = Mathf.Min(ExpectedTimeSpeedZero, LookAheadTime);
@@ -58,6 +64,19 @@ public class DynamicObjectComponent : MonoBehaviour
 			Debug.LogError("Can't find a ShipUnit");
 			Destroy(this);
 			return;
+		}
+
+		MeshContainer = null;
+		int i = 0;
+		while (i < transform.childCount && MeshContainer == null)
+		{
+			Transform CurrentChild = transform.GetChild(i);
+			if (CurrentChild.GetComponentInChildren<MeshRenderer>())
+			{
+				MeshContainer = CurrentChild.gameObject;
+				MeshContainer.SetActive(false);
+			}
+			++i;
 		}
 	}
 
