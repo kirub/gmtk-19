@@ -809,7 +809,7 @@ MonoBehaviour:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    m_lensFlareGradTexture: {fileID: 1635925611}
+    m_lensFlareGradTexture: {fileID: 1928312135}
     m_lensFlareHaloParams: {x: 0.3, y: 0.573, z: 1, w: 128}
     m_lensFlareHaloChrDistortion: 1.51
     m_lensFlareGaussianBlurAmount: 3
@@ -855,8 +855,8 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     m_glareMaxPassCount: 4
-    m_currentWidth: 585
-    m_currentHeight: 283
+    m_currentWidth: 762
+    m_currentHeight: 497
     m_currentGlareType: 0
     m_currentGlareIdx: 0
     m_perPassDisplacement: 4
@@ -1664,7 +1664,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4becbf578cf110b4a9383751792483ad, type: 3}
---- !u!28 &1635925611
+--- !u!4 &1651500727 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3113069724706460451, guid: eaa835af524df21488e6444d63d92810,
+    type: 3}
+  m_PrefabInstance: {fileID: 312588303}
+  m_PrefabAsset: {fileID: 0}
+--- !u!28 &1928312135
 Texture2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1704,12 +1710,6 @@ Texture2D:
     offset: 0
     size: 0
     path: 
---- !u!4 &1651500727 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3113069724706460451, guid: eaa835af524df21488e6444d63d92810,
-    type: 3}
-  m_PrefabInstance: {fileID: 312588303}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &432571902521549337
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -106,6 +106,9 @@ public class PropulsorComponent : MonoBehaviour
 		CurrentPressedPropulsionTime = -1f;
 		Time.timeScale = 1f;
 
+		// Reset slow-mo on soundtrack
+		UpdateAudioAccordingToTimeScale(Time.timeScale);
+
 		if (ChargeParticle)
 		{
 			ChargeParticle.SetActive(false);
@@ -127,6 +130,12 @@ public class PropulsorComponent : MonoBehaviour
 		{
 			PropulsionCancelSound.Play();
 		}
+	}
+
+	private void UpdateAudioAccordingToTimeScale(float timeScale) {
+		if (!GameManager.Instance) return;
+
+		GameManager.Instance.UpdateAudioAccordingToTimeScale(timeScale);
 	}
 
 	void StartPropulse()
@@ -172,6 +181,9 @@ public class PropulsorComponent : MonoBehaviour
 			{
 				Time.timeScale = SlowTime;
 			}
+
+			// Add a slow-mo effect on in-game audio
+			UpdateAudioAccordingToTimeScale(Time.timeScale);
 
 			if (CurrentPressedPropulsionTime > MaxPressedPropulsionTime)
 			{

@@ -30,6 +30,10 @@ public class GameManager : MonoBehaviour
 
 	private float AmbientMainMenuVolume = 0f;
 	private float AmbientInGameVolume = 0f;
+	private float MinimumCuttoffFrequency = 500f;
+	private float CuttoffFrequencyRangeDelta = 4500f;
+	private float MaximumAudioTimeScale = 1f;
+	private float MinimumAudioTimeScale = .5f;
 
 	private bool HasDoneTutorial = false;
 
@@ -282,13 +286,7 @@ public class GameManager : MonoBehaviour
 		LastTimeScale = Time.timeScale;
 		Time.timeScale = 0f;
 
-		if (AmbientInGame) {
-			AmbientInGame.pitch = .5f;
-		}
-
-		if (AmbientInGameLPF) {
-			AmbientInGameLPF.cutoffFrequency = 500f;
-		}
+		UpdateAudioAccordingToTimeScale(MinimumAudioTimeScale, true);
 
 		CanvasHighScores.SetActive(true);
 		ResumeButton.SetActive(true);
@@ -310,14 +308,8 @@ public class GameManager : MonoBehaviour
 		CanvasMenuIngame.SetActive(false);
 		
 		Time.timeScale = LastTimeScale;
-
-		if (AmbientInGame) {
-			AmbientInGame.pitch = 1f;
-		}
-
-		if (AmbientInGameLPF) {
-			AmbientInGameLPF.cutoffFrequency = 5000f;
-		}
+		
+		UpdateAudioAccordingToTimeScale(MaximumAudioTimeScale, true);
 
 		OnPauseUnpauseEvent.Invoke(false);
 	}
@@ -374,6 +366,29 @@ public class GameManager : MonoBehaviour
         Debug.Log("Exit sauf que ça marche que en build^^");
         Application.Quit();
     }
+
+	/* Return a cutoff frequency adjusted for a given timeScale */
+	private float getCutoffFrequency(float timeScale) {
+		return CuttoffFrequencyRangeDelta - (CuttoffFrequencyRangeDelta * 
+		(MaximumAudioTimeScale - timeScale) / MinimumAudioTimeScale);
+	}
+
+	/* Update in-game AudioSource pitch and LPF cutoff frequency for a given timeScale */
+	public void UpdateAudioAccordingToTimeScale(float timeScale, bool shouldApplyLPF = false) {
+		float gatedTimeScale = timeScale < MinimumAudioTimeScale ? 
+			MinimumAudioTimeScale : timeScale;
+
+		if (AmbientInGame) {
+			AmbientInGame.pitch = gatedTimeScale;
+		}
+
+		if (!shouldApplyLPF) return;
+
+		if (AmbientInGameLPF) {
+			float cutoffFrequency = MinimumCuttoffFrequency + getCutoffFrequency(gatedTimeScale);
+			AmbientInGameLPF.cutoffFrequency = cutoffFrequency;
+		}
+	}
     
 
 }
