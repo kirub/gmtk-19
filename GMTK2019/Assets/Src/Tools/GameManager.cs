@@ -223,6 +223,7 @@ public class GameManager : MonoBehaviour
 		if (HasDoneTutorial)
 		{
 			Debug.Log("GameStart");
+			IsGameOver = false;
 			IsInPause = false;
 			CanvasHighScores.SetActive(false);
 			CanvasMenuStart.SetActive(false);
@@ -260,6 +261,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Debug.Log("GameOver");
+		IsGameOver = true;
 		CanvasHighScores.SetActive(true);
 		ResumeButton.SetActive(false);
 		CanvasMenuIngame.SetActive(true);
