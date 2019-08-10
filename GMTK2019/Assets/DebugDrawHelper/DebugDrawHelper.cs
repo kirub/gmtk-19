@@ -193,13 +193,19 @@ public class DebugDrawHelper : MonoBehaviour
 		{
 			OnGUIShortcuts(Pos, Inc);
 		}
-		else if (IsListDisplayed)
-		{
-			OnGUIListDrawables(Pos, Inc);
-		}
 		else
 		{
-			OnGUISelectedDrawables(Pos, Inc);
+			GUI.Label(Pos, "Display Shortcuts " + DisplayShortcutsKey, Style);
+			Pos.y += Inc;
+
+			if (IsListDisplayed)
+			{
+				OnGUIListDrawables(Pos, Inc);
+			}
+			else
+			{
+				OnGUISelectedDrawables(Pos, Inc);
+			}
 		}
 #endif // UNITY_EDITOR
 	}
