@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChargerComponent : MonoBehaviour
+public class ChargerComponent : MonoBehaviour, IDebugDrawable
 {
 	[SerializeField] private bool CanAddRechargeWithR = false;
 
@@ -14,6 +14,7 @@ public class ChargerComponent : MonoBehaviour
 	[SerializeField] private AudioSource RechargeCompleteSound = null;
 
 	public int CurrentNumRecharge { get; private set; } = 0;
+	private bool CanRechargeMore { get { return IsRecharging && MaxRechargeAvailable > 0 && CurrentNumRecharge < MaxRecharge; } }
 
 	public bool IsRecharging { get; private set; } = false;
 	private int MaxRechargeAvailable = 0;
@@ -60,6 +61,11 @@ public class ChargerComponent : MonoBehaviour
 		Debug.Log("Base recharge " + CurrentNumRecharge);
 	}
 
+	private void Start()
+	{
+		DebugDrawHelper.RegisterDrawable(gameObject, this);
+	}
+
 	private void Update()
 	{
 		if (CanAddRechargeWithR && Input.GetKeyUp(KeyCode.R))
@@ -67,7 +73,7 @@ public class ChargerComponent : MonoBehaviour
 			AddCharge();
 		}
 
-		if (IsRecharging && MaxRechargeAvailable > 0 && CurrentNumRecharge < MaxRecharge)
+		if (CanRechargeMore)
 		{
 			CurrentRechargeTime += Time.unscaledDeltaTime;
 			if (CurrentRechargeTime > RechargeTime)
@@ -78,5 +84,28 @@ public class ChargerComponent : MonoBehaviour
 				Debug.Log("Recharge available " + MaxRechargeAvailable);
 			}
 		}
+	}
+
+	public void DebugDraw(ref Rect BasePos, float TextYIncrement, GUIStyle Style)
+	{
+#if UNITY_EDITOR
+		GUI.Label(BasePos, "- Recharges " + CurrentNumRecharge + "/" + MaxRecharge, Style);
+		BasePos.y += TextYIncrement;
+
+		if (IsRecharging)
+		{
+			if (CanRechargeMore)
+			{
+				float Percent = 100f * CurrentRechargeTime / RechargeTime;
+				GUI.Label(BasePos, "- Charging " + Percent + "% [" + MaxRechargeAvailable + "]", Style);
+				BasePos.y += TextYIncrement;
+			}
+			else
+			{
+				GUI.Label(BasePos, "- Charging MAX", Style);
+				BasePos.y += TextYIncrement;
+			}
+		}
+#endif
 	}
 }
