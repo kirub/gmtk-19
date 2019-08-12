@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttractionComponent : MonoBehaviour
+public class AttractionComponent : AggregatedComponent
 {
     public float Mass { get; private set; }
     [SerializeField]
@@ -40,8 +40,9 @@ public class AttractionComponent : MonoBehaviour
     public bool IsStatic { get { return IsAStaticStar; } }
 
     // Start is called before the first frame update
-    public void Start()
+    override public void Start()
     {
+        base.Start();
         if (AttractedBy)
         {
             gameObject.transform.SetParent(AttractedBy.gameObject.transform, true);
@@ -51,7 +52,7 @@ public class AttractionComponent : MonoBehaviour
     }
 
     // Update is called once per frame
-    public void Update()
+    override public void Tick()
     {
         if (AttractedBy)
         {

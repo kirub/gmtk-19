@@ -5,88 +5,61 @@ using UnityEngine;
 public class UIPlanetHelper : MonoBehaviour
 {
     public const int HintedPlanetCount = 5;
-    List<GameObject> Planets = new List<GameObject>(HintedPlanetCount);
+    List<OrbitalComponent> Planets = new List<OrbitalComponent>(HintedPlanetCount);
     private float CurrentMaxDistance = -1.0f;
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateFor(OrbitalComponent Planet)
     {
-        if (ShipUnit.Instance)
+        Planet.IsUIActive = false;
+        if (ShipUnit.Instance == null)
+            return;
+
+        float CurrentPlanetDistance = Vector3.Distance(Planet.transform.position, ShipUnit.Instance.transform.position);
+        if (CurrentMaxDistance != -1 && CurrentMaxDistance < CurrentPlanetDistance)
         {
-            List<GameObject> PlanetsInCell = PlanetManager.Instance.GetPlanetsInGridFromPosition(ShipUnit.Instance.transform.position, 1, true);
-            if (PlanetsInCell != null)
-            {
-                PlanetsInCell.RemoveAll( x => Planets.Contains(x) );
-                foreach (GameObject CurrentPlanet in PlanetsInCell)
-                {
-                    float CurrentPlanetDistance = Vector3.Distance(CurrentPlanet.transform.position, ShipUnit.Instance.transform.position);
-                    if (CurrentMaxDistance != -1 && CurrentMaxDistance < CurrentPlanetDistance)
-                        continue;
+            return;
+        }
 
-                    if(Planets.Count < HintedPlanetCount)
+        if (Planets.Count < HintedPlanetCount)
+        {
+            Planets.Add(Planet);
+            Planet.IsUIActive = true;
+            if (CurrentPlanetDistance > CurrentMaxDistance)
+            {
+                CurrentMaxDistance = CurrentPlanetDistance;
+            }
+        }
+        else
+        {
+            OrbitalComponent AlreadyInPlanet = null;
+            for (int Idx = Planets.Count - 1; Idx >= 0; Idx--)
+            {
+                AlreadyInPlanet = Planets[Idx];
+                if (AlreadyInPlanet)
+                {
+                    float AlreadyInDistance = Vector3.Distance(AlreadyInPlanet.transform.position, ShipUnit.Instance.transform.position);
+                    if (CurrentPlanetDistance <= AlreadyInDistance)
                     {
-                        Planets.Add(CurrentPlanet);
+                        Planets[Idx].IsUIActive = false;
+                        Planets.RemoveAt(Idx);
+                        Planets.Add(Planet);
+                        Planet.IsUIActive       = true;
                         if (CurrentPlanetDistance > CurrentMaxDistance)
                         {
                             CurrentMaxDistance = CurrentPlanetDistance;
                         }
-                    }
-                    else
-                    {
-                        GameObject AlreadyInPlanet = null;
-                        for (int Idx = Planets.Count - 1; Idx >= 0; Idx--)
-                        {
-                            AlreadyInPlanet = Planets[Idx];
-                            if (AlreadyInPlanet)
-                            {
-                                float AlreadyInDistance = Vector3.Distance(AlreadyInPlanet.transform.position, ShipUnit.Instance.transform.position);
-                                if (CurrentPlanetDistance <= AlreadyInDistance)
-                                {
-                                    Planets.RemoveAt(Idx);
-                                    Planets.Add(CurrentPlanet);
-                                    if (CurrentPlanetDistance > CurrentMaxDistance)
-                                    {
-                                        CurrentMaxDistance = CurrentPlanetDistance;
-                                    }
-                                    break;
-                                }
-                            }
-                        }
+                        break;
                     }
                 }
             }
+        }
+    }
 
-            foreach (GameObject Planet in Planets)
-            {
-                Vector3 ViewportPos = Camera.main.WorldToViewportPoint(Planet.transform.position);
-                bool IsVisible =
-                    (ViewportPos.x >= 0.0f && ViewportPos.x < 1.0f) &&
-                    (ViewportPos.y >= 0.0f && ViewportPos.y < 1.0f);
-
-                List<SpriteRenderer> Sprites = new List<SpriteRenderer>();
-                Planet.GetComponentsInChildren<SpriteRenderer>(true, Sprites);
-                SpriteRenderer UIPlanetHelper = Sprites.Find(x => x.CompareTag("UIPlanetHelper"));
-                UIPlanetHelper.gameObject.SetActive(!IsVisible);
-
-                if (!IsVisible)
-                {
-                    float CurrentPlanetDistance = Vector3.Distance(Planet.transform.position, ShipUnit.Instance.transform.position);
-                    TextMesh UIPlanetDistanceText = UIPlanetHelper.gameObject.GetComponentInChildren<TextMesh>();
-                    UIPlanetDistanceText.transform.SetParent(UIPlanetHelper.gameObject.transform);
-                    UIPlanetDistanceText.text = ((int)CurrentPlanetDistance).ToString();
-
-                    Vector3 VecShipToPlanet = Planet.gameObject.transform.position - ShipUnit.Instance.transform.position;
-                    Bounds bounds = CameraExtensions.OrthographicBounds(Camera.main);
-
-                    VecShipToPlanet.Normalize();
-                    UIPlanetHelper.gameObject.transform.position = bounds.center - (new Vector3(-VecShipToPlanet.x * (bounds.size.x / 2), 10.0f, -VecShipToPlanet.z * (bounds.size.y / 2)) * 1.2f);
-                    UIPlanetHelper.gameObject.transform.rotation = Quaternion.LookRotation(VecShipToPlanet);
-                }
-            }
+    private void Update()
+    {
+        foreach( OrbitalComponent Planet in Planets)
+        {
+            Planet.UpdateUI();
         }
     }
 }

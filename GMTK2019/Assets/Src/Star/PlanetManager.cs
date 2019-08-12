@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class PlanetManager : MonoBehaviour
 {
-    public static float G   = 9.81f;
-    const int MapHalfSize   = 1000;
-    const int GridSize      = 10;
-    const int CellSize      = (MapHalfSize * 2) / GridSize;
-    Vector3 MapSizeOffset   = new Vector3();
+    public static float G           = 9.81f;
+    const int MapHalfSize           = 1000;
+    const int GridSize              = 10;
+    const int CellSize              = (MapHalfSize * 2) / GridSize;
+    Vector3 MapSizeOffset           = new Vector3();
+    public UIPlanetHelper UIPlanetHelper   = null;
 
-    List<GameObject>[,] ObjectGrid = new List<GameObject>[GridSize, GridSize];
+    List<OrbitalComponent>[,] ObjectGrid = new List<OrbitalComponent>[GridSize, GridSize];
 
     public static PlanetManager Instance { get; private set; } = null;
 
@@ -19,10 +20,15 @@ public class PlanetManager : MonoBehaviour
 
     private class PlanetGridInfos
     {
-        List<GameObject> Objects    = new List<GameObject>();
+        List<OrbitalComponent> Objects    = new List<OrbitalComponent>();
         Vector2Int CurrentPos       = new Vector2Int();
 
-        public bool Check(Vector2Int InPos, out List<GameObject> InObjects)
+        public bool Check(Vector2Int InPos)
+        {
+            return CurrentPos == InPos;
+        }
+
+        public bool Check(Vector2Int InPos, out List<OrbitalComponent> InObjects)
         {
             InObjects = Objects;
             return CurrentPos == InPos;
@@ -38,11 +44,12 @@ public class PlanetManager : MonoBehaviour
 
     private void Awake()
     {
+        UIPlanetHelper = GetComponentInChildren<UIPlanetHelper>();
         for(int X = 0; X < GridSize; ++X)
         {
             for (int Y = 0; Y < GridSize; ++Y)
             {
-                ObjectGrid[X, Y] = new List<GameObject>();
+                ObjectGrid[X, Y] = new List<OrbitalComponent>();
             }
         }
 
@@ -56,34 +63,46 @@ public class PlanetManager : MonoBehaviour
         }
         MapSizeOffset.x = MapHalfSize;
         MapSizeOffset.z = MapHalfSize;
-
-        List<OrbitalComponent> OrbitalComps = new List<OrbitalComponent>();
-        GetComponentsInChildren<OrbitalComponent>(OrbitalComps);
-        List<OrbitalComponent> PlanetsOrbitalComps = OrbitalComps.FindAll(x => x.CompareTag("Planet"));
-        PlanetsOrbitalComps.ForEach(x => RegisterPlanet(x.gameObject));
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        ComponentAggregator Aggregator = GetComponentInChildren<ComponentAggregator>();
+        foreach (AggregatedComponent Component in Aggregator.Components)
+        {
+            RegisterPlanet(Component as OrbitalComponent);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        UpdatePlanets();
     }
 
-    public List<GameObject> GetPlanetsInGridFromPosition( Vector3 Position, int Extent = 1, bool Cache = false)
+    void UpdatePlanets()
     {
-        List<GameObject> OutPlanets = null;
+        if (ShipUnit.Instance)
+        {
+            const int Extent = 1;
+            Vector3 Position = ShipUnit.Instance.transform.position;
+            foreach(OrbitalComponent Planet in GetPlanetsInGridFromPosition(Position, Extent, true) )
+            {
+                UIPlanetHelper.UpdateFor(Planet);
+            }
+        }
+    }
+
+    public List<OrbitalComponent> GetPlanetsInGridFromPosition( Vector3 Position, int Extent = 1, bool Cache = false)
+    {
+        List<OrbitalComponent> OutPlanets = null;
         GetPositionInGrid(Position, ref PositionInGrid);
         if (!PlanetCache.Check(PositionInGrid, out OutPlanets))
         {
-            List<GameObject> CopyOldPlanetCache = new List<GameObject>(OutPlanets);
+            List<OrbitalComponent> CopyOldPlanetCache = new List<OrbitalComponent>(OutPlanets);
             if (!Cache)
-                OutPlanets = new List<GameObject>();
+                OutPlanets = new List<OrbitalComponent>();
             else
                 OutPlanets.Clear();
             for (int X = PositionInGrid.x - Extent; X <= PositionInGrid.x + Extent; ++X)
@@ -94,7 +113,7 @@ public class PlanetManager : MonoBehaviour
                     {
                         OutPlanets.Add(Planet);
                         CopyOldPlanetCache.Remove(Planet);
-                        Planet.SetActive(true);
+                        Planet.gameObject.SetActive(true);
                     });
                 }
             }
@@ -115,7 +134,7 @@ public class PlanetManager : MonoBehaviour
         PositionInGrid.y = (int)OffsetPos.z / CellSize;
     }
 
-    void AddPlanetInGrid(GameObject Planet)
+    void AddPlanetInGrid(OrbitalComponent Planet)
     {
         GetPositionInGrid(Planet.transform.position, ref PositionInGrid);
         ObjectGrid[PositionInGrid.x, PositionInGrid.y].Add(Planet);
@@ -179,13 +198,13 @@ public class PlanetManager : MonoBehaviour
         return AttractedByComponent.gameObject;
     }
 
-    public GameObject RegisterPlanet( GameObject Planet )
+    public GameObject RegisterPlanet( OrbitalComponent Planet )
     {
         GameObject AttractedByObj = null;
         //AttractedByObj = FindAttractedPlanet(Planet);
         Planets.Add(Planet);
         AddPlanetInGrid(Planet);
-        Planet.SetActive(false);
+        Planet.gameObject.SetActive(false);
         return AttractedByObj;
     }
 }
