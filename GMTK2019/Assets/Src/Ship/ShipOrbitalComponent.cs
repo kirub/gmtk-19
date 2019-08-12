@@ -105,8 +105,11 @@ public class ShipOrbitalComponent : MonoBehaviour
 
                         ComputeTrajectoryDistanceFrom(Planet);
                         AttractionComponent AttractionComp = gameObject.GetComponentInParent<AttractionComponent>();
-                        AttractionComp.AttractedBy = other.attachedRigidbody.gameObject;
-                        AttractionComp.OrbitCounterClockWise = WillBeCounterClockWiseOrbit;
+                        if (AttractionComp)
+                        {
+                            AttractionComp.AttractedBy = other.attachedRigidbody.gameObject;
+                            AttractionComp.OrbitCounterClockWise = WillBeCounterClockWiseOrbit;
+                        }
                         //Debug.Log("AttachTo: " + Planet.name + " CCW: " + AttractionComp.OrbitCounterClockWise.ToString());//
 
 

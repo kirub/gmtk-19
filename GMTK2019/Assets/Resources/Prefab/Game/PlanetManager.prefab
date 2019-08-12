@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5523008070831822489}
   - component: {fileID: 4385794799107466418}
   m_Layer: 0
-  m_Name: UIPlanetHelper
+  m_Name: Planets
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87,3 +87,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02b27b40c95f3d34288ac2e1767e0e9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UIPlanetHelper: {fileID: 0}

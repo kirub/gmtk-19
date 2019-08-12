@@ -40,9 +40,8 @@ public class AttractionComponent : AggregatedComponent
     public bool IsStatic { get { return IsAStaticStar; } }
 
     // Start is called before the first frame update
-    override public void Start()
+    public void Start()
     {
-        base.Start();
         if (AttractedBy)
         {
             gameObject.transform.SetParent(AttractedBy.gameObject.transform, true);

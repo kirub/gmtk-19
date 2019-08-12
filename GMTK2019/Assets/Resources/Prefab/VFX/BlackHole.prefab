@@ -19082,8 +19082,8 @@ GameObject:
   - component: {fileID: 5471923145258789988}
   - component: {fileID: 5471923145258789989}
   - component: {fileID: 5471923145258789994}
-  - component: {fileID: 4560264273091988151}
   - component: {fileID: 6725865219602741202}
+  - component: {fileID: 4050188914917939390}
   m_Layer: 0
   m_Name: BlackHole
   m_TagString: Attractor
@@ -19170,21 +19170,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.2
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4560264273091988151
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5471923145258789995}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3adcac0658cd62438c36a7b26d9f73e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AttractionForce: 3
-  _AttractedBy: {fileID: 0}
-  IsAStaticStar: 0
 --- !u!54 &6725865219602741202
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -19201,6 +19186,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4050188914917939390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5471923145258789995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f64acd5445073e64b9a21d5e6ca00fc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttractionForce: 3
+  _AttractedBy: {fileID: 0}
+  IsAStaticStar: 0
 --- !u!1001 &5471923145187570474
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19208,11 +19208,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5471923145258789991}
     m_Modifications:
-    - target: {fileID: 1129695113834253060, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
-        type: 3}
-      propertyPath: m_Name
-      value: GravityField
-      objectReference: {fileID: 0}
     - target: {fileID: 1129695113834253056, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -19282,6 +19277,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1.0118151
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129695113834253060, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
+        type: 3}
+      propertyPath: m_Name
+      value: GravityField
       objectReference: {fileID: 0}
     - target: {fileID: 1129695113834253059, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
         type: 3}
@@ -19308,16 +19308,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5471923145258789991}
     m_Modifications:
-    - target: {fileID: 1129695113834253060, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
-        type: 3}
-      propertyPath: m_Name
-      value: GravityField_BlackHole
-      objectReference: {fileID: 0}
-    - target: {fileID: 1129695113834253060, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
-        type: 3}
-      propertyPath: m_TagString
-      value: Attractor
-      objectReference: {fileID: 0}
     - target: {fileID: 1129695113834253056, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -19387,6 +19377,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129695113834253060, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
+        type: 3}
+      propertyPath: m_Name
+      value: GravityField_BlackHole
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129695113834253060, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
+        type: 3}
+      propertyPath: m_TagString
+      value: Attractor
       objectReference: {fileID: 0}
     - target: {fileID: 1129695113834253059, guid: 6e8c7d5769a3a1a45bae99a6aa862eba,
         type: 3}

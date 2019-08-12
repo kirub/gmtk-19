@@ -69,9 +69,9 @@ public class PlanetManager : MonoBehaviour
     void Start()
     {
         ComponentAggregator Aggregator = GetComponentInChildren<ComponentAggregator>();
-        foreach (AggregatedComponent Component in Aggregator.Components)
+        foreach (OrbitalComponent Component in Aggregator.Components)
         {
-            RegisterPlanet(Component as OrbitalComponent);
+            RegisterPlanet(Component);
         }
     }
 

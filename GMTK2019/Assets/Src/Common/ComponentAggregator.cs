@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Profiling;
@@ -8,24 +9,16 @@ public class ComponentAggregator : MonoBehaviour
     CustomSampler Sampler;
     public string AggregatorName = "ComponentAggregator";
     public HashSet<AggregatedComponent> Components { get; } = new HashSet<AggregatedComponent>();
-
-    public void Start()
-    {
-        Sampler = CustomSampler.Create(AggregatorName);
-    }
+    
     public void RegisterComponent(AggregatedComponent Component)
     {
-        Sampler.Begin();
+        Sampler = CustomSampler.Create(AggregatorName);
         Components.Add(Component);
-
-        Sampler.End();
     }
 
-    public void UnregisterComponent(AggregatedComponent Component)
+    public void UnregisterComponent(AggregatedComponent InComponent)
     {
-        Sampler.Begin();
-        Components.Remove(Component);
-        Sampler.End();
+        Components.Remove(InComponent);
     }
 
     // Update is called once per frame

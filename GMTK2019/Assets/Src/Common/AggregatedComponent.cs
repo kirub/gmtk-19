@@ -9,12 +9,7 @@ public class AggregatedComponent : MonoBehaviour
     virtual public void Awake()
     {
         Aggregator = GetComponentInParent<ComponentAggregator>();
-
-    }
-    // Start is called before the first frame update
-    virtual public void Start()
-    {
-        if(Aggregator)
+        if (Aggregator)
         {
             Aggregator.RegisterComponent(this);
         }

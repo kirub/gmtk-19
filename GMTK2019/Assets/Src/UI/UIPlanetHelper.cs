@@ -10,15 +10,16 @@ public class UIPlanetHelper : MonoBehaviour
 
     public void UpdateFor(OrbitalComponent Planet)
     {
-        Planet.IsUIActive = false;
         if (ShipUnit.Instance == null)
-            return;
-
-        float CurrentPlanetDistance = Vector3.Distance(Planet.transform.position, ShipUnit.Instance.transform.position);
-        if (CurrentMaxDistance != -1 && CurrentMaxDistance < CurrentPlanetDistance)
         {
+            Planet.IsUIActive = false;
             return;
         }
+
+        float CurrentPlanetDistance = Vector3.Distance(Planet.transform.position, ShipUnit.Instance.transform.position);
+
+        if (Planet.IsUIActive)
+            return;
 
         if (Planets.Count < HintedPlanetCount)
         {
@@ -31,6 +32,12 @@ public class UIPlanetHelper : MonoBehaviour
         }
         else
         {
+            if (CurrentMaxDistance != -1 && CurrentMaxDistance < CurrentPlanetDistance)
+            {
+                Planet.IsUIActive = false;
+                return;
+            }
+
             OrbitalComponent AlreadyInPlanet = null;
             for (int Idx = Planets.Count - 1; Idx >= 0; Idx--)
             {
