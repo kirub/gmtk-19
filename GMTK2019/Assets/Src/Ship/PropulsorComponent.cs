@@ -296,10 +296,14 @@ public class PropulsorComponent : MonoBehaviour, IDebugDrawable
 		{
 			GameManager.Instance.OnPauseUnpauseEvent.AddListener(OnPause);
 		}
+
+		DebugDrawHelper.RegisterDrawable(gameObject, this);
 	}
 
 	private void OnDestroy()
 	{
+		DebugDrawHelper.UnregisterDrawable(gameObject, this);
+
 		if (GameManager.Instance)
 		{
 			GameManager.Instance.OnPauseUnpauseEvent.RemoveListener(OnPause);
@@ -409,10 +413,12 @@ public class PropulsorComponent : MonoBehaviour, IDebugDrawable
 		if (CurrentEnergySupplier)
 		{
 			GUI.Label(BasePos, "- Energy supplier " + CurrentEnergySupplier.name, Style);
+			BasePos.y += TextYIncrement;
 		}
 		else
 		{
 			GUI.Label(BasePos, "- No energy supplier around", Style);
+			BasePos.y += TextYIncrement;
 		}
 		
 		if (WaitTimeToReactivateRotator > 0f)

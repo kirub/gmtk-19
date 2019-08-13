@@ -20,6 +20,16 @@ public class RotatorComponent : MonoBehaviour, IDebugDrawable
 		}
 	}
 
+	private void Start()
+	{
+		DebugDrawHelper.RegisterDrawable(gameObject, this);
+	}
+
+	private void OnDestroy()
+	{
+		DebugDrawHelper.UnregisterDrawable(gameObject, this);
+	}
+
 	private void Update()
 	{
 		CurrentRotationSpeed = Mathf.Min(RotationSpeed, CurrentRotationSpeed + RotationAcceleration * Time.deltaTime);

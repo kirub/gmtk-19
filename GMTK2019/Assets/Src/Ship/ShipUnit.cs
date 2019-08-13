@@ -67,12 +67,7 @@ public class ShipUnit : MonoBehaviour, IDebugDrawable
 
 		OrbitalComp.OnOrbitEndEvent.RemoveListener(BoostOnOrbitLeft);
 	}
-
-	void OnDestroy()
-	{
-		OrbitalComp.OnOrbitEndEvent.RemoveListener(BoostOnOrbitLeft);
-	}
-
+	
 	private void Start()
 	{
 		CameraShakeComp = FindObjectOfType<ShakeComponent>();
@@ -86,6 +81,14 @@ public class ShipUnit : MonoBehaviour, IDebugDrawable
 		{
 			StartCoroutine(UpdateP1Visibility());
 		}
+
+		DebugDrawHelper.RegisterDrawable(gameObject, this);
+	}
+
+	void OnDestroy()
+	{
+		DebugDrawHelper.UnregisterDrawable(gameObject, this);
+		OrbitalComp.OnOrbitEndEvent.RemoveListener(BoostOnOrbitLeft);
 	}
 
 	private IEnumerator UpdateP1Visibility()

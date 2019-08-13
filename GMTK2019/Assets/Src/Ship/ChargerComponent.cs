@@ -66,6 +66,11 @@ public class ChargerComponent : MonoBehaviour, IDebugDrawable
 		DebugDrawHelper.RegisterDrawable(gameObject, this);
 	}
 
+	private void OnDestroy()
+	{
+		DebugDrawHelper.UnregisterDrawable(gameObject, this);
+	}
+
 	private void Update()
 	{
 		if (CanAddRechargeWithR && Input.GetKeyUp(KeyCode.R))

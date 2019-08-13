@@ -26,16 +26,19 @@ public class ShipOrbitalComponent : MonoBehaviour, IDebugDrawable
     public class OnOrbitEvent : UnityEvent { }
     public OnOrbitEvent OnOrbitStartEvent { get; }   = new OnOrbitEvent();
     public OnOrbitEvent OnOrbitEndEvent { get; }     = new OnOrbitEvent();
-
-    void OnDestroy()
-    {
-        ShipUnit.Instance.PropulsorComp.OnPropulseEndEvent.RemoveListener(OnPropulsedEndEvent);
-    }
-
-    // Start is called before the first frame update
+	
     void Start()
     {
         ShipUnit.Instance.PropulsorComp.OnPropulseEndEvent.AddListener(OnPropulsedEndEvent);
+		
+		DebugDrawHelper.RegisterDrawable(transform.parent ? transform.parent.gameObject : gameObject, this);
+	}
+
+    void OnDestroy()
+    {
+		DebugDrawHelper.UnregisterDrawable(transform.parent ? transform.parent.gameObject : gameObject, this);
+
+		ShipUnit.Instance.PropulsorComp.OnPropulseEndEvent.RemoveListener(OnPropulsedEndEvent);
     }
 
     private void OnPropulsedEndEvent()

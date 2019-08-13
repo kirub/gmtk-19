@@ -288,13 +288,21 @@ public class DebugDrawHelper : MonoBehaviour
 			for (int i = StartDrawable; i < EndDrawable && i < DrawablesList.Count; ++i)
 			{
 				GameObject CurrentObj = DrawablesList[i];
-				bool IsSelected = SelectedDrawables.Contains(CurrentObj);
-				bool IsHighlighted = CurrentHighlightedItemIndex == i;
-				string SelectionStr = IsSelected ? "X" : " ";
-				Style.normal.textColor = GetColorFromStatus(IsSelected, IsHighlighted);
+				if (CurrentObj)
+				{
+					bool IsSelected = SelectedDrawables.Contains(CurrentObj);
+					bool IsHighlighted = CurrentHighlightedItemIndex == i;
+					string SelectionStr = IsSelected ? "X" : " ";
+					Style.normal.textColor = GetColorFromStatus(IsSelected, IsHighlighted);
 
-				GUI.Label(Pos, "[" + SelectionStr + "] " + CurrentObj.name, Style);
-				Pos.y += Inc;
+					GUI.Label(Pos, "[" + SelectionStr + "] " + CurrentObj.name, Style);
+					Pos.y += Inc;
+				}
+				else
+				{
+					GUI.Label(Pos, "[ ] NULL", Style);
+					Pos.y += Inc;
+				}
 			}
 
 			if (MaxFullPages > 1)
@@ -328,27 +336,38 @@ public class DebugDrawHelper : MonoBehaviour
 			for (int i = StartDrawable; i < EndDrawable && i < ListToUse.Count; ++i)
 			{
 				GameObject CurrentObj = ListToUse[i];
-				bool IsSelected = SelectedToggled[i];
-				bool IsHighlighted = CurrentHighlightedItemIndex == i;
-				string SelectionStr = IsSelected ? "-" : "+";
-				Style.normal.textColor = GetColorFromStatus(IsSelected, IsHighlighted);
-
-				GUI.Label(Pos, SelectionStr + " " + CurrentObj.name, Style);
-				Pos.y += Inc;
-
-				Style.normal.textColor = DefaultColor;
-
-				if (IsSelected)
+				if (CurrentObj)
 				{
-					Pos.x += Inc;
+					bool IsSelected = SelectedToggled[i];
+					bool IsHighlighted = CurrentHighlightedItemIndex == i;
+					string SelectionStr = IsSelected ? "-" : "+";
+					Style.normal.textColor = GetColorFromStatus(IsSelected, IsHighlighted);
 
-					List<IDebugDrawable> ToDraw = Drawables[CurrentObj];
-					foreach (IDebugDrawable CurDrawable in ToDraw)
+					GUI.Label(Pos, SelectionStr + " " + CurrentObj.name, Style);
+					Pos.y += Inc;
+
+					Style.normal.textColor = DefaultColor;
+
+					if (IsSelected)
 					{
-						CurDrawable.DebugDraw(ref Pos, Inc, Style);
-					}
+						Pos.x += Inc;
 
-					Pos.x -= Inc;
+						List<IDebugDrawable> ToDraw = Drawables[CurrentObj];
+						foreach (IDebugDrawable CurDrawable in ToDraw)
+						{
+							if (CurDrawable != null)
+							{
+								CurDrawable.DebugDraw(ref Pos, Inc, Style);
+							}
+						}
+
+						Pos.x -= Inc;
+					}
+				}
+				else
+				{
+					GUI.Label(Pos, "- NULL", Style);
+					Pos.y += Inc;
 				}
 			}
 
@@ -443,10 +462,11 @@ public class DebugDrawHelper : MonoBehaviour
 		else if (Input.GetKeyDown(NextItemKey))
 		{
 			++CurrentHighlightedItem;
-			if (CurrentHighlightedItem >= MaxPossibleItem)
-			{
-				CurrentHighlightedItem = 0;
-			}
+		}
+
+		if (CurrentHighlightedItem >= MaxPossibleItem)
+		{
+			CurrentHighlightedItem = 0;
 		}
 	}
 
