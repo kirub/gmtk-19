@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ShipOrbitalComponent : MonoBehaviour
+public class ShipOrbitalComponent : MonoBehaviour, IDebugDrawable
 {
     public enum EOrbitalState
     {
@@ -239,4 +239,22 @@ public class ShipOrbitalComponent : MonoBehaviour
             }
         }
     }*/
+
+	public void DebugDraw(ref Rect BasePos, float TextYIncrement, GUIStyle Style)
+	{
+#if UNITY_EDITOR
+		if (Planet)
+		{
+			GUI.Label(BasePos, "- Planet " + Planet.name, Style);
+			BasePos.y += TextYIncrement;
+		}
+		else
+		{
+			GUI.Label(BasePos, "- No Planet...", Style);
+			BasePos.y += TextYIncrement;
+		}
+		GUI.Label(BasePos, "- Orbital State " + OrbitalState, Style);
+		BasePos.y += TextYIncrement;
+#endif
+	}
 }

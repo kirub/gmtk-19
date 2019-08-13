@@ -106,6 +106,11 @@ public class ChargerComponent : MonoBehaviour, IDebugDrawable
 				BasePos.y += TextYIncrement;
 			}
 		}
+		else
+		{
+			GUI.Label(BasePos, "- Not charging...", Style);
+			BasePos.y += TextYIncrement;
+		}
 #endif
 	}
 }

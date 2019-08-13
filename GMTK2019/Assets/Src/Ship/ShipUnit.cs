@@ -7,7 +7,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(RotatorComponent))]
 [RequireComponent(typeof(PropulsorComponent))]
 [RequireComponent(typeof(ChargerComponent))]
-public class ShipUnit : MonoBehaviour
+public class ShipUnit : MonoBehaviour, IDebugDrawable
 {
 	[SerializeField] private bool UseCameraShakeOnExplode = true;
 	[SerializeField] private float ExplodeShakeTime = 2f;
@@ -97,5 +97,16 @@ public class ShipUnit : MonoBehaviour
 		}
 
 		P1Particle.SetActive(false);
+	}
+
+	public void DebugDraw(ref Rect BasePos, float TextYIncrement, GUIStyle Style)
+	{
+#if UNITY_EDITOR
+		if (CurrentP1DisplayedTime < P1DisplayedTime)
+		{
+			GUI.Label(BasePos, "- P1 Time Left : " + (P1DisplayedTime - CurrentP1DisplayedTime).ToString("F2") + "s", Style);
+			BasePos.y += TextYIncrement;
+		}
+#endif
 	}
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotatorComponent : MonoBehaviour
+public class RotatorComponent : MonoBehaviour, IDebugDrawable
 {
 	[SerializeField] private float RotationAcceleration = 1f;
 	[SerializeField] private float RotationSpeed = 1f;
@@ -34,5 +34,15 @@ public class RotatorComponent : MonoBehaviour
 	private void OnDisable()
 	{
 		CurrentRotationSpeed = 0f;
+	}
+
+	public void DebugDraw(ref Rect BasePos, float TextYIncrement, GUIStyle Style)
+	{
+#if UNITY_EDITOR
+		bool IsMaxSpeed = CurrentRotationSpeed >= RotationSpeed;
+
+		GUI.Label(BasePos, "- Rotation Speed " + CurrentRotationSpeed + (IsMaxSpeed ? " [MAX]" : ""), Style);
+		BasePos.y += TextYIncrement;
+#endif
 	}
 }

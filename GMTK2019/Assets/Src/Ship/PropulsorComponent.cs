@@ -6,7 +6,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(MovingComponent))]
 [RequireComponent(typeof(RotatorComponent))]
 [RequireComponent(typeof(ChargerComponent))]
-public class PropulsorComponent : MonoBehaviour
+public class PropulsorComponent : MonoBehaviour, IDebugDrawable
 {
 	[SerializeField] private bool CanAlwaysPropulse = false;
 
@@ -394,5 +394,32 @@ public class PropulsorComponent : MonoBehaviour
 				OnCanPropulseEndEvent.Invoke();
 			}
 		}
+	}
+
+	public void DebugDraw(ref Rect BasePos, float TextYIncrement, GUIStyle Style)
+	{
+#if UNITY_EDITOR
+		GUI.Label(BasePos, "- " + (IsPropulsing ? "Propulsing " + (100f * CurrentPropulsionRatio).ToString("F2") : "Not propulsing..."), Style);
+		BasePos.y += TextYIncrement;
+		GUI.Label(BasePos, "- Time scale " + Time.timeScale, Style);
+		BasePos.y += TextYIncrement;
+		GUI.Label(BasePos, "- " + NearComets.Count + " comets around", Style);
+		BasePos.y += TextYIncrement;
+		
+		if (CurrentEnergySupplier)
+		{
+			GUI.Label(BasePos, "- Energy supplier " + CurrentEnergySupplier.name, Style);
+		}
+		else
+		{
+			GUI.Label(BasePos, "- No energy supplier around", Style);
+		}
+		
+		if (WaitTimeToReactivateRotator > 0f)
+		{			
+			GUI.Label(BasePos, "- Wait time before rotator " + WaitTimeToReactivateRotator.ToString("F2") + "s", Style);
+			BasePos.y += TextYIncrement;
+		}
+#endif
 	}
 }
