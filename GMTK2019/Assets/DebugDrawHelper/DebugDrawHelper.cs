@@ -268,6 +268,24 @@ public class DebugDrawHelper : MonoBehaviour
 		Pos.y += Inc;
 	}
 
+	void OnGUIDisplayHighlighted( GameObject HighlightedObject, bool IsSelected )
+	{
+		Color BaseColor = Style.normal.textColor;
+		if (HighlightedObject)
+		{
+			const float Width = 500f;
+			const float Height = 20f;
+
+			Vector3 ScreenPos = Camera.main.WorldToScreenPoint(HighlightedObject.transform.position);
+			Rect Pos = new Rect(ScreenPos.x, Screen.height - ScreenPos.y, Width, Height);
+
+			Style.normal.textColor = GetColorFromStatus(IsSelected, true);
+			GUI.Label(Pos, "+ " + HighlightedObject.name, Style);
+		}
+
+		Style.normal.textColor = BaseColor;
+	}
+
 	void OnGUIListDrawables(Rect Pos, float Inc)
 	{
 		Style.fontStyle = FontStyle.Bold;
@@ -297,6 +315,11 @@ public class DebugDrawHelper : MonoBehaviour
 
 					GUI.Label(Pos, "[" + SelectionStr + "] " + CurrentObj.name, Style);
 					Pos.y += Inc;
+
+					if (IsHighlighted)
+					{
+						OnGUIDisplayHighlighted(CurrentObj, IsSelected);
+					}
 				}
 				else
 				{
@@ -340,11 +363,16 @@ public class DebugDrawHelper : MonoBehaviour
 				{
 					bool IsSelected = SelectedToggled[i];
 					bool IsHighlighted = CurrentHighlightedItemIndex == i;
-					string SelectionStr = IsSelected ? "-" : "+";
+					string SelectionStr = IsSelected ? "v" : ">";
 					Style.normal.textColor = GetColorFromStatus(IsSelected, IsHighlighted);
 
 					GUI.Label(Pos, SelectionStr + " " + CurrentObj.name, Style);
 					Pos.y += Inc;
+
+					if (IsHighlighted)
+					{
+						OnGUIDisplayHighlighted(CurrentObj, IsSelected);
+					}
 
 					Style.normal.textColor = DefaultColor;
 
