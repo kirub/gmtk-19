@@ -49,7 +49,7 @@ public class ShipOrbitalComponent : MonoBehaviour, IDebugDrawable
             AttractionComponent AttractionComp = gameObject.GetComponentInParent<AttractionComponent>();
             AttractionComp.AttractedBy = null;
             MovingComponent MovingComp = gameObject.GetComponentInParent<MovingComponent>();
-            MovingComp.enabled = true;
+            MovingComp.StartMovement();
 
             OnOrbitEndEvent.Invoke();
             //Vector3 PlanetToShipVector = gameObject.transform.parent.position - Planet.transform.position;
@@ -117,7 +117,7 @@ public class ShipOrbitalComponent : MonoBehaviour, IDebugDrawable
 
 
                         MovingComponent MovingComp = gameObject.GetComponentInParent<MovingComponent>();
-                        MovingComp.enabled = false;
+						MovingComp.StopMovement();
                         OnOrbitStartEvent.Invoke();
                     }
                 }
