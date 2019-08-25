@@ -6,9 +6,18 @@ using UnityEngine;
 [RequireComponent(typeof(MovingComponent))]
 public class DynamicObjectComponent : MonoBehaviour
 {
-	[SerializeField] private float LookAheadTime = 3f;
-	[SerializeField] private float RandomRange = 2f;
-	[SerializeField] private float MinTime = 0.5f;
+	public enum ETargetType
+	{
+		HomingRandom,
+		HomingFixed,
+		FollowingForward
+	}
+
+	[SerializeField] private ETargetType TargetType = ETargetType.HomingRandom;
+	[SerializeField] private float HomingValue = 2f;
+	[SerializeField] private float HomingLookAheadTime = 3f;
+	[SerializeField] private float HomingLookAheadMinTime = 0.5f;
+
 
 	private bool IsLaunched = false;
 	private GameObject MeshContainer = null;
@@ -23,33 +32,47 @@ public class DynamicObjectComponent : MonoBehaviour
 			MeshContainer.SetActive(true);
 		}
 
-		float ExpectedTimeSpeedZero = ShipUnit.Instance.MovingComp.CurrentSpeed / ShipUnit.Instance.MovingComp.DecelerationValue;
-		float ExpectedTime = Mathf.Min(ExpectedTimeSpeedZero, LookAheadTime);
-
-		Vector3 ExpectedPosition = ShipUnit.Instance.MovingComp.transform.position +
-			ShipUnit.Instance.MovingComp.transform.forward * ShipUnit.Instance.MovingComp.CurrentSpeed * ExpectedTime -
-			0.5f * ShipUnit.Instance.MovingComp.transform.forward * ShipUnit.Instance.MovingComp.DecelerationValue * ExpectedTime * ExpectedTime;
-		float Distance = Vector3.Distance(transform.position, ExpectedPosition);
-
-		float FinalTime = ExpectedTime;
-		if (RandomRange > 0f)
+		if (TargetType == ETargetType.FollowingForward)
 		{
-			FinalTime += Random.Range(-RandomRange, RandomRange);
-			FinalTime = Mathf.Max(MinTime, FinalTime);
+			MovingComp.CurrentSpeed = MovingComp.MaxMovingSpeedValue;
 		}
-
-		float ExpectedSpeed = Distance / ExpectedTime;
-		float FinalSpeed = Distance / FinalTime;
-		Vector3 ExpectedForward = (ExpectedPosition - transform.position).normalized;
-
-		if (MovingComp.MaxMovingSpeedValue > 0f && ExpectedSpeed > MovingComp.MaxMovingSpeedValue)
+		else
 		{
-			ExpectedSpeed = MovingComp.MaxMovingSpeedValue;
-			transform.position = ExpectedPosition - ExpectedForward * ExpectedSpeed * FinalTime;
+			float ExpectedTimeSpeedZero = ShipUnit.Instance.MovingComp.CurrentSpeed / ShipUnit.Instance.MovingComp.DecelerationValue;
+			float ExpectedTime = Mathf.Min(ExpectedTimeSpeedZero, HomingLookAheadTime);
+
+			Vector3 ExpectedPosition = ShipUnit.Instance.MovingComp.transform.position +
+				ShipUnit.Instance.MovingComp.transform.forward * ShipUnit.Instance.MovingComp.CurrentSpeed * ExpectedTime -
+				0.5f * ShipUnit.Instance.MovingComp.transform.forward * ShipUnit.Instance.MovingComp.DecelerationValue * ExpectedTime * ExpectedTime;
+			float Distance = Vector3.Distance(transform.position, ExpectedPosition);
+
+			float FinalTime = ExpectedTime;
+			if (HomingValue > 0f)
+			{
+				if (TargetType == ETargetType.HomingRandom)
+				{
+					FinalTime += Random.Range(-HomingValue, HomingValue);
+				}
+				else
+				{
+					FinalTime += HomingValue;
+				}
+				FinalTime = Mathf.Max(HomingLookAheadMinTime, FinalTime);
+			}
+
+			float ExpectedSpeed = Distance / ExpectedTime;
+			float FinalSpeed = Distance / FinalTime;
+			Vector3 ExpectedForward = (ExpectedPosition - transform.position).normalized;
+
+			if (MovingComp.MaxMovingSpeedValue > 0f && ExpectedSpeed > MovingComp.MaxMovingSpeedValue)
+			{
+				ExpectedSpeed = MovingComp.MaxMovingSpeedValue;
+				transform.position = ExpectedPosition - ExpectedForward * ExpectedSpeed * FinalTime;
+			}
+
+			GetComponent<MovingComponent>().CurrentSpeed = FinalSpeed;
+			transform.rotation = Quaternion.LookRotation(ExpectedForward, Vector3.up);
 		}
-		
-		GetComponent<MovingComponent>().CurrentSpeed = FinalSpeed;
-		transform.rotation = Quaternion.LookRotation(ExpectedForward, Vector3.up);
 	}
 
 	private void Awake()
