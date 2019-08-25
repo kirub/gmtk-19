@@ -15,6 +15,7 @@ public class MovingComponent : MonoBehaviour, IAggregatedComponent
     public float MaxMovingSpeedValue { get { return MaxMovingSpeed; } }
     public float DecelerationValue { get { return Deceleration; } }
 	public bool UseDeceleration { get; set; } = true;
+	public bool IsMoving { get; private set; } = true;
 
 	public void Awake()
 	{
@@ -51,10 +52,20 @@ public class MovingComponent : MonoBehaviour, IAggregatedComponent
 		}
 	}
 
+	public void StartMovement()
+	{
+		IsMoving = true;
+	}
+
+	public void StopMovement()
+	{
+		IsMoving = false;
+	}
+
 	// IAggregatedComponent
 	public bool IsTickable()
 	{
-		return true;
+		return IsMoving;
 	}
 
 	public void Tick()
