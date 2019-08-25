@@ -130,6 +130,11 @@ public class PropulsorComponent : MonoBehaviour, IDebugDrawable
 		{
 			PropulsionCancelSound.Play();
 		}
+
+		if (ReactorParticle)
+		{
+			ReactorParticle.SetActive(false);
+		}
 	}
 
 	private void UpdateAudioAccordingToTimeScale(float timeScale) {
