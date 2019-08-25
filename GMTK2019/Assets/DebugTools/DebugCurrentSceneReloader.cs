@@ -3,20 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class DebugCurrentSceneReloader : MonoBehaviour
+public class DebugCurrentSceneReloader : DebugToolBase
 {
 	// -------------------------------------------------------------------------------------
 
 	[SerializeField] private KeyCode RestartKey = KeyCode.R;
 
 	// -------------------------------------------------------------------------------------
-
-	private void Awake()
-	{
-#if !UNITY_EDITOR
-		Destroy(this);
-#endif // UNITY_EDITOR
-	}
 
 	private void Update()
 	{
@@ -28,4 +21,6 @@ public class DebugCurrentSceneReloader : MonoBehaviour
 		}
 #endif // UNITY_EDITOR
 	}
+
+	// -------------------------------------------------------------------------------------
 }
