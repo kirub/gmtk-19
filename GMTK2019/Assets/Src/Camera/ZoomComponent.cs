@@ -18,6 +18,7 @@ public class ZoomComponent : MonoBehaviour
 
 	void OnZoomStart()
 	{
+		ZoomSpeed = ZoomBaseSpeed;
 		ZoomModifier = -1f;
 		enabled = true;
 	}
