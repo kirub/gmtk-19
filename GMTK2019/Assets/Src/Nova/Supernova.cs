@@ -58,16 +58,6 @@ public class Supernova : MonoBehaviour
 		}
     }
 
-	// void Start()
-    // {
-	// 	VScale.Set(DefaultExpantionSpeed, 0, DefaultExpantionSpeed);
-    //     StartCoroutine(TimerExpantionStart());
-    //     if (!ShipUnit.Instance)
-	// 	{
-	// 		Debug.LogError("No ShipUnit found !");
-	// 	}
-    // }
-
     private IEnumerator TimerExpantionStart()
     {
         yield return new WaitForSecondsRealtime(TimerBeforeStart);
