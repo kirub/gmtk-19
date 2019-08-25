@@ -408,7 +408,20 @@ public class PropulsorComponent : MonoBehaviour, IDebugDrawable
 	public void DebugDraw(ref Rect BasePos, float TextYIncrement, GUIStyle Style)
 	{
 #if UNITY_EDITOR
-		GUI.Label(BasePos, "- " + (IsPropulsing ? "Propulsing " + (100f * CurrentPropulsionRatio).ToString("F2") : "Not propulsing..."), Style);
+		string PropulsingValue = "[NONE]";
+		if (CurrentPropulsionRatio < NeutralPropulsionThreshold)
+		{
+			PropulsingValue = "[NEUTRAL]";
+		}
+		else if (CurrentPropulsionRatio < GoodPropulsionThreshold)
+		{
+			PropulsingValue = "[GOOD]";
+		}
+		else
+		{
+			PropulsingValue = "[BAD]";
+		}
+		GUI.Label(BasePos, "- " + (IsPropulsing ? "Propulsing " + (100f * CurrentPropulsionRatio).ToString("F2") + " " + PropulsingValue : "Not propulsing..."), Style);
 		BasePos.y += TextYIncrement;
 		GUI.Label(BasePos, "- Time scale " + Time.timeScale, Style);
 		BasePos.y += TextYIncrement;
@@ -426,9 +439,9 @@ public class PropulsorComponent : MonoBehaviour, IDebugDrawable
 			BasePos.y += TextYIncrement;
 		}
 		
-		if (WaitTimeToReactivateRotator > 0f)
+		if (CurrentWaitTimeBeforeReactivatingRotator > 0f)
 		{			
-			GUI.Label(BasePos, "- Wait time before rotator " + WaitTimeToReactivateRotator.ToString("F2") + "s", Style);
+			GUI.Label(BasePos, "- Wait time before rotation " + CurrentWaitTimeBeforeReactivatingRotator + "s", Style);
 			BasePos.y += TextYIncrement;
 		}
 #endif
