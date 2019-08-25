@@ -44,29 +44,40 @@ public class Supernova : MonoBehaviour
         Instance = this;
         NovaCollider.enabled = false;
         FXStartExplosion.SetActive(false);
+        ShipUnit.Instance.PropulsorComp.OnPropulseEndEvent.AddListener(OnPropulsedEndEvent);
     }
 
-	void Start()
-    {
-		VScale.Set(DefaultExpantionSpeed, 0, DefaultExpantionSpeed);
+    void OnPropulsedEndEvent() {
+        ShipUnit.Instance.PropulsorComp.OnPropulseEndEvent.RemoveListener(OnPropulsedEndEvent);
+        VScale.Set(DefaultExpantionSpeed, 0, DefaultExpantionSpeed);
         StartCoroutine(TimerExpantionStart());
+
         if (!ShipUnit.Instance)
 		{
 			Debug.LogError("No ShipUnit found !");
 		}
     }
 
+	// void Start()
+    // {
+	// 	VScale.Set(DefaultExpantionSpeed, 0, DefaultExpantionSpeed);
+    //     StartCoroutine(TimerExpantionStart());
+    //     if (!ShipUnit.Instance)
+	// 	{
+	// 		Debug.LogError("No ShipUnit found !");
+	// 	}
+    // }
+
     private IEnumerator TimerExpantionStart()
     {
-        yield return new WaitForSeconds(TimerBeforeStart - TimerOffsetBeforeStartForFX);
+        yield return new WaitForSecondsRealtime(TimerBeforeStart);
         FXStartExplosion.SetActive(true);
-        yield return new WaitForSeconds(TimerOffsetBeforeStartForFX/5.0f);
+        yield return new WaitForSecondsRealtime(TimerOffsetBeforeStartForFX);
         if (ExplosionSound)
         {
             ExplosionSound.Play();
         }
         ExpantionIsOn = true;
-        yield return new WaitForSeconds(4*TimerOffsetBeforeStartForFX / 5.0f);
 		NovaCollider.enabled = true;
         StartCoroutine(LaunchTriggers());
     }

@@ -288,9 +288,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6f3b90cf0c022d47bc292795d67c63c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DefaultExpantionSpeed: 10
+  TimersOffset: []
+  ExpansionSpeed: []
   FXStartExplosion: {fileID: 7522445362381438307}
   NovaCollider: {fileID: 7610911190483160622}
-  TimerBeforeStart: 5
+  TimerOffsetBeforeStartForFX: 0
+  TimerBeforeStart: 0.5
   ExplosionSound: {fileID: 6992138457569552473}
   OnEnterOuterSupernova:
     m_PersistentCalls:
