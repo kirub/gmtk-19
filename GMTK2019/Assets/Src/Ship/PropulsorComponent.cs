@@ -119,6 +119,7 @@ public class PropulsorComponent : MonoBehaviour, IDebugDrawable
 		}
 
 		ChargerComp.StopRecharge();
+		CurrentEnergySupplier = null;
 	}
 
 	void CancelPropulse( bool PlaySound = true )
