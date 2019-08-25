@@ -10,10 +10,10 @@ public class DebugDrawHelper : MonoBehaviour
 	
 	public static void RegisterDrawable(GameObject BaseObject, IDebugDrawable DrawableComponent)
 	{
+#if UNITY_EDITOR
 		if (!Instance)
 			return;
-
-#if UNITY_EDITOR
+		
 		if (!Instance.DrawablesList.Contains(BaseObject))
 		{
 			Instance.DrawablesList.Add(BaseObject);
@@ -34,10 +34,10 @@ public class DebugDrawHelper : MonoBehaviour
 
 	public static void UnregisterDrawable(GameObject BaseObject, IDebugDrawable DrawableComponent)
 	{
+#if UNITY_EDITOR
 		if (!Instance)
 			return;
-
-#if UNITY_EDITOR
+		
 		if (Instance.Drawables.ContainsKey(BaseObject))
 		{
 			Instance.Drawables[BaseObject].Remove(DrawableComponent);
@@ -142,6 +142,10 @@ public class DebugDrawHelper : MonoBehaviour
 			return;
 		}
 		Instance = this;
+
+#if !UNITY_EDITOR
+		Destroy(this);
+#endif // UNITY_EDITOR
 	}
 
 	private void Update()

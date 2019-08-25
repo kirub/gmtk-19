@@ -40,14 +40,29 @@ public class AttractionComponent : MonoBehaviour, IAggregatedComponent
     public bool IsStatic { get { return IsAStaticStar; } }
 
     // Start is called before the first frame update
-    public void Start()
-    {
-        if (AttractedBy)
-        {
-            gameObject.transform.SetParent(AttractedBy.gameObject.transform, true);
-            AttractionMass = gameObject.GetComponent<Rigidbody>().mass + AttractedBy.gameObject.GetComponent<Rigidbody>().mass;
-            AttractionSpeed = AttractionForceCoefficient * 10000 / (AttractionMass * AttractionMass) /*/ Vector3.Distance(AttractedBy.transform.position, gameObject.transform.position)*/;
-        }
+	void Start()
+	{
+		if (AttractedBy)
+		{
+			gameObject.transform.SetParent(AttractedBy.gameObject.transform, true);
+			AttractionMass = gameObject.GetComponent<Rigidbody>().mass + AttractedBy.gameObject.GetComponent<Rigidbody>().mass;
+			AttractionSpeed = AttractionForceCoefficient * 10000 / (AttractionMass * AttractionMass) /*/ Vector3.Distance(AttractedBy.transform.position, gameObject.transform.position)*/;
+		}
+
+		AttractionComponentAggregator Aggregator = FindObjectOfType<AttractionComponentAggregator>();
+		if (Aggregator)
+		{
+			Aggregator.RegisterComponent(this);
+		}
+	}
+
+	void OnDestroy()
+	{
+		AttractionComponentAggregator Aggregator = FindObjectOfType<AttractionComponentAggregator>();
+		if (Aggregator)
+		{
+			Aggregator.UnregisterComponent(this);
+		}
 	}
 
 	private void Update()

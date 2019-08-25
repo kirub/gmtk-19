@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4148623677708777864
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2756430534979594345}
+  - component: {fileID: 772370982439365878}
+  - component: {fileID: 6595928559551620588}
+  m_Layer: 0
+  m_Name: DebugTools
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2756430534979594345
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4148623677708777864}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &772370982439365878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4148623677708777864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40e652ece01928549b06b67f3c6c7d9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RestartKey: 114
+--- !u!114 &6595928559551620588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4148623677708777864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44b001b014191fa4b88b466acb2e0416, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ToggleDebugDrawKey: 282
+  ToggleDisplayDrawablesListKey: 283
+  SwitchDisplayTypeKey: 284
+  DisplayShortcutsKey: 285
+  PrevItemKey: 273
+  NextItemKey: 274
+  PrevPageKey: 276
+  NextPageKey: 275
+  ToggleSelectionKey: 13
+  DefaultColor: {r: 0, g: 0, b: 0, a: 1}
+  SelectedColor: {r: 0, g: 1, b: 0, a: 1}
+  HighlightedColor: {r: 0, g: 0, b: 1, a: 1}
+  HighlightedSelectedColor: {r: 0, g: 1, b: 1, a: 1}
+  MaxDrawablesPerPage: 10

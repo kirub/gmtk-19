@@ -25,6 +25,24 @@ public class MovingComponent : MonoBehaviour, IAggregatedComponent
 		}
 	}
 
+	void Start()
+	{
+		MovingComponentAggregator Aggregator = FindObjectOfType<MovingComponentAggregator>();
+		if (Aggregator)
+		{
+			Aggregator.RegisterComponent(this);
+		}
+	}
+
+	void OnDestroy()
+	{
+		MovingComponentAggregator Aggregator = FindObjectOfType<MovingComponentAggregator>();
+		if (Aggregator)
+		{
+			Aggregator.UnregisterComponent(this);
+		}
+	}
+
 	private void Update()
 	{
 		if ( IsTickable() )

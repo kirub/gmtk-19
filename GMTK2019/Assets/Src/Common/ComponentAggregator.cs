@@ -21,14 +21,6 @@ public class ComponentAggregator<T> : MonoBehaviour where T : MonoBehaviour, IAg
 
 	private void Start()
 	{
-		T[] AggregatedObjects = FindObjectsOfType<T>();
-		Components = new HashSet<T>(AggregatedObjects);
-
-		foreach (T CurrentComponent in Components)
-		{
-			CurrentComponent.enabled = false;
-		}
-
 		Sampler = CustomSampler.Create(AggregatorName);
 	}
 
@@ -37,11 +29,23 @@ public class ComponentAggregator<T> : MonoBehaviour where T : MonoBehaviour, IAg
         Sampler.Begin();
         foreach (T CurrentComponent in Components)
         {
-            if (CurrentComponent.IsTickable())
+            if (CurrentComponent && CurrentComponent.IsTickable())
             {
                 CurrentComponent.Tick();
             }
         }
         Sampler.End();
     }
+
+	public void RegisterComponent(T Component)
+	{
+		Component.enabled = false;
+		Components.Add(Component);
+	}
+
+	public void UnregisterComponent(T Component)
+	{
+		Components.Remove(Component);
+		Component.enabled = true;
+	}
 }
