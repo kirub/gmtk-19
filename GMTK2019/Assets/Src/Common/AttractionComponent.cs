@@ -23,7 +23,7 @@ public class AttractionComponent : MonoBehaviour, IAggregatedComponent
             _AttractedBy = value;
             if (_AttractedBy)
             {
-                gameObject.transform.SetParent(_AttractedBy.gameObject.transform, true);
+                gameObject.transform.SetParent(_AttractedBy.transform, true);
                 AttractionMass = gameObject.GetComponent<Rigidbody>().mass + _AttractedBy.gameObject.GetComponent<Rigidbody>().mass;
                 AttractionSpeed = 300 / Vector3.Distance(AttractedBy.transform.position, gameObject.transform.position);
             }
@@ -44,7 +44,7 @@ public class AttractionComponent : MonoBehaviour, IAggregatedComponent
 	{
 		if (AttractedBy)
 		{
-			gameObject.transform.SetParent(AttractedBy.gameObject.transform, true);
+			gameObject.transform.SetParent(AttractedBy.transform, true);
 			AttractionMass = gameObject.GetComponent<Rigidbody>().mass + AttractedBy.gameObject.GetComponent<Rigidbody>().mass;
 			AttractionSpeed = AttractionForceCoefficient * 10000 / (AttractionMass * AttractionMass) /*/ Vector3.Distance(AttractedBy.transform.position, gameObject.transform.position)*/;
 		}
