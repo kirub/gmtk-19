@@ -49,9 +49,7 @@ public class RotatorComponent : MonoBehaviour, IDebugDrawable
 	public void DebugDraw(ref Rect BasePos, float TextYIncrement, GUIStyle Style)
 	{
 #if UNITY_EDITOR
-		bool IsMaxSpeed = CurrentRotationSpeed >= RotationSpeed;
-
-		GUI.Label(BasePos, "- Rotation Speed " + CurrentRotationSpeed + (IsMaxSpeed ? " [MAX]" : ""), Style);
+		GUI.Label(BasePos, "- Rotation Speed " + CurrentRotationSpeed + "/" + RotationSpeed, Style);
 		BasePos.y += TextYIncrement;
 #endif
 	}
