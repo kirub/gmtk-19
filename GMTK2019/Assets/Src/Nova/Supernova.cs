@@ -72,9 +72,14 @@ public class Supernova : MonoBehaviour
         StartCoroutine(LaunchTriggers());
     }
 
-    public float GetPlayerDistance()
+    public float GetPlayerDistanceFromCenter()
     {
         return Vector3.Distance(transform.position, ShipUnit.Instance.transform.position);
+    }
+
+    public float GetPlayerDistanceFromBorder() {   
+        Vector3 shipPosition = ShipUnit.Instance.transform.position;
+        return Vector3.Distance(NovaCollider.ClosestPoint(shipPosition), shipPosition);
     }
 
     public IEnumerator LaunchTriggers()
