@@ -4,30 +4,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Profiling;
 
-public class ComponentAggregator : MonoBehaviour
+public class ComponentAggregator<T> : MonoBehaviour where T : MonoBehaviour, IAggregatedComponent
 {
-    CustomSampler Sampler;
-    public string AggregatorName = "ComponentAggregator";
-    public HashSet<AggregatedComponent> Components { get; } = new HashSet<AggregatedComponent>();
-    
-    public void RegisterComponent(AggregatedComponent Component)
-    {
-        Sampler = CustomSampler.Create(AggregatorName);
-        Components.Add(Component);
-    }
+	/*
+	 * Your inherited class should have this
+	protected void Awake()
+	{
+		AggregatorName = "YourName";
+	}
+	 */
 
-    public void UnregisterComponent(AggregatedComponent InComponent)
-    {
-        Components.Remove(InComponent);
-    }
+	protected string AggregatorName = "ComponentAggregator";
 
-    // Update is called once per frame
-    private void Update()
+    private CustomSampler Sampler;
+	public HashSet<T> Components { get; private set; } = new HashSet<T>();
+
+	private void Start()
+	{
+		T[] AggregatedObjects = FindObjectsOfType<T>();
+		Components = new HashSet<T>(AggregatedObjects);
+
+		foreach (T CurrentComponent in Components)
+		{
+			CurrentComponent.enabled = false;
+		}
+
+		Sampler = CustomSampler.Create(AggregatorName);
+	}
+
+	private void Update()
     {
         Sampler.Begin();
-        foreach (AggregatedComponent CurrentComponent in Components)
+        foreach (T CurrentComponent in Components)
         {
-            if (CurrentComponent.isActiveAndEnabled)
+            if (CurrentComponent.IsTickable())
             {
                 CurrentComponent.Tick();
             }

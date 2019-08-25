@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingComponent : AggregatedComponent
+public class MovingComponent : MonoBehaviour, IAggregatedComponent
 {
 	[SerializeField] private float BaseMovingSpeed = 1f;
 	[SerializeField] private float MinMovingSpeed = 1f;
@@ -16,9 +16,8 @@ public class MovingComponent : AggregatedComponent
     public float DecelerationValue { get { return Deceleration; } }
 	public bool UseDeceleration { get; set; } = true;
 
-	override public void Awake()
+	public void Awake()
 	{
-        base.Awake();
 		CurrentSpeed = BaseMovingSpeed;
 		if (MaxMovingSpeed <= 0f)
 		{
@@ -26,7 +25,21 @@ public class MovingComponent : AggregatedComponent
 		}
 	}
 
-	override public void Tick()
+	private void Update()
+	{
+		if ( IsTickable() )
+		{
+			Tick();
+		}
+	}
+
+	// IAggregatedComponent
+	public bool IsTickable()
+	{
+		return true;
+	}
+
+	public void Tick()
 	{
 		if (UseDeceleration)
 		{
@@ -37,4 +50,5 @@ public class MovingComponent : AggregatedComponent
 
         BoostSpeed = 1.0f;
     }
+	// ~IAggregatedComponent
 }

@@ -11,11 +11,10 @@ public class OrbitalComponent : AttractionComponent
     public bool IsUIActive { get; set; } = false;
     public bool IsUIVisible { get; set; } = false;
 
-    override public void Awake()
+    public void Awake()
     {
-        base.Awake();
         Sprites.Clear();
-        gameObject.GetComponentsInChildren<SpriteRenderer>(true, Sprites);
+        gameObject.GetComponentsInChildren(true, Sprites);
         UIPlanetHelper = Sprites.Find(x => x.CompareTag("UIPlanetHelper"));
         UIPlanetDistanceText = GetComponentInChildren<TextMesh>();
         UIPlanetDistanceText.transform.SetParent(UIPlanetHelper.gameObject.transform);

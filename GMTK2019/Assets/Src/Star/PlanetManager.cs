@@ -9,7 +9,7 @@ public class PlanetManager : MonoBehaviour
     const int GridSize              = 10;
     const int CellSize              = (MapHalfSize * 2) / GridSize;
     Vector3 MapSizeOffset           = new Vector3();
-    public UIPlanetHelper UIPlanetHelper   = null;
+    private  UIPlanetHelper UIPlanetHelper   = null;
 
     List<OrbitalComponent>[,] ObjectGrid = new List<OrbitalComponent>[GridSize, GridSize];
 
@@ -68,8 +68,8 @@ public class PlanetManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ComponentAggregator Aggregator = GetComponentInChildren<ComponentAggregator>();
-        foreach (OrbitalComponent Component in Aggregator.Components)
+		OrbitalComponent[] Components = GetComponentsInChildren<OrbitalComponent>();
+        foreach (OrbitalComponent Component in Components)
         {
             RegisterPlanet(Component);
         }

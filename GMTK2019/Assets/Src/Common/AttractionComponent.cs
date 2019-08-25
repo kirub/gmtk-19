@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttractionComponent : AggregatedComponent
+public class AttractionComponent : MonoBehaviour, IAggregatedComponent
 {
     public float Mass { get; private set; }
     [SerializeField]
@@ -48,31 +48,42 @@ public class AttractionComponent : AggregatedComponent
             AttractionMass = gameObject.GetComponent<Rigidbody>().mass + AttractedBy.gameObject.GetComponent<Rigidbody>().mass;
             AttractionSpeed = AttractionForceCoefficient * 10000 / (AttractionMass * AttractionMass) /*/ Vector3.Distance(AttractedBy.transform.position, gameObject.transform.position)*/;
         }
-    }
+	}
 
-    // Update is called once per frame
-    override public void Tick()
+	private void Update()
+	{
+		if (IsTickable())
+		{
+			Tick();
+		}
+	}
+
+	// IAggregatedComponent
+	public bool IsTickable()
+	{
+		return AttractedBy != null;
+	}
+
+	public void Tick()
     {
-        if (AttractedBy)
+        float Dist = Vector3.Distance(AttractedBy.transform.position, gameObject.transform.position);
+        /*
+        float k = (4 * Mathf.PI * Mathf.PI) / ;
+        //float PeriodSq = k * Mathf.Pow(Dist, 3);
+        float PeriodSq = k * Dist * Dist;*/
+        float AdditionalSpeed = 0.0f;
+        MovingComponent MovingComp = gameObject.GetComponent<MovingComponent>();
+        if(MovingComp)
         {
-            float Dist = Vector3.Distance(AttractedBy.transform.position, gameObject.transform.position);
-            /*
-            float k = (4 * Mathf.PI * Mathf.PI) / ;
-            //float PeriodSq = k * Mathf.Pow(Dist, 3);
-            float PeriodSq = k * Dist * Dist;*/
-            float AdditionalSpeed = 0.0f;
-            MovingComponent MovingComp = gameObject.GetComponent<MovingComponent>();
-            if(MovingComp)
-            {
-                AdditionalSpeed = MovingComp.CurrentSpeed;
-            }
-            float Speed = (AdditionalSpeed + AttractionSpeed) * Time.deltaTime;// Mathf.Sqrt(PlanetManager.G * AttractionMass / Dist);
-
-            gameObject.transform.RotateAround(AttractedBy.transform.position, Vector3.up, Speed * (OrbitCounterClockWise ? -1 : 1));
+            AdditionalSpeed = MovingComp.CurrentSpeed;
         }
-    }
+        float Speed = (AdditionalSpeed + AttractionSpeed) * Time.deltaTime;// Mathf.Sqrt(PlanetManager.G * AttractionMass / Dist);
 
-    public static float ComputeAttraction(OrbitalComponent Lhs, OrbitalComponent Rhs)
+        gameObject.transform.RotateAround(AttractedBy.transform.position, Vector3.up, Speed * (OrbitCounterClockWise ? -1 : 1));
+	}
+	// ~ IAggregatedComponent
+
+	public static float ComputeAttraction(OrbitalComponent Lhs, OrbitalComponent Rhs)
     {
         Rigidbody LhsRBody = Lhs.gameObject.GetComponent<Rigidbody>();
         Rigidbody RhsRBody = Rhs.gameObject.GetComponent<Rigidbody>();
