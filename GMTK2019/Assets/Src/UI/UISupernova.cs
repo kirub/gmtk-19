@@ -49,7 +49,7 @@ public class UISupernova : MonoBehaviour
                 transform.position = bounds.center - (new Vector3(-VecShipToSupernova.x * (bounds.size.x / 2), 10.0f, -VecShipToSupernova.z * (bounds.size.y / 2)) * 1.2f);
                 transform.rotation = Quaternion.LookRotation(VecShipToSupernova);
 
-                UIInGameScore.text = ((int)Supernova.Instance.GetPlayerDistance()).ToString();
+                UIInGameScore.text = ((int)Supernova.Instance.GetPlayerDistanceFromCenter()).ToString();
             }
         }
     }

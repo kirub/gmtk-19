@@ -267,7 +267,7 @@ public class GameManager : MonoBehaviour
 		CanvasMenuIngame.SetActive(true);
 		if (Supernova.Instance)
 		{
-			LatestScore = Supernova.Instance.GetPlayerDistance() * 100;
+			LatestScore = Supernova.Instance.GetPlayerDistanceFromCenter() * 100;
 		}
         HandleHighScores(((int)LatestScore) * ScoreMultiplier);
     }
