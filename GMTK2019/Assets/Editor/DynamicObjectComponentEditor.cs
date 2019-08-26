@@ -10,6 +10,8 @@ public class DynamicObjectComponentEditor : Editor
 	{
 		serializedObject.Update();
 
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("DestroyAfterMaxRange"));
+
 		SerializedProperty TargetTypeProp = serializedObject.FindProperty("TargetType");
 		EditorGUILayout.PropertyField(TargetTypeProp);
 
@@ -24,6 +26,7 @@ public class DynamicObjectComponentEditor : Editor
 				EditorGUILayout.PropertyField(serializedObject.FindProperty("HomingValue"));
 				EditorGUILayout.PropertyField(serializedObject.FindProperty("HomingLookAheadTime"));
 				EditorGUILayout.PropertyField(serializedObject.FindProperty("HomingLookAheadMinTime"));
+				EditorGUILayout.PropertyField(serializedObject.FindProperty("HomingTranslateToUseMaxSpeed"));
 			}
 			--EditorGUI.indentLevel;
 		}

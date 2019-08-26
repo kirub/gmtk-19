@@ -23,7 +23,7 @@ public class ProximitySensorComponent : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (!audioSource) return;
+        if (!audioSource || !Supernova.Instance) return;
 
         float distance = Supernova.Instance.GetPlayerDistanceFromBorder();
 

@@ -13,10 +13,12 @@ public class DynamicObjectComponent : MonoBehaviour
 		FollowingForward
 	}
 
+	[SerializeField] private float DestroyAfterMaxRange = 10000f;
 	[SerializeField] private ETargetType TargetType = ETargetType.HomingRandom;
 	[SerializeField] private float HomingValue = 2f;
 	[SerializeField] private float HomingLookAheadTime = 3f;
 	[SerializeField] private float HomingLookAheadMinTime = 0.5f;
+	[SerializeField] private bool HomingTranslateToUseMaxSpeed = true;
 
 
 	private bool IsLaunched = false;
@@ -64,10 +66,14 @@ public class DynamicObjectComponent : MonoBehaviour
 			float FinalSpeed = Distance / FinalTime;
 			Vector3 ExpectedForward = (ExpectedPosition - transform.position).normalized;
 
-			if (MovingComp.MaxMovingSpeedValue > 0f && ExpectedSpeed > MovingComp.MaxMovingSpeedValue)
+			if (MovingComp.MaxMovingSpeedValue > 0f &&
+				ExpectedSpeed > MovingComp.MaxMovingSpeedValue)
 			{
 				ExpectedSpeed = MovingComp.MaxMovingSpeedValue;
-				transform.position = ExpectedPosition - ExpectedForward * ExpectedSpeed * FinalTime;
+				if (HomingTranslateToUseMaxSpeed)
+				{
+					transform.position = ExpectedPosition - ExpectedForward * ExpectedSpeed * FinalTime;
+				}
 			}
 
 			GetComponent<MovingComponent>().CurrentSpeed = FinalSpeed;
@@ -88,7 +94,7 @@ public class DynamicObjectComponent : MonoBehaviour
 			Destroy(this);
 			return;
 		}
-
+		
 		MeshContainer = null;
 		int i = 0;
 		while (i < transform.childCount && MeshContainer == null)
@@ -100,6 +106,18 @@ public class DynamicObjectComponent : MonoBehaviour
 				MeshContainer.SetActive(false);
 			}
 			++i;
+		}
+	}
+
+	private void Update()
+	{
+		if (IsLaunched)
+		{
+			if (!ShipUnit.Instance ||
+				Vector3.SqrMagnitude(ShipUnit.Instance.transform.position - transform.position) >= DestroyAfterMaxRange * DestroyAfterMaxRange)
+			{
+				Destroy(gameObject);
+			}
 		}
 	}
 
