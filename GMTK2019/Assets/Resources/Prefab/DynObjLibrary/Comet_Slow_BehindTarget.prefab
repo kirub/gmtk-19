@@ -79,7 +79,7 @@ PrefabInstance:
     - target: {fileID: 8040445299718889166, guid: ff07c53155dc0c949aa0ca9679c2777b,
         type: 3}
       propertyPath: m_Name
-      value: Comet_Slow_OnTarget
+      value: Comet_Slow_BehindTarget
       objectReference: {fileID: 0}
     - target: {fileID: 8040445299718889169, guid: ff07c53155dc0c949aa0ca9679c2777b,
         type: 3}
@@ -149,7 +149,7 @@ PrefabInstance:
     - target: {fileID: 8040445299718889168, guid: ff07c53155dc0c949aa0ca9679c2777b,
         type: 3}
       propertyPath: HomingLookAheadTime
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8040445299718889168, guid: ff07c53155dc0c949aa0ca9679c2777b,
         type: 3}

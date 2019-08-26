@@ -151,6 +151,11 @@ PrefabInstance:
       propertyPath: HomingValue
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8040445299718889168, guid: ff07c53155dc0c949aa0ca9679c2777b,
+        type: 3}
+      propertyPath: HomingTranslateToUseMaxSpeed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8040445299718889170, guid: ff07c53155dc0c949aa0ca9679c2777b,
         type: 3}
       propertyPath: MaxMovingSpeed
